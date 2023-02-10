@@ -51,8 +51,8 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit(submitHandler)} style={{ width: '16%' }}>
                 <VStack spacing={4} bgColor='primary' pl={10} pr={10} pt={4} pb={3} rounded={6}>
                     <VStack>
-                        <Image width='100px' src='/images/logo.png'></Image>
-                        <Heading color='#18b58f' size='md' fontFamily="">Elixir Depot</Heading>
+                        <Image width='100px' src='/images/logo.svg'></Image>
+                        <Heading color='#18b58f' size='md' fontFamily="">Ultra Maverick Dry</Heading>
                     </VStack>
                     <Box>
                         <Input variant='filled' size='sm' autoComplete='off' placeholder='Username' {...register("userName")} />
@@ -65,7 +65,7 @@ const LoginPage = () => {
                     <Button width='83%' bgColor='#18b58f' size='sm' type='sumbit' disabled={!isValid} isLoading={isLoading}>
                         Login
                     </Button>
-                    <Text color='gray.300' fontSize='10px'>© 2022, Elixir Depot Powered by MIS</Text>
+                    <Text color='gray.300' fontSize='10px'>© 2022, Ultra Maverick Dry Depot Powered by MIS</Text>
                 </VStack>
             </form>
         </Flex>

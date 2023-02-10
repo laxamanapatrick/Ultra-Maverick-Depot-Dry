@@ -22,8 +22,8 @@ const SidebarHeader = () => {
 const SidebarFooter = () => {
     const navigate = useNavigate()
     return <Flex justifyContent='center' alignItems='center' flexDirection='column' pb='3'>
-        <Image src='/images/logo.png' onClick={currentUser?.role === 1 ? () => navigate('/sandbox') : null}></Image>
-        <Text color='white' fontSize='xs' textAlign='center'>© 2022, Elixir Depot Powered by Process Automation (MIS)</Text>
+        <Image src='/images/logo.svg' w='120px' onClick={currentUser?.role === 1 ? () => navigate('/sandbox') : null}></Image>
+        <Text color='white' fontSize='xs' textAlign='center'>© 2022, Ultra Maverick Dry Powered by Process Automation (MIS)</Text>
     </Flex>
 }
 
