@@ -37,6 +37,7 @@ export const ListofOrders = ({
   setWarehouseId,
   setPageDisable,
   preparedData,
+  preparingStatus
 }) => {
   const TableHead = [
     "Line",
@@ -74,10 +75,15 @@ export const ListofOrders = ({
   };
 
   useEffect(() => {
-    const validate = orderListData.some(
-      (item) => item.quantityOrder === item.preparedQuantity
-    );
-    setPageDisable(validate);
+    if (preparingStatus) {
+      setPageDisable(false)
+    } else {
+      const validate = orderListData.some(
+        (item) => item.quantityOrder === item.preparedQuantity
+      );
+      setPageDisable(validate);
+    }
+    
   }, [preparedData, orderListData]);
 
 //   orderListData, ...orderListData?.map(item => item.quantityOrder), ...orderListData?.map(item => item.preparedQuantity)

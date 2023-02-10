@@ -108,7 +108,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
     initialState: { currentPage: 1, pageSize: 1 },
   });
 
-  const [pageDisable, setPageDisable] = useState(false)
+  const [pageDisable, setPageDisable] = useState(false);
 
   const [preparingStatus, setPreparingStatus] = useState(false);
   const [paginationData, setPaginationData] = useState([]);
@@ -302,6 +302,11 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   //   }
   // }, [path != pathMO]);
 
+  // useEffect(() => {
+  //   if (preparingStatus) {
+  //     setPageDisable(false);
+  //   }
+  // }, [preparingStatus]);
 
   return (
     <>
@@ -337,6 +342,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
             setWarehouseId={setWarehouseId}
             setPageDisable={setPageDisable}
             preparedData={preparedData}
+            preparingStatus={preparingStatus}
           />
         ) : (
           ""
