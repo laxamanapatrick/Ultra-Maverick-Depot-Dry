@@ -1,0 +1,73 @@
+import React from 'react'
+import { Button, Flex, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, Text, useToast, VStack } from '@chakra-ui/react'
+import { BsFillQuestionOctagonFill } from 'react-icons/bs'
+import apiClient from '../../../services/apiClient'
+import { ToastComponent } from '../../../components/Toast'
+import moment from 'moment'
+
+export const ConfirmFiltteredModal = ({ isOpen, onClose, resultArray, openErrorModal, closeErrorModal, isLoading, fetchNotification }) => {
+    const toast = useToast()
+
+    const syncHandler = () => {
+        try {
+            // setIsLoading(true)
+            const res = apiClient.post(`Ordering/AddNewOrders`,
+                resultArray.map(item => {
+                    return {
+                        transactId: item?.transactId,
+                        customerName: item?.customerName,
+                        customerPosition: item?.customerPosition,
+                        // farmType: item?.farmType,
+                        farmCode: item?.fox,
+                        farmName: item?.name,
+                        // orderNo: item?.orderNo,
+                        // batchNo: item?.batchNo.toString(),
+                        orderDate: moment(item?.dateOrdered).format("yyyy-MM-DD"),
+                        dateNeeded: moment(item?.dateNeeded).format("yyyy-MM-DD"),
+                        // timeNeeded: item?.dateNeeded,
+                        // transactionType: item?.transactionType,
+                        itemCode: item?.productcode,
+                        itemDescription: item?.products,
+                        uom: item?.uom,
+                        quantityOrdered: item?.qty,
+                        category: item?.meattype
+                    }
+                })
+            ).then(res => {
+                ToastComponent("Success", "Orders Synced!", "success", toast)
+                fetchNotification()
+                // setIsLoading(false)
+                onClose()
+                closeErrorModal()
+            }).catch(err => {
+                ToastComponent("Error", "Orders were not Synced!", "error", toast)
+                onClose()
+            })
+        } catch (error) {
+        }
+    }
+
+    return (
+        <Modal isOpen={isOpen} onClose={() => { }} size='xl' isCentered>
+            <ModalContent>
+                <ModalHeader>
+                    <Flex justifyContent='center'>
+                        <BsFillQuestionOctagonFill fontSize='50px' />
+                    </Flex>
+                </ModalHeader>
+                <ModalCloseButton onClick={onClose} />
+
+                <ModalBody>
+                    <VStack justifyContent='center'>
+                        <Text>Are you sure you want sync these orders?</Text>
+                    </VStack>
+                </ModalBody>
+
+                <ModalFooter>
+                    <Button isLoading={isLoading} onClick={() => syncHandler()} colorScheme='blue'>Yes</Button>
+                    <Button ml={2} colorScheme='red' onClick={onClose}>No</Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
+    )
+}
