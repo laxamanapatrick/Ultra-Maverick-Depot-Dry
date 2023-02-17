@@ -7,10 +7,6 @@ import { Context } from '../context/Context';
 const QcModulePage = ({ notification, fetchNotification }) => {
     const { selectedMenu } = useContext(Context)
 
-    useEffect(() => {
-        fetchNotification()
-    }, [])
-
     return (
         <Flex flexDirection='column' width='full'>
             <Flex bgColor='secondary'>

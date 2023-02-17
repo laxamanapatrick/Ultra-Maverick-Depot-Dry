@@ -147,7 +147,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
 
                 <HStack w='auto'>
                     <Badge bgColor='secondary' color='white' px={3}>Category: </Badge>
-                    <Select placeholder='All Categories' onChange={(e) => setKeyword(e.target.value)}>
+                    <Select placeholder='Select a Category' onChange={(e) => setKeyword(e.target.value)}>
                         {
                             sortedCategories?.map((item) =>
                                 <option value={item} key={item}>{item}</option>
@@ -209,6 +209,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
                                 <Th color='white'>Item Description</Th>
                                 <Th color='white'>UOM</Th>
                                 <Th color='white'>Quantity Order</Th>
+                                <Th color='white'>Allocated Quantity</Th>
                                 <Th color='white'>Reserve</Th>
                                 <Th color='white'>Edit</Th>
                                 <Th color='white'>Cancel</Th>
@@ -261,6 +262,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
                                             <Td>{item.itemDescription}</Td>
                                             <Td>{item.uom}</Td>
                                             <Td>{item.quantityOrder.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
+                                            <Td>{item.allocatedQuantity.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
                                             <Td>{item.stockOnHand}</Td>
                                             <Td>
                                                 <Button

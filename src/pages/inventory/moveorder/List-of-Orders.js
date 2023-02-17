@@ -54,12 +54,12 @@ export const ListofOrders = ({
     "Status",
   ];
 
-  const rowHandler = ({ id, itemCode, quantityOrder, preparedQuantity }) => {
+  const rowHandler = ({ id, itemCode, allocatedQuantity, preparedQuantity }) => {
     setWarehouseId("");
     if (id && itemCode) {
       setItemCode(itemCode);
       setHighlighterId(id);
-      setQtyOrdered(quantityOrder);
+      setQtyOrdered(allocatedQuantity);
       setPreparedQty(preparedQuantity);
     } else {
       setItemCode("");
@@ -79,7 +79,7 @@ export const ListofOrders = ({
       setPageDisable(false)
     } else {
       const validate = orderListData.some(
-        (item) => item.quantityOrder === item.preparedQuantity
+        (item) => item.allocatedQuantity === item.preparedQuantity
       );
       setPageDisable(validate);
     }
@@ -134,10 +134,10 @@ export const ListofOrders = ({
                 <Td>{list.itemCode}</Td>
                 <Td>{list.itemDescription}</Td>
                 <Td>{list.uom}</Td>
-                <Td>{list.quantityOrder}</Td>
+                <Td>{list.allocatedQuantity}</Td>
                 <Td>{list.preparedQuantity}</Td>
                 <Td>
-                  {list.quantityOrder <= list.preparedQuantity ? (
+                  {list.allocatedQuantity <= list.preparedQuantity ? (
                     <BsCheck2Circle fontSize="20px" title="Done" />
                   ) : (
                     <MdOutlinePendingActions fontSize="20px" title="Pending" />

@@ -48,7 +48,7 @@ const LoginPage = () => {
     return (
 
         <Flex bgGradient="linear(to-l, secondary, primary)" h='100vh' justifyContent='center' alignItems='center'>
-            <form onSubmit={handleSubmit(submitHandler)} style={{ width: '16%' }}>
+            <form onSubmit={handleSubmit(submitHandler)} style={{ width: 'auto' }}>
                 <VStack spacing={4} bgColor='primary' pl={10} pr={10} pt={4} pb={3} rounded={6}>
                     <VStack>
                         <Image width='100px' src='/images/logo.svg'></Image>
@@ -62,7 +62,7 @@ const LoginPage = () => {
                         <Input variant='filled' size='sm' autoComplete='off' placeholder='Password' type='password' {...register("password")} />
                         <Text color="danger" fontSize='xs' mt={1}>{errors.password?.message}</Text>
                     </Box>
-                    <Button width='83%' bgColor='#18b58f' size='sm' type='sumbit' disabled={!isValid} isLoading={isLoading}>
+                    <Button width='full' bgColor='#18b58f' size='sm' type='sumbit' disabled={!isValid} isLoading={isLoading}>
                         Login
                     </Button>
                     <Text color='gray.300' fontSize='10px'>© 2022, Ultra Maverick Dry Depot Powered by MIS</Text>
@@ -74,3 +74,4 @@ const LoginPage = () => {
 }
 
 export default LoginPage;
+

@@ -1,0 +1,168 @@
+import React from "react";
+import {
+  Badge,
+  Button,
+  ButtonGroup,
+  Flex,
+  HStack,
+  Table,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import {
+  Pagination,
+  usePagination,
+  PaginationNext,
+  PaginationPage,
+  PaginationPrevious,
+  PaginationContainer,
+  PaginationPageGroup,
+} from "@ajna/pagination";
+import PageScrollReusable from "../../../components/PageScroll-Reusable";
+import apiClient from "../../../services/apiClient";
+import { ToastComponent } from "../../../components/Toast";
+
+export const ListofforAllocation = ({
+  itemCode,
+  pagesCount,
+  currentPage,
+  setCurrentPage,
+  orderData,
+  fetchForAllocationPagination,
+  fetchOrdersByItemCode,
+  fetchNotification
+}) => {
+  const toast = useToast();
+
+  const handlePageChange = (nextPage) => {
+    setCurrentPage(nextPage);
+  };
+
+  const proceedHandler = async () => {
+    try {
+      const res = await apiClient
+        .put(`Ordering/Allocate`, [{ itemCode: itemCode }])
+        .then((res) => {
+          ToastComponent(
+            "Success",
+            `Orders for Item Code ${itemCode} has been proceeded for scheduling of preparation.`,
+            "success",
+            toast
+          );
+          fetchForAllocationPagination();
+          fetchOrdersByItemCode();
+          fetchNotification()
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <Flex w="full" p={7} flexDirection="column">
+      <Flex w="full" justifyContent="space-between">
+        <HStack w="auto">
+          <Badge bgColor="secondary" color="white" px={3}>
+            Item Code:{" "}
+          </Badge>
+          <Text fontSize="sm">{itemCode && itemCode}</Text>
+        </HStack>
+
+        <Flex w="auto">
+          <Pagination
+            pagesCount={pagesCount}
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+          >
+            <PaginationContainer>
+              <PaginationPrevious
+                border="1px"
+                fontSize="xs"
+                px={2}
+                _hover={{ bg: "accent", color: "white" }}
+              >
+                {"< Previous"}
+              </PaginationPrevious>
+              <Text mx={1} bgColor="secondary" color="white" px={2} pt={1.5}>
+                {currentPage}
+              </Text>
+              <PaginationNext
+                border="1px"
+                fontSize="xs"
+                px={4}
+                _hover={{ bg: "accent", color: "white" }}
+              >
+                {"Next >"}
+              </PaginationNext>
+            </PaginationContainer>
+          </Pagination>
+        </Flex>
+      </Flex>
+
+      <VStack w="full" spacing={0} justifyContent="center" mt={10}>
+        {/* <Text w='full' textAlign='start' fontSize='sm' fontWeight='semibold'>{pageTotal && pageTotal} Remaining Orders</Text> */}
+        <Text
+          w="full"
+          fontWeight="semibold"
+          fontSize="xl"
+          bgColor="secondary"
+          color="white"
+          textAlign="center"
+        >
+          List of Orders
+        </Text>
+        <PageScrollReusable minHeight="150px" maxHeight="640px">
+          <Table size="sm" variant="simple">
+            <Thead bgColor="secondary">
+              <Tr>
+                <Th color="white">Order ID</Th>
+                <Th color="white">Order Date</Th>
+                <Th color="white">Date Needed</Th>
+                <Th color="white">Customer Code</Th>
+                <Th color="white">Customer Name</Th>
+                <Th color="white">Item Description</Th>
+                <Th color="white">Category</Th>
+                <Th color="white">Quantity Order</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {orderData?.map((item, i) => (
+                <Tr key={i}>
+                  <Td>{item.id}</Td>
+                  <Td>{item.orderDate}</Td>
+                  <Td>{item.dateNeeded}</Td>
+                  <Td>{item.farmCode}</Td>
+                  <Td>{item.farm}</Td>
+                  <Td>{item.itemDescription}</Td>
+                  <Td>{item.category}</Td>
+                  <Td>{item.quantityOrder}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </PageScrollReusable>
+        <ButtonGroup size="sm" justifyContent="end" w="full" py={2} px={2}>
+          {/* <Text fontSize='xs'>Selected Item(s): {checkedItems?.length}</Text> */}
+          <Button
+            onClick={proceedHandler}
+            title={"Proceed to preparation schedule"}
+            disabled={!itemCode}
+            px={3}
+            colorScheme="blue"
+          >
+            Proceed
+          </Button>
+          {/* <Button px={3} colorScheme="red">
+            Cancel and proceed for scheduling
+          </Button> */}
+        </ButtonGroup>
+      </VStack>
+    </Flex>
+  );
+};

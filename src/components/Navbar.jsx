@@ -48,6 +48,10 @@ const Navbar = ({ menus, notification }) => {
             notifcation: notification?.orderingFarm?.orderingfarmcount,
         },
         {
+            title: 'Allocation',
+            notifcation: notification?.allocation?.forallocationcount,
+        },
+        {
             title: 'Approval',
             notifcation: notification?.orderingApproval?.orderingapprovalcount,
         },

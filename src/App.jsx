@@ -42,6 +42,7 @@ import PreparationSchedulePage from './pages/ordering/PreparationSchedulePage'
 import ApprovalPage from './pages/ordering/ApprovalPage'
 import OrderSummaryPage from './pages/ordering/OrderSummaryPage'
 import Calendar from './pages/ordering/Calendar';
+import AllocationPage from './pages/ordering/AllocationPage';
 
 import TransformationPage from './pages/TransformationPage';
 
@@ -49,7 +50,6 @@ import TransformationPlanningPage from './pages/transformation/TransformationPla
 import AddRequest from './pages/transformation/transformation-planning/Add-Request';
 import StatusOfRequest from './pages/transformation/transformation-planning/Status-Of-Request';
 // import RequestReject from './pages/transformation/transformation-planning/Request-Reject';
-
 
 import ApprovalRequestPage from './pages/transformation/ApprovalRequestPage'
 import PreparationPage from './pages/transformation/PreparationPage'
@@ -128,19 +128,18 @@ function App() {
   const SideBarHandler = () => {
     setIsSidebarVisible(prev => !prev)
   }
-
   //Miscellaneous Issue Fetch and Cancel Feature
   const [miscData, setMiscData] = useState([])
   const [navigation, setNavigation] = useState('')
   //Get Added Misc Issues per Item
-  const userId = user?.id
-  const fetchActiveMiscIssuesApi = async (userId) => {
-    const res = await apiClient.get(`Miscellaneous/GetAllActiveMiscellaneousIssueTransaction?empId=${userId}`)
+  const userFullname = user?.fullName
+  const fetchActiveMiscIssuesApi = async (userFullname) => {
+    const res = await apiClient.get(`Miscellaneous/GetAllActiveMiscellaneousIssueTransaction?fullName=${userFullname}`)
     return res.data
   }
   //Misc Issue Data
   const fetchActiveMiscIssues = () => {
-    fetchActiveMiscIssuesApi(userId).then(res => {
+    fetchActiveMiscIssuesApi(userFullname).then(res => {
       setMiscData(res)
     })
   }
@@ -150,7 +149,7 @@ function App() {
     return () => {
       setMiscData([])
     }
-  }, [userId])
+  }, [userFullname])
   // Open modal to cancel all ID on table if re-routed without saving
   const { isOpen: isArrayCancel, onClose: closeArrayCancel, onOpen: openArrayCancel } = useDisclosure()
   const path = useLocation()
@@ -229,6 +228,7 @@ function App() {
             <Route path="approval" element={user ? <ApprovalPage notification={notification} fetchNotification={fetchNotification} /> : <Navigate to="/login" />} />
             <Route path="order-summary" element={user ? <OrderSummaryPage /> : <Navigate to="/login" />} />
             <Route path="calendar" element={user ? <Calendar /> : <Navigate to="/login" />} />
+            <Route path="allocation" element={user ? <AllocationPage notification={notification} fetchNotification={fetchNotification} /> : <Navigate to="/login" />} />
           </Route>
 
           <Route path="transformation" element={user ? <TransformationPage notification={notification} fetchNotification={fetchNotification} /> : <Navigate to="/login" />}>

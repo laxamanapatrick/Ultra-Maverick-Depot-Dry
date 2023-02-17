@@ -18,19 +18,19 @@ export const ConfirmFiltteredModal = ({ isOpen, onClose, resultArray, openErrorM
                         customerName: item?.customerName,
                         customerPosition: item?.customerPosition,
                         // farmType: item?.farmType,
-                        farmCode: item?.fox,
-                        farmName: item?.name,
+                        farmCode: item?.farmCode,
+                        farmName: item?.farmName,
                         // orderNo: item?.orderNo,
                         // batchNo: item?.batchNo.toString(),
                         orderDate: moment(item?.dateOrdered).format("yyyy-MM-DD"),
                         dateNeeded: moment(item?.dateNeeded).format("yyyy-MM-DD"),
                         // timeNeeded: item?.dateNeeded,
                         // transactionType: item?.transactionType,
-                        itemCode: item?.productcode,
-                        itemDescription: item?.products,
+                        itemCode: item?.itemCode,
+                        itemDescription: item?.itemDescription,
                         uom: item?.uom,
-                        quantityOrdered: item?.qty,
-                        category: item?.meattype
+                        quantityOrdered: item?.quantityOrdered,
+                        category: item?.category
                     }
                 })
             ).then(res => {

@@ -218,7 +218,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   useEffect(() => {
     if (orderListData.length > 0) {
       const variable = orderListData.every(
-        (item) => item.preparedQuantity === item.quantityOrder
+        (item) => item.preparedQuantity === item.allocatedQuantity
       );
       setButtonChanger(variable);
       // orderListData.some(item => {
@@ -310,7 +310,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
 
   return (
     <>
-      {preparingStatus && <DisablePreparation />}
+      {false && <DisablePreparation />}
       <VStack w="full" p={4} spacing={6}>
         <ListofApprovedDate
           farmName={farmName}
@@ -369,7 +369,8 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
           />
         ) : (
           itemCode &&
-          highlighterId && (
+          highlighterId && 
+          (
             <ActualItemQuantity
               setWarehouseId={setWarehouseId}
               warehouseId={warehouseId}

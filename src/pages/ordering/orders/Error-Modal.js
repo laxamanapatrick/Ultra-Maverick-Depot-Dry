@@ -27,6 +27,8 @@ import { ConfirmFiltteredModal } from './Confirm-Filttered-Modal'
 
 export const ErrorModal = ({ isOpen, onClose, errorData, isLoading, fetchNotification }) => {
 
+    console.log(errorData)
+
     const { isOpen: isConfirm, onClose: closeConfirm, onOpen: openConfirm } = useDisclosure()
 
     const duplicateList = errorData?.duplicateList?.map(list => {
@@ -61,7 +63,7 @@ export const ErrorModal = ({ isOpen, onClose, errorData, isLoading, fetchNotific
             itemCode: list?.itemCode,
             itemDescription: list?.itemDescription,
             uom: list?.uom,
-            quantityOrdered: list?.quantityOrdered,
+            quantity: list?.quantityOrdered,
             category: list?.category
 
             // orderDate: list.orderDate,

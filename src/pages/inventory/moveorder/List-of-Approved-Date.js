@@ -250,7 +250,7 @@ export const ListofApprovedDate = ({
                 <Th color="white">Order ID</Th>
                 <Th color="white">Customer Code</Th>
                 <Th color="white">Customer Name</Th>
-                <Th color="white">Category</Th>
+                {/* <Th color="white">Category</Th> */}
                 <Th color="white">Total Quantity Order</Th>
                 <Th color="white">
                   <HStack>
@@ -296,8 +296,8 @@ export const ListofApprovedDate = ({
                   <Td>{order.id}</Td>
                   <Td>{order.farmCode}</Td>
                   <Td>{order.farm}</Td>
-                  <Td>{order.category}</Td>
-                  <Td>{order.totalOrders}</Td>
+                  {/* <Td>{order.category}</Td> */}
+                  <Td>{order.totalAllocatedOrder}</Td>
                   <Td>{moment(order.preparedDate).format("MM/DD/yyyy")}</Td>
                   <Td>
                     <Button

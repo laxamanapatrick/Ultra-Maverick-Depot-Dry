@@ -24,6 +24,8 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
     openReject()
   }
 
+  console.log(farmOrders)
+
   return (
     <Flex w='95%' p={10} flexDirection='column'>
 
@@ -42,7 +44,7 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
                 <Th color='white'>Item Code</Th>
                 <Th color='white'>Item Description</Th>
                 <Th color='white'>UOM</Th>
-                <Th color='white'>Quantity Order</Th>
+                <Th color='white'>Allocated Quantity</Th>
                 <Th color='white'>Order Date</Th>
               </Tr>
             </Thead>
@@ -70,7 +72,7 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
                         <Td>{item.itemCode}</Td>
                         <Td>{item.itemDescription}</Td>
                         <Td>{item.uom}</Td>
-                        <Td>{item.quantityOrder}</Td>
+                        <Td>{item.allocatedQuantity}</Td>
                         <Td>{item.orderDate}</Td>
                       </Tr>
                     )

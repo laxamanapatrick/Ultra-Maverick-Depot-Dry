@@ -15,6 +15,7 @@ export const ListofPreparedDate = ({ orders, orderNo, setOrderNo }) => {
             setOrderNo('')
         }
     }
+    console.log(orders)
 
     return (
         <Flex w='95%' p={10} flexDirection='column'>
@@ -35,8 +36,8 @@ export const ListofPreparedDate = ({ orders, orderNo, setOrderNo }) => {
                                 <Th color='white'>Order ID</Th>
                                 <Th color='white'>Customer Code</Th>
                                 <Th color='white'>Customer Name</Th>
-                                <Th color='white'>Category</Th>
-                                <Th color='white'>Total Quantity Order</Th>
+                                {/* <Th color='white'>Category</Th> */}
+                                <Th color='white'>Total Allocated Quantity</Th>
                                 {/* <Th color='white'>Order Date</Th> */}
                                 {/* <Th color='white'>Date Needed</Th> */}
                                 <Th color='white'>Prepared Date</Th>
@@ -55,8 +56,8 @@ export const ListofPreparedDate = ({ orders, orderNo, setOrderNo }) => {
                                         <Td>{item.orderNo}</Td>
                                         <Td>{item.farmCode}</Td>
                                         <Td>{item.farm}</Td>
-                                        <Td>{item.category}</Td>
-                                        <Td>{item.totalOrders}</Td>
+                                        {/* <Td>{item.category}</Td> */}
+                                        <Td>{item.totalAllocatedOrder}</Td>
                                         {/* <Td>{item.orderDate}</Td> */}
                                         {/* <Td>{item.dateNeeded}</Td> */}
                                         <Td>{moment(item.preparedDate).format("MM/DD/yyyy")}</Td>
