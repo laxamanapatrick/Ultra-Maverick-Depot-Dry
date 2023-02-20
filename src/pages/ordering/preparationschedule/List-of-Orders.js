@@ -41,9 +41,9 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
 
     const [keyword, setKeyword] = useState('')
 
-    const [dateNeeded, setDateNeeded] = useState('')
+    // const dateToday = new Date()
+    // const [dateNeeded, setDateNeeded] = useState('')
     const [disableIfStock, setDisableIfStock] = useState(false)
-    const dateToday = new Date()
 
     const { isOpen: isEdit, onOpen: openEdit, onClose: closeEdit } = useDisclosure()
     const { isOpen: isCancel, onOpen: openCancel, onClose: closeCancel } = useDisclosure()
@@ -87,20 +87,20 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
         }
     }
 
-    //Buton disable for out of stock and backdated date needed
-    // useEffect(() => {
-    //     orders.map((item) => {
-    //         setTransactId(item.id)
-    //         // || item.days < 0
-    //         if (item.stockOnHand < item.quantityOrder) {
-    //             setDisableIfStock(true)
-    //         }
-    //         else {
-    //             setDisableIfStock(false)
-    //         }
-    //     }
-    //     )
-    // }, [orders])
+    // Buton disable for out of stock and backdated date needed
+    useEffect(() => {
+        orders.map((item) => {
+            setTransactId(item.id)
+            // || item.days < 0
+            if (item.stockOnHand < item.allocatedQuantity) {
+                setDisableIfStock(true)
+            }
+            else {
+                setDisableIfStock(false)
+            }
+        }
+        )
+    }, [orders])
 
     //refetch if data length === 0
     useEffect(() => {
@@ -114,7 +114,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
         }
     }, [lengthIndicator])
 
-    const stockAvailable = orders?.filter(item => item.stockOnHand >= item.quantityOrder)
+    const stockAvailable = orders?.filter(item => item.stockOnHand >= item.allocatedQuantity)
     const stockData = stockAvailable?.map(item => item.id)
     const parentCheckHandler = (e) => {
         if (e.target.checked) {
@@ -225,15 +225,15 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
                                     )
                                     ?.map((item, i) =>
                                         <Tr
-                                            bgColor={item.stockOnHand < item.quantityOrder ? '#dfdfdf5c' : 'none'}
-                                            color={item.stockOnHand < item.quantityOrder ? 'black' : 'none'}
+                                            bgColor={item.stockOnHand < item.allocatedQuantity ? '#dfdfdf5c' : 'none'}
+                                            color={item.stockOnHand < item.allocatedQuantity ? 'black' : 'none'}
                                             _active={transactId ? { bgColor: 'accent', color: 'white' } : { bgColor: 'none' }}
                                             _hover={transactId ? { bgColor: 'accent', color: 'white' } : { bgColor: 'none' }}
                                             cursor='pointer'
                                             key={i}
                                         >
                                             {
-                                                item.stockOnHand >= item.quantityOrder ?
+                                                item.stockOnHand >= item.allocatedQuantity ?
                                                     <Td>
                                                         <Checkbox
                                                             onChange={childCheckHandler}

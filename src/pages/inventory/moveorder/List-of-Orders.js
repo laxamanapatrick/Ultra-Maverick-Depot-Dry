@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
+  Badge,
   Button,
   ButtonGroup,
   Flex,
+  HStack,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
+  Select,
   Table,
   Tbody,
   Td,
@@ -37,7 +40,7 @@ export const ListofOrders = ({
   setWarehouseId,
   setPageDisable,
   preparedData,
-  preparingStatus
+  preparingStatus,
 }) => {
   const TableHead = [
     "Line",
@@ -54,7 +57,26 @@ export const ListofOrders = ({
     "Status",
   ];
 
-  const rowHandler = ({ id, itemCode, allocatedQuantity, preparedQuantity }) => {
+  const orderCategories = orderListData?.map((item) => {
+    return {
+      category: item.category,
+    };
+  });
+  const filteredCategories = [
+    ...new Set(orderCategories?.map((item) => item.category)),
+  ];
+  const sortedCategories = [...filteredCategories].sort((a, b) =>
+    a.category > b.category ? 1 : -1
+  );
+
+  const [keyword, setKeyword] = useState("");
+
+  const rowHandler = ({
+    id,
+    itemCode,
+    allocatedQuantity,
+    preparedQuantity,
+  }) => {
     setWarehouseId("");
     if (id && itemCode) {
       setItemCode(itemCode);
@@ -76,20 +98,35 @@ export const ListofOrders = ({
 
   useEffect(() => {
     if (preparingStatus) {
-      setPageDisable(false)
+      setPageDisable(false);
     } else {
       const validate = orderListData.some(
         (item) => item.allocatedQuantity === item.preparedQuantity
       );
       setPageDisable(validate);
     }
-    
   }, [preparedData, orderListData]);
 
-//   orderListData, ...orderListData?.map(item => item.quantityOrder), ...orderListData?.map(item => item.preparedQuantity)
+  //   orderListData, ...orderListData?.map(item => item.quantityOrder), ...orderListData?.map(item => item.preparedQuantity)
 
   return (
     <VStack w="full" spacing={0} justifyContent="center" mt={10}>
+      <HStack w="full" justifyContent="start" mb={1}>
+        <Badge bgColor="secondary" color="white" px={3}>
+          Category:{" "}
+        </Badge>
+        <Select
+          w="auto"
+          placeholder="Select a Category"
+          onChange={(e) => setKeyword(e.target.value)}
+        >
+          {sortedCategories?.map((item) => (
+            <option value={item} key={item}>
+              {item}
+            </option>
+          ))}
+        </Select>
+      </HStack>
       <Text
         w="full"
         fontWeight="semibold"
@@ -112,39 +149,47 @@ export const ListofOrders = ({
             </Tr>
           </Thead>
           <Tbody>
-            {orderListData?.map((list, i) => (
-              <Tr
-                key={i}
-                onClick={() => rowHandler(list)}
-                bgColor={highlighterId === list.id ? "table_accent" : "none"}
-                cursor="pointer"
-              >
-                {highlighterId === list.id ? (
-                  <Td>
-                    <GoArrowSmallRight fontSize="27px" />
-                  </Td>
-                ) : (
-                  <Td>{i + 1}</Td>
-                )}
-                <Td>{moment(list.orderDate).format("yyyy-MM-DD")}</Td>
-                <Td>{moment(list.dateNeeded).format("yyyy-MM-DD")}</Td>
-                <Td>{list.farmCode}</Td>
-                <Td>{list.farm}</Td>
-                <Td>{list.category}</Td>
-                <Td>{list.itemCode}</Td>
-                <Td>{list.itemDescription}</Td>
-                <Td>{list.uom}</Td>
-                <Td>{list.allocatedQuantity}</Td>
-                <Td>{list.preparedQuantity}</Td>
-                <Td>
-                  {list.allocatedQuantity <= list.preparedQuantity ? (
-                    <BsCheck2Circle fontSize="20px" title="Done" />
+            {orderListData
+              ?.filter((val) => {
+                const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                return val.category?.toLowerCase().match(newKeyword, "*");
+              })
+              ?.map((list, i) => (
+                <Tr
+                  key={i}
+                  onClick={() => rowHandler(list)}
+                  bgColor={highlighterId === list.id ? "table_accent" : "none"}
+                  cursor="pointer"
+                >
+                  {highlighterId === list.id ? (
+                    <Td>
+                      <GoArrowSmallRight fontSize="27px" />
+                    </Td>
                   ) : (
-                    <MdOutlinePendingActions fontSize="20px" title="Pending" />
+                    <Td>{i + 1}</Td>
                   )}
-                </Td>
-              </Tr>
-            ))}
+                  <Td>{moment(list.orderDate).format("yyyy-MM-DD")}</Td>
+                  <Td>{moment(list.dateNeeded).format("yyyy-MM-DD")}</Td>
+                  <Td>{list.farmCode}</Td>
+                  <Td>{list.farm}</Td>
+                  <Td>{list.category}</Td>
+                  <Td>{list.itemCode}</Td>
+                  <Td>{list.itemDescription}</Td>
+                  <Td>{list.uom}</Td>
+                  <Td>{list.allocatedQuantity}</Td>
+                  <Td>{list.preparedQuantity}</Td>
+                  <Td>
+                    {list.allocatedQuantity <= list.preparedQuantity ? (
+                      <BsCheck2Circle fontSize="20px" title="Done" />
+                    ) : (
+                      <MdOutlinePendingActions
+                        fontSize="20px"
+                        title="Pending"
+                      />
+                    )}
+                  </Td>
+                </Tr>
+              ))}
           </Tbody>
         </Table>
       </PageScrollReusable>
