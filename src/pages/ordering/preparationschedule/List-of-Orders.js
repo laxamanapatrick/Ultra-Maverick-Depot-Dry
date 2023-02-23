@@ -209,7 +209,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
                                 <Th color='white'>Item Description</Th>
                                 <Th color='white'>UOM</Th>
                                 <Th color='white'>Quantity Order</Th>
-                                <Th color='white'>Allocated Quantity</Th>
+                                {/* <Th color='white'>Allocated Quantity</Th> */}
                                 <Th color='white'>Reserve</Th>
                                 <Th color='white'>Edit</Th>
                                 <Th color='white'>Cancel</Th>
@@ -261,8 +261,8 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
                                             <Td>{item.itemCode}</Td>
                                             <Td>{item.itemDescription}</Td>
                                             <Td>{item.uom}</Td>
-                                            <Td>{item.quantityOrder.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
-                                            <Td>{item.allocatedQuantity.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
+                                            <Td>{item.quantityOrder?.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
+                                            {/* <Td>{item.allocatedQuantity?.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td> */}
                                             <Td>{item.stockOnHand}</Td>
                                             <Td>
                                                 <Button

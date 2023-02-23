@@ -111,7 +111,8 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   const [pageDisable, setPageDisable] = useState(false);
 
   const [preparingStatus, setPreparingStatus] = useState(false);
-  const [paginationData, setPaginationData] = useState([]);
+  const [preparingUser, setPreparingUser] = useState('')
+  // const [paginationData, setPaginationData] = useState([]);
   const [connectionTwo, setConnectionTwo] = useState(null);
 
   //Pagination
@@ -120,8 +121,9 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
     fetchMoveOrderApi(currentPage).then((res) => {
       setFarmName(res?.orders[0]?.farm);
       setPreparingStatus(res?.orders[0]?.isBeingPrepared);
+      setPreparingUser(res?.orders[0]?.setBy)
       setPageTotal(res.totalCount);
-      setPaginationData(res);
+      // setPaginationData(res);
     });
   };
 
@@ -262,7 +264,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
       {
         orderNoPKey: moveData[0]?.id,
         isBeingPrepared: true,
-        userId: currentUser?.id,
+        setBy: currentUser?.fullName,
       },
     ]);
   };
@@ -272,7 +274,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   //     {
   //       orderNoPKey: id,
   //       isBeingPrepared: null,
-  //       userId: null,
+  //       setBy: null,
   //     },
   //   ]);
   // };
@@ -290,7 +292,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   }, [moveData?.length > 0]);
 
   useEffect(() => {
-    unsetRequest(moveData[0]?.id, currentUser?.id);
+    unsetRequest(moveData[0]?.id, currentUser?.fullName);
   }, [currentPage]);
 
   // const pathMO = "/inventory/move-order";
@@ -310,7 +312,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
 
   return (
     <>
-      {false && <DisablePreparation />}
+      {preparingStatus && <DisablePreparation preparingUser={preparingUser} />}
       <VStack w="full" p={4} spacing={6}>
         <ListofApprovedDate
           farmName={farmName}

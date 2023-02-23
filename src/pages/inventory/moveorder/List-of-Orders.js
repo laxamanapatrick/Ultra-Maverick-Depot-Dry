@@ -176,7 +176,7 @@ export const ListofOrders = ({
                   <Td>{list.itemCode}</Td>
                   <Td>{list.itemDescription}</Td>
                   <Td>{list.uom}</Td>
-                  <Td>{list.allocatedQuantity}</Td>
+                  <Td>{list.quantityOrder}</Td>
                   <Td>{list.preparedQuantity}</Td>
                   <Td>
                     {list.allocatedQuantity <= list.preparedQuantity ? (

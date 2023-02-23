@@ -297,7 +297,7 @@ export const ListofApprovedDate = ({
                   <Td>{order.farmCode}</Td>
                   <Td>{order.farm}</Td>
                   {/* <Td>{order.category}</Td> */}
-                  <Td>{order.totalAllocatedOrder}</Td>
+                  <Td>{order.quantityOrder}</Td>
                   <Td>{moment(order.preparedDate).format("MM/DD/yyyy")}</Td>
                   <Td>
                     <Button

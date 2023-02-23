@@ -37,7 +37,7 @@ export const ListofPreparedDate = ({ orders, orderNo, setOrderNo }) => {
                                 <Th color='white'>Customer Code</Th>
                                 <Th color='white'>Customer Name</Th>
                                 {/* <Th color='white'>Category</Th> */}
-                                <Th color='white'>Total Allocated Quantity</Th>
+                                <Th color='white'>Total Quantity Order</Th>
                                 {/* <Th color='white'>Order Date</Th> */}
                                 {/* <Th color='white'>Date Needed</Th> */}
                                 <Th color='white'>Prepared Date</Th>
@@ -57,7 +57,7 @@ export const ListofPreparedDate = ({ orders, orderNo, setOrderNo }) => {
                                         <Td>{item.farmCode}</Td>
                                         <Td>{item.farm}</Td>
                                         {/* <Td>{item.category}</Td> */}
-                                        <Td>{item.totalAllocatedOrder}</Td>
+                                        <Td>{item.quantityOrder}</Td>
                                         {/* <Td>{item.orderDate}</Td> */}
                                         {/* <Td>{item.dateNeeded}</Td> */}
                                         <Td>{moment(item.preparedDate).format("MM/DD/yyyy")}</Td>

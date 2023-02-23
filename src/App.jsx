@@ -172,12 +172,12 @@ function App() {
   const currentUser = decodeUser()
 
   //Unset Move Order Hub
-  const unsetRequest = (id, userId) => {
+  const unsetRequest = (id, userFullname) => {
     apiClient.post("Ordering/UnsetBeingPrepared", [
       {
         orderNoPKey: id,
         isBeingPrepared: null,
-        userId: userId,
+        setBy: userFullname,
       },
     ]);
   };

@@ -19,16 +19,8 @@ import {
   Button,
   Stack,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
   Skeleton,
   Badge,
-  VStack,
 } from "@chakra-ui/react";
 import {
   Pagination,
@@ -39,12 +31,14 @@ import {
   PaginationPrevious,
   usePagination,
 } from "@ajna/pagination";
-import moment from "moment";
 import { FaSearch } from "react-icons/fa";
-import { decodeUser } from "../../services/decode-user";
+import {
+  ViewModalComponent,
+  CancelModalComponent,
+} from "./qc-checklist-depot.jsx/View_Cancel-Modal";
 import apiClient from "../../services/apiClient";
 import PageScrollReusable from "../../components/PageScroll-Reusable";
-import { CancelModalComponent } from "./qc-checklist-depot.jsx/Cancel-Modal";
+import { EditModalComponent } from "./qc-checklist-depot.jsx/Edit-Modal-Parent";
 
 // Old Checklist
 // import PageScroll from '../../components/PageScroll'
@@ -143,7 +137,7 @@ const QCReceivingPage = ({ fetchNotification }) => {
   };
 
   const cancelModalHandler = (data) => {
-    setPoId(data)
+    setPoId(data);
     openCancelModal();
   };
 
@@ -346,7 +340,6 @@ const QCReceivingPage = ({ fetchNotification }) => {
         />
       )}
 
-      
       {isCancelModalOpen && (
         <CancelModalComponent
           isOpen={isCancelModalOpen}
@@ -357,72 +350,19 @@ const QCReceivingPage = ({ fetchNotification }) => {
         />
       )}
 
+      {isEditModalOpen && (
+        <EditModalComponent
+          editData={editData}
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          fetchPo={fetchPo}
+          fetchNotification={fetchNotification}
+        />
+      )}
     </Flex>
   );
 };
 
 export default QCReceivingPage;
 
-//Viewing Modal
-
-const ViewModalComponent = ({ isOpen, onClose, viewingData }) => {
-  return (
-    <Flex>
-      <Modal size="5xl" isOpen={isOpen} onClose={() => {}} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            <Flex justifyContent="center">
-              <Text>PO Summary</Text>
-            </Flex>
-          </ModalHeader>
-          <ModalCloseButton onClick={onClose} />
-
-          <ModalBody>
-            <PageScrollReusable>
-              {!viewingData ? (
-                <Stack width="full">
-                  <Skeleton height="20px" />
-                  <Skeleton height="20px" />
-                  <Skeleton height="20px" />
-                  <Skeleton height="20px" />
-                  <Skeleton height="20px" />
-                  <Skeleton height="20px" />
-                </Stack>
-              ) : (
-                <Table variant="striped" size="sm">
-                  <Thead>
-                    <Tr bgColor="secondary">
-                      <Th color="white">PO No.</Th>
-                      <Th color="white">Approved Date</Th>
-                      <Th color="white">PR No.</Th>
-                      <Th color="white">PR Date</Th>
-                    </Tr>
-                  </Thead>
-
-                  <Tbody>
-                    <Tr key={viewingData.id}>
-                      <Td>{viewingData.pO_Number}</Td>
-                      <Td>
-                        {moment(viewingData.pO_Date).format("MM/DD/YYYY")}
-                      </Td>
-                      <Td>{viewingData.pR_Number}</Td>
-                      <Td>
-                        {moment(viewingData.pR_Date).format("MM/DD/YYYY")}
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-              )}
-            </PageScrollReusable>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="outline" onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </Flex>
-  );
-};
+// { editData, isOpen, onClose, fetchPo, fetchNotification }  
