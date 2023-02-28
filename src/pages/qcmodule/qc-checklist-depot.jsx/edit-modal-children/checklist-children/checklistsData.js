@@ -1,14 +1,14 @@
 export const documentationData = [
-  { id: 1, details: "With minimum updated necessary documents" },
-  { id: 2, details: "Certificate of Analysis" },
-  { id: 3, details: "Certificate of Product Registration" },
-  { id: 4, details: "Food Grade Certificate" },
-  { id: 5, details: "Meat Inspection Certificate" },
-  { id: 6, details: "Purchase Order" },
-  { id: 7, details: "Material Safety Data Sheet" },
-  { id: 8, details: "Migration Test" },
-  { id: 9, details: "Veterinary Health Certificate" },
-  { id: 10, details: "Shipping Permit" },
+  // { id: 1, details: "With minimum updated necessary documents" },
+  { id: 1, details: "Certificate of Analysis" },
+  { id: 2, details: "Certificate of Product Registration" },
+  { id: 3, details: "Food Grade Certificate" },
+  { id: 4, details: "Meat Inspection Certificate" },
+  { id: 5, details: "Purchase Order" },
+  { id: 6, details: "Material Safety Data Sheet" },
+  { id: 7, details: "Migration Test" },
+  { id: 8, details: "Veterinary Health Certificate" },
+  { id: 9, details: "Shipping Permit" },
 ];
 
 export const foodHandlingData = [
@@ -177,18 +177,21 @@ export const otherConformanceData = [
     details: "With clear, correct and readable product information and label",
   },
   {
-    id: 7,
+    id: 7, details: "No spillages / leaks/wet portions"
+  },
+  {
+    id: 8,
     details:
       "Stored / delivered in clean and in good conditioned container (crates and/or pallets)",
   },
   {
-    id: 8,
+    id: 9,
     details: "Each product type is segragated to avoid cross contamination",
   },
   {
-    id: 9,
+    id: 10,
     details:
       "Absence of unnecessary things/ products inside the delivery truck that may contaminate the products",
   },
-  { id: 10, details: "No dirt, food debris, pest and signs of pest, etc." },
+  { id: 11, details: "No dirt, food debris, pest and signs of pest, etc." },
 ];

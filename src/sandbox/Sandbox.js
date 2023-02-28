@@ -107,3 +107,57 @@ export default function Sandbox() {
     </Flex>
   );
 }
+
+// {
+//   "pO_Receiving": {
+//     "id": 0,
+//     "pO_Summary_Id": 0,
+//     "manufacturing_Date": "2023-02-27T00:24:28.188Z",
+//     "expected_Delivery": 0,
+//     "expiry_Date": "2023-02-27T00:24:28.188Z",
+//     "actual_Delivered": 0,
+//     "itemCode": "string",
+//     "batch_No": "string",
+//     "totalReject": 0,
+//     "isActive": true,
+//     "cancelDate": "2023-02-27T00:24:28.188Z",
+//     "cancelBy": "string",
+//     "reason": "string",
+//     "expiryIsApprove": true,
+//     "isNearlyExpire": true,
+//     "expiryApproveBy": "string",
+//     "expiryDateOfApprove": "2023-02-27T00:24:28.188Z",
+//     "qC_ReceiveDate": "2023-02-27T00:24:28.188Z",
+//     "confirmRejectByQc": true,
+//     "isWareHouseReceive": true,
+//     "cancelRemarks": "string",
+//     "qcBy": "string"
+//   },
+//   "checklistForCompliants": [
+//     {
+//       "pO_ReceivingId": 0,
+//       "checklist_Type": "string",
+//       "value": "string",
+//       "isCompliant": true
+//     },
+//   ],
+//   "checklistsString": [
+//     {
+//       "pO_ReceivingId": 0,
+//       "checlist_Type": "string",
+//       "value": "string"
+//     }
+//   ],
+//   "checkListInput": [
+//     {
+//       "pO_ReceivingId": 0,
+//       "checlist_Type": "string",
+//       "parameter": "string",
+//       "value": "string"
+//     }
+//   ]
+// }
+
+
+
+

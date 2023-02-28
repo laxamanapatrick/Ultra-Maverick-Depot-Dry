@@ -24,7 +24,7 @@ const fetchReasonsApi = async () => {
   return res.data;
 };
 
-const RejectInformation = ({setRejectionInformation}) => {
+const RejectInformation = ({setRejectionInformation, setTotalReject}) => {
   const [rows, setRows] = useState([{ rejectQty: "", reason: "" }]);
   const [totalQty, setTotalQty] = useState(0);
 
@@ -67,6 +67,7 @@ const RejectInformation = ({setRejectionInformation}) => {
       sum += Number(row.rejectQty);
     });
     setTotalQty(sum);
+    setTotalReject(sum)
   };
 
   useEffect(() => {
@@ -78,21 +79,21 @@ const RejectInformation = ({setRejectionInformation}) => {
 
   return (
     <>
-      <Accordion w="full" allowMultiple defaultIndex={[0]}>
-        <AccordionItem>
-          <AccordionButton>
-            <Text
-              fontSize="sm"
-              textAlign="center"
-              bgColor="secondary"
-              color="white"
-              w="full"
-            >
-              Rejection Information
-              <AccordionIcon />
-            </Text>
-          </AccordionButton>
-          <AccordionPanel>
+        <Accordion w="full" allowMultiple defaultIndex={[0]}>
+          <AccordionItem>
+            <AccordionButton>
+              <Text
+                fontSize="sm"
+                textAlign="center"
+                bgColor="secondary"
+                color="white"
+                w="full"
+              >
+                Rejection Information
+                <AccordionIcon />
+              </Text>
+            </AccordionButton>
+            <AccordionPanel>
             <Box w="80%">
               <Table variant="simple">
                 <Thead>

@@ -34,8 +34,6 @@ export const EditModalComponent = ({
   fetchPo,
   fetchNotification,
 }) => {
-  const newDate = new Date();
-  const dateToday = moment(newDate).format("yyyy-MM-DD");
 
   // Submit Data states
   const [submitReceiving, setSubmitReceiving] = useState({
@@ -45,12 +43,14 @@ export const EditModalComponent = ({
     actualQuantityDelivered: "",
   });
   const [rejectionInformation, setRejectionInformation] = useState(null);
+  const [totalReject, setTotalReject] = useState(0)
   const [documentationChecklist, setDocumentationChecklist] = useState(null);
   const [foodHandlingDetails, setFoodHandlingDetails] = useState(null);
   const [conformanceDetails, setConformanceDetails] = useState(null);
   const [otherConformanceDetails, setOtherConformanceDetails] = useState(null);
   const [deliveryDetails, setDeliveryDetails] = useState(null);
   const [hygieneDetails, setHygieneDetails] = useState(null)
+  const [productType, setProductType] = useState(null)
 
   return (
     <ReceivingContext.Provider
@@ -60,7 +60,8 @@ export const EditModalComponent = ({
         setConformanceDetails,
         setOtherConformanceDetails,
         setDeliveryDetails,
-        setHygieneDetails
+        setHygieneDetails,
+        setProductType
       }}
     >
       <Flex>
@@ -83,6 +84,7 @@ export const EditModalComponent = ({
                   />
                   <RejectInformation
                     setRejectionInformation={setRejectionInformation}
+                    setTotalReject={setTotalReject}
                   />
                   <ChecklistParent />
                 </VStack>
@@ -94,14 +96,17 @@ export const EditModalComponent = ({
                 onClose={onClose}
                 fetchPo={fetchPo}
                 fetchNotification={fetchNotification}
+                editData={editData}
                 submitReceiving={submitReceiving}
                 rejectionInformation={rejectionInformation}
+                totalReject={totalReject}
                 documentationChecklist={documentationChecklist}
                 foodHandlingDetails={foodHandlingDetails}
                 conformanceDetails={conformanceDetails}
                 otherConformanceDetails={otherConformanceDetails}
                 deliveryDetails={deliveryDetails}
                 hygieneDetails={hygieneDetails}
+                productType={productType}
               />
             </ModalFooter>
           </ModalContent>
