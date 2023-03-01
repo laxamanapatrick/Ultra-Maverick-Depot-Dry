@@ -9,15 +9,18 @@ import {
   HStack,
   Input,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
 import { decodeUser } from "../../../../services/decode-user";
+import { ToastComponent } from "../../../../components/Toast";
 
 const ReceivingInformation = ({
   editData,
   submitReceiving,
   setSubmitReceiving,
 }) => {
+  const toast = useToast()
   const user = decodeUser();
   const newDate = new Date();
   const dateToday = moment(newDate).format("yyyy-MM-DD");
@@ -25,6 +28,24 @@ const ReceivingInformation = ({
     fontSize: "sm",
     fontWeight: "semibold",
   };
+
+  const expiryDateHandler = (data) => {
+    console.log(data)
+    const day1 = new Date();
+    const day2 = new Date(data);
+    const daysDifference =
+      (day2.getTime() - day1.getTime()) / (1000 * 3600 * 24);
+    if (daysDifference <= 30) {
+      ToastComponent("Warning", "Item is about to expire", "warning", toast);
+    }
+    setSubmitReceiving({
+      manufacturingDate: submitReceiving.manufacturingDate,
+      expiryDate: data,
+      expectedDelivery: submitReceiving.expectedDelivery,
+      actualQuantityDelivered: submitReceiving.actualQuantityDelivered,
+    });
+  };
+
   return (
     <>
       <Accordion w="full" allowMultiple defaultIndex={[0]}>
@@ -134,15 +155,7 @@ const ReceivingInformation = ({
                     w="215px"
                     h="35px"
                     min={dateToday}
-                    onChange={(e) =>
-                      setSubmitReceiving({
-                        manufacturingDate: submitReceiving.manufacturingDate,
-                        expiryDate: e.target.value,
-                        expectedDelivery: submitReceiving.expectedDelivery,
-                        actualQuantityDelivered:
-                          submitReceiving.actualQuantityDelivered,
-                      })
-                    }
+                    onChange={(e) => expiryDateHandler(e.target.value)}
                   />
                 </VStack>
                 <VStack spacing={0} alignItems="start">

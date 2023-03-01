@@ -15,13 +15,16 @@ import apiClient from "../../services/apiClient";
 import { SaveButton } from "./moveorder/Action-Modals";
 import { ToastComponent } from "../../components/Toast";
 import { hubURL } from "../../services/hubURL";
-import { DisablePreparation } from "./moveorder/Disable-Preparation";
 import {
   HttpTransportType,
   HubConnectionBuilder,
   LogLevel,
 } from "@microsoft/signalr";
 import { decodeUser } from "../../services/decode-user";
+import {
+  DisablePreparation,
+  EnablePreparation,
+} from "./moveorder/Preparation-User-Control";
 
 const currentUser = decodeUser();
 
@@ -70,7 +73,12 @@ const fetchPreparedItemsApi = async (orderId) => {
   return res.data;
 };
 
-const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
+const MoveOrderPage = ({
+  notification,
+  fetchNotification,
+  unsetRequest,
+  setMoveOrderIdOnApp,
+}) => {
   const [farmName, setFarmName] = useState("");
 
   const [deliveryStatus, setDeliveryStatus] = useState("");
@@ -111,7 +119,8 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   const [pageDisable, setPageDisable] = useState(false);
 
   const [preparingStatus, setPreparingStatus] = useState(false);
-  const [preparingUser, setPreparingUser] = useState('')
+  const [isBeingPrepared, setIsBeingPrepared] = useState(false);
+  const [preparingUser, setPreparingUser] = useState("");
   // const [paginationData, setPaginationData] = useState([]);
   const [connectionTwo, setConnectionTwo] = useState(null);
 
@@ -120,8 +129,8 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   const fetchMoveOrder = () => {
     fetchMoveOrderApi(currentPage).then((res) => {
       setFarmName(res?.orders[0]?.farm);
-      setPreparingStatus(res?.orders[0]?.isBeingPrepared);
-      setPreparingUser(res?.orders[0]?.setBy)
+      setIsBeingPrepared(res?.orders[0]?.isBeingPrepared);
+      setPreparingUser(res?.orders[0]?.setBy);
       setPageTotal(res.totalCount);
       // setPaginationData(res);
     });
@@ -142,6 +151,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   const fetchApprovedMoveOrders = () => {
     fetchApprovedMoveOrdersApi(farmName).then((res) => {
       setMoveData(res);
+      setMoveOrderIdOnApp(res[0]?.id);
       setLengthIndicator(res.length);
       // setOrderId(res[0]?.id)
     });
@@ -286,13 +296,15 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
   //   }
   // }, [path.pathname != pathMO]);
 
-  useEffect(() => {
-    startSetConnection();
-    setRequest();
-  }, [moveData?.length > 0]);
+  // useEffect(() => {
+  //   startSetConnection();
+  //   setRequest();
+  // }, [moveData?.length > 0]);
 
   useEffect(() => {
+    startSetConnection();
     unsetRequest(moveData[0]?.id, currentUser?.fullName);
+    setPreparingStatus(false)
   }, [currentPage]);
 
   // const pathMO = "/inventory/move-order";
@@ -312,9 +324,25 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
 
   return (
     <>
-      {preparingStatus && <DisablePreparation preparingUser={preparingUser} />}
+      {isBeingPrepared && preparingUser !== currentUser?.fullName && (
+        <DisablePreparation preparingUser={preparingUser} />
+      )}
+      {preparingStatus === false && !isBeingPrepared && (
+        <EnablePreparation preparingUser={preparingUser} />
+      )}
       <VStack w="full" p={4} spacing={6}>
         <ListofApprovedDate
+          preparingUser={preparingUser}
+          me={currentUser?.fullName}
+          isBeingPrepared={isBeingPrepared}
+          preparingStatus={preparingStatus}
+          setPreparingStatus={setPreparingStatus}
+          setRequest={setRequest}
+          unsetRequest={unsetRequest}
+          startSetConnection={startSetConnection}
+          connectionTwo={connectionTwo}
+          MoveOrderId={moveData[0]?.id}
+          userFullname={currentUser?.fullName}
           farmName={farmName}
           moveData={moveData}
           setCurrentPage={setCurrentPage}
@@ -329,6 +357,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
           // setBatchNumber={setBatchNumber}
           buttonChanger={buttonChanger}
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
+          fetchMoveOrder={fetchMoveOrder}
           lengthIndicator={lengthIndicator}
           preparedLength={preparedData?.length}
           pageDisable={pageDisable}
@@ -371,8 +400,7 @@ const MoveOrderPage = ({ notification, fetchNotification, unsetRequest }) => {
           />
         ) : (
           itemCode &&
-          highlighterId && 
-          (
+          highlighterId && (
             <ActualItemQuantity
               setWarehouseId={setWarehouseId}
               warehouseId={warehouseId}

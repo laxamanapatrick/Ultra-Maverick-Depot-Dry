@@ -8,7 +8,7 @@ import {
 import { Button, Flex, Select, Text } from "@chakra-ui/react";
 import { hubURL } from "../services/hubURL";
 import apiClient from "../services/apiClient";
-import { DisablePreparation } from "../pages/inventory/moveorder/Disable-Preparation";
+import { DisablePreparation } from "../pages/inventory/moveorder/Preparation-User-Control";
 
 const currentUser = decodeUser();
 

@@ -100,6 +100,8 @@ const SubmitConfirmation = ({
       totalReject: totalReject,
       qC_ReceiveDate: moment(new Date()).format("yyyy-MM-DD"),
       qcBy: user?.fullName,
+      isActive: true,
+      expiryIsApprove: true,
     },
     checklistForCompliants: [
       {

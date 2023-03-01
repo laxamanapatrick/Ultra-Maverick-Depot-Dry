@@ -16,15 +16,22 @@ import {
   AccordionIcon,
   AccordionPanel,
   AccordionItem,
+  useToast,
 } from "@chakra-ui/react";
 import apiClient from "../../../../services/apiClient";
+import { ToastComponent } from "../../../../components/Toast";
 
 const fetchReasonsApi = async () => {
   const res = await apiClient.get("Reason/GetAllActiveReason");
   return res.data;
 };
 
-const RejectInformation = ({setRejectionInformation, setTotalReject}) => {
+const RejectInformation = ({
+  actualQuantityDelivered,
+  setRejectionInformation,
+  setTotalReject,
+}) => {
+  const toast = useToast();
   const [rows, setRows] = useState([{ rejectQty: "", reason: "" }]);
   const [totalQty, setTotalQty] = useState(0);
 
@@ -58,6 +65,50 @@ const RejectInformation = ({setRejectionInformation, setTotalReject}) => {
     const { name, value } = event.target;
     const newRows = [...rows];
     newRows[index][name] = value;
+
+    // Reset rejectQty if the selected reason is empty
+    if (name === "reason" && value === "") {
+      newRows[index].rejectQty = "";
+    }
+
+    // Disable the rejectQty input if no reason is selected
+    if (name === "reason") {
+      newRows[index].rejectQtyDisabled = value === "";
+      // Disable the input for all subsequent rows if no reason is selected
+      for (let i = index + 1; i < newRows.length; i++) {
+        newRows[i].rejectQtyDisabled = true;
+      }
+    } else if (newRows[index].rejectQtyDisabled) {
+      // Enable the input for the current row if a reason is selected
+      newRows[index].rejectQtyDisabled = false;
+    }
+
+    // Reset the rejectQty input if the value entered is greater than actualQuantityDelivered
+    if (
+      name === "rejectQty" &&
+      Number(value) > Number(actualQuantityDelivered) &&
+      totalQty !== 0 // Check if totalQty is not 0
+    ) {
+      ToastComponent(
+        "Warning",
+        "Your quantity is higher than your Actual Delivered",
+        "warning",
+        toast
+      );
+      newRows[index][name] = "";
+    }
+
+    //Reset if total reject quanity exceed actualQuantityDelivered
+    if (name === "rejectQty" && Number(value) + totalQty > Number(actualQuantityDelivered)) {
+      ToastComponent(
+        "Warning",
+        "Your total reject quantity will be higher than your Actual Delivered",
+        "warning",
+        toast
+      );
+      newRows[index][name] = "";
+    }
+
     setRows(newRows);
   };
 
@@ -67,39 +118,41 @@ const RejectInformation = ({setRejectionInformation, setTotalReject}) => {
       sum += Number(row.rejectQty);
     });
     setTotalQty(sum);
-    setTotalReject(sum)
+    setTotalReject(sum);
   };
 
   useEffect(() => {
     calculateTotalQty();
-    setRejectionInformation(rows.filter(row => row.rejectQty && row.reason))
+    setRejectionInformation(rows.filter((row) => row.rejectQty && row.reason));
   }, [rows]);
 
-  const canAddRow = rows.every((row) => row.rejectQty && row.reason);
+  const canAddRow =
+    rows.every((row) => row.rejectQty && row.reason) &&
+    Number(totalQty) < Number(actualQuantityDelivered);
 
   return (
     <>
-        <Accordion w="full" allowMultiple defaultIndex={[0]}>
-          <AccordionItem>
-            <AccordionButton>
-              <Text
-                fontSize="sm"
-                textAlign="center"
-                bgColor="secondary"
-                color="white"
-                w="full"
-              >
-                Rejection Information
-                <AccordionIcon />
-              </Text>
-            </AccordionButton>
-            <AccordionPanel>
+      <Accordion w="full" allowMultiple defaultIndex={[0]}>
+        <AccordionItem>
+          <AccordionButton>
+            <Text
+              fontSize="sm"
+              textAlign="center"
+              bgColor="secondary"
+              color="white"
+              w="full"
+            >
+              Rejection Information
+              <AccordionIcon />
+            </Text>
+          </AccordionButton>
+          <AccordionPanel>
             <Box w="80%">
               <Table variant="simple">
                 <Thead>
                   <Tr>
-                    <Th>Reject Quantity</Th>
                     <Th>Reason</Th>
+                    <Th>Reject Quantity</Th>
                     <Th>Action</Th>
                   </Tr>
                 </Thead>
@@ -107,21 +160,12 @@ const RejectInformation = ({setRejectionInformation, setTotalReject}) => {
                   {rows.map((row, index) => (
                     <Tr key={index}>
                       <Td>
-                        <Input
-                          type="number"
-                          name="rejectQty"
-                          value={row.rejectQty}
-                          onChange={(e) => handleInputChange(e, index)}
-                          required
-                        />
-                      </Td>
-                      <Td>
                         {reasons.length > 0 ? (
                           <Select
                             w="auto"
                             name="reason"
                             value={row.reason}
-                            placeholder="Please Select a Remark"
+                            placeholder="Please Select a Remark First"
                             onChange={(e) => handleInputChange(e, index)}
                             required
                           >
@@ -134,6 +178,21 @@ const RejectInformation = ({setRejectionInformation, setTotalReject}) => {
                         ) : (
                           "Loading"
                         )}
+                      </Td>
+                      <Td>
+                        <Input
+                          type="number"
+                          name="rejectQty"
+                          value={row.rejectQty}
+                          onChange={(e) => handleInputChange(e, index)}
+                          required
+                          disabled={row.rejectQtyDisabled}
+                          title={
+                            row.rejectQtyDisabled
+                              ? "Please select a remark first."
+                              : ""
+                          }
+                        />
                       </Td>
                       <Td>
                         {index === rows.length - 1 ? (

@@ -31,15 +31,27 @@ import { GoArrowSmallRight } from "react-icons/go";
 import { FaSort } from "react-icons/fa";
 import moment from "moment";
 import { CancelApprovedDate } from "./Action-Modals";
-import { DisablePreparation } from "./Disable-Preparation";
+import { DisablePreparation } from "./Preparation-User-Control";
 import { ToastComponent } from "../../../components/Toast";
 
 export const ListofApprovedDate = ({
+  preparingUser,
+  me,
+  isBeingPrepared,
+  preparingStatus,
+  setPreparingStatus,
+  MoveOrderId,
+  userFullname,
+  setRequest,
+  unsetRequest,
+  startSetConnection,
+  connectionTwo,
   farmName,
   moveData,
   pagesCount,
   currentPage,
   fetchApprovedMoveOrders,
+  fetchMoveOrder,
   lengthIndicator,
   setCurrentPage,
   setItemCode,
@@ -141,15 +153,51 @@ export const ListofApprovedDate = ({
     }
   }, [pageDisable]);
 
+  const startPreparationHandler = () => {
+    startSetConnection()
+    setPreparingStatus(true);
+    setRequest();
+  };
+
+  const stopPreparationHandler = () => {
+    startSetConnection()
+    setPreparingStatus(false);
+    unsetRequest(MoveOrderId, userFullname);
+  };
+
+  useEffect(() => {
+    if(connectionTwo){
+      fetchMoveOrder()
+    }
+  
+  }, [connectionTwo])
+  
+
   return (
     <Flex w="full" flexDirection="column">
       <Flex w="full" justifyContent="space-between">
-        <HStack w="40%">
+        <HStack>
           <Badge bgColor="secondary" color="white" px={3}>
             Farm:{" "}
           </Badge>
           <Text fontSize="sm">{farmName && farmName}</Text>
         </HStack>
+
+        {!preparingStatus ? (
+          <Button
+            onClick={startPreparationHandler}
+            size="sm"
+            colorScheme="green"
+            disabled={isBeingPrepared}
+            title={isBeingPrepared ? 'Someone is already preaparing this order' : ''}
+          >
+            Start Preparing
+          </Button>
+        ) : (
+          <Button onClick={stopPreparationHandler} size="sm" colorScheme="red">
+            Stop Preparing
+          </Button>
+        )}
 
         <Flex>
           <Pagination

@@ -34,7 +34,6 @@ export const EditModalComponent = ({
   fetchPo,
   fetchNotification,
 }) => {
-
   // Submit Data states
   const [submitReceiving, setSubmitReceiving] = useState({
     manufacturingDate: "",
@@ -43,14 +42,14 @@ export const EditModalComponent = ({
     actualQuantityDelivered: "",
   });
   const [rejectionInformation, setRejectionInformation] = useState(null);
-  const [totalReject, setTotalReject] = useState(0)
+  const [totalReject, setTotalReject] = useState(0);
   const [documentationChecklist, setDocumentationChecklist] = useState(null);
   const [foodHandlingDetails, setFoodHandlingDetails] = useState(null);
   const [conformanceDetails, setConformanceDetails] = useState(null);
   const [otherConformanceDetails, setOtherConformanceDetails] = useState(null);
   const [deliveryDetails, setDeliveryDetails] = useState(null);
-  const [hygieneDetails, setHygieneDetails] = useState(null)
-  const [productType, setProductType] = useState(null)
+  const [hygieneDetails, setHygieneDetails] = useState(null);
+  const [productType, setProductType] = useState(null);
 
   return (
     <ReceivingContext.Provider
@@ -61,7 +60,7 @@ export const EditModalComponent = ({
         setOtherConformanceDetails,
         setDeliveryDetails,
         setHygieneDetails,
-        setProductType
+        setProductType,
       }}
     >
       <Flex>
@@ -83,6 +82,9 @@ export const EditModalComponent = ({
                     setSubmitReceiving={setSubmitReceiving}
                   />
                   <RejectInformation
+                    actualQuantityDelivered={
+                      submitReceiving.actualQuantityDelivered
+                    }
                     setRejectionInformation={setRejectionInformation}
                     setTotalReject={setTotalReject}
                   />
