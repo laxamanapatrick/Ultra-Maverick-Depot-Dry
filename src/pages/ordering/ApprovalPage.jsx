@@ -20,6 +20,8 @@ const ApprovalPage = ({ fetchNotification }) => {
   const [orders, setOrders] = useState([])
   const [farmOrders, setFarmOrders] = useState([])
 
+  const [orderIds, setOrderIds] = useState([])
+
   const fetchOrderList = () => {
     fetchOrderListApi().then(res => {
       setOrders(res)
@@ -53,10 +55,10 @@ const ApprovalPage = ({ fetchNotification }) => {
   return (
     <>
       <VStack w='full' h='auto' spacing={5}>
-        <ListofPreparedDate orders={orders} orderNo={orderNo} setOrderNo={setOrderNo}
+        <ListofPreparedDate orders={orders} orderNo={orderNo} setOrderNo={setOrderNo} setOrderIds={setOrderIds}
         />
         <ListofOrders farmOrders={farmOrders} orderNo={orderNo} setOrderNo={setOrderNo} fetchOrderList={fetchOrderList}
-          fetchOrdersByOrderNo={fetchOrdersByOrderNo} fetchNotification={fetchNotification} />
+          fetchOrdersByOrderNo={fetchOrdersByOrderNo} fetchNotification={fetchNotification} orderIds={orderIds} />
       </VStack>
     </>
   )

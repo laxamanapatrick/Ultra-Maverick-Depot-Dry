@@ -60,11 +60,11 @@ export const hygienePracticesData = [
     details: "Absence of loose items",
     type: "radio",
   },
-  {
-    id: 7,
-    details: "Name of delivery personnel",
-    type: "input",
-  },
+  // {
+  //   id: 7,
+  //   details: "Name of delivery personnel",
+  //   type: "input",
+  // },
 ];
 
 // export const evaluationData = [

@@ -13,12 +13,12 @@ const fetchGenusOrdersApi = async (fromDate, toDate) => {
 const OrdersPage = ({ fetchNotification }) => {
 
   const dateVar = new Date()
-  const startDate = dateVar.setDate(dateVar.getDate() - 3)
+  const startDate = moment(dateVar.setDate(dateVar.getDate() - 3)).format('yyyy-MM-DD')
 
   const [genusOrders, setGenusOrders] = useState([])
 
   const [fromDate, setFromDate] = useState(startDate)
-  const [toDate, setToDate] = useState(new Date())
+  const [toDate, setToDate] = useState(moment(new Date()).format('yyyy-MM-DD'))
 
   const [search, setSearch] = useState('')
 

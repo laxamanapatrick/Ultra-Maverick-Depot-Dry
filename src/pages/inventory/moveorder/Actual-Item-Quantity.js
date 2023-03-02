@@ -19,8 +19,6 @@ export const ActualItemQuantity = ({ warehouseId, setWarehouseId, barcodeData, o
     itemCode, fetchOrderList, fetchPreparedItems, qtyOrdered, preparedQty, nearlyExpireBarcode, setItemCode
 }) => {
 
-    console.log(qtyOrdered)
-
     const [availableBarcode, setAvailableBarcode] = useState([])
 
     const fetchAvailableBarcodePerItemCode = () => {

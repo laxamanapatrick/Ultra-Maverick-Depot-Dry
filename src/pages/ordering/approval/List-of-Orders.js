@@ -9,9 +9,7 @@ import PageScrollReusable from '../../../components/PageScroll-Reusable'
 import { ApproveModal, RejectModal } from './Action-Modals'
 import { TiInfo } from 'react-icons/ti'
 
-export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, fetchOrdersByOrderNo, fetchNotification }) => {
-
-  const [stockIdentifier, setStockIdentifier] = useState("false")
+export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, fetchOrdersByOrderNo, fetchNotification, orderIds }) => {
 
   const { isOpen: isApprove, onClose: closeApprove, onOpen: openApprove } = useDisclosure()
   const { isOpen: isReject, onClose: closeReject, onOpen: openReject } = useDisclosure()
@@ -23,8 +21,6 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
   const rejectModal = () => {
     openReject()
   }
-
-  console.log(farmOrders)
 
   return (
     <Flex w='95%' p={10} flexDirection='column'>
@@ -86,8 +82,8 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
 
       <Flex justifyContent='end'>
         <ButtonGroup size='xs'>
-          <Button colorScheme='blue' px={2} disabled={!orderNo} onClick={approveModal}>APPROVE</Button>
-          <Button colorScheme='red' px={4} disabled={!orderNo} onClick={rejectModal}>REJECT</Button>
+          <Button colorScheme='blue' px={2} disabled={orderIds?.length <= 0} onClick={approveModal}>APPROVE</Button>
+          <Button colorScheme='red' px={4} disabled={orderIds?.length <= 0} onClick={rejectModal}>REJECT</Button>
         </ButtonGroup>
       </Flex>
 
@@ -97,6 +93,7 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
             isOpen={isApprove}
             onClose={closeApprove}
             orderNo={orderNo}
+            orderIds={orderIds}
             setOrderNo={setOrderNo}
             fetchOrderList={fetchOrderList}
             fetchOrdersByOrderNo={fetchOrdersByOrderNo}
@@ -111,6 +108,7 @@ export const ListofOrders = ({ farmOrders, orderNo, setOrderNo, fetchOrderList, 
             isOpen={isReject}
             onClose={closeReject}
             orderNo={orderNo}
+            orderIds={orderIds}
             setOrderNo={setOrderNo}
             fetchOrderList={fetchOrderList}
             fetchOrdersByOrderNo={fetchOrdersByOrderNo}

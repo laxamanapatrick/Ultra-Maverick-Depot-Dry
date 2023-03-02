@@ -427,7 +427,7 @@ function App() {
               path="orders"
               element={
                 user ? (
-                  <ImportOrderPage
+                  <OrdersPage
                     notification={notification}
                     fetchNotification={fetchNotification}
                   />
@@ -590,7 +590,16 @@ function App() {
             />
             <Route
               path="import-order"
-              element={user ? <ImportOrderPage /> : <Navigate to="/login" />}
+              element={
+                user ? (
+                  <ImportOrderPage
+                    notification={notification}
+                    fetchNotification={fetchNotification}
+                  />
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
             />
             <Route
               path="import-raw-materials"

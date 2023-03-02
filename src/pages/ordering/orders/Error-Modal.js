@@ -178,7 +178,7 @@ export const ErrorModal = ({ isOpen, onClose, errorData, isLoading, fetchNotific
             farmCode: list?.farmCode,
             farmName: list?.farmName,
             orderNo: list?.orderNo,
-            batchNo: list?.batchNo,
+            // batchNo: list?.batchNo,
             orderDate: list?.orderDate,
             dateNeeded: list?.dateNeeded,
             timeNeeded: list?.dateNeeded,
@@ -186,11 +186,13 @@ export const ErrorModal = ({ isOpen, onClose, errorData, isLoading, fetchNotific
             itemCode: list?.itemCode,
             itemDescription: list?.itemDescription,
             uom: list?.uom,
-            quantityOrdered: list?.quantityOrdered,
+            quantityOrdered: list?.quantity,
             category: list?.category
         }
     })
 
+    console.log(filteredOrders)
+    
     const syncManager = () => {
         openConfirm()
     }

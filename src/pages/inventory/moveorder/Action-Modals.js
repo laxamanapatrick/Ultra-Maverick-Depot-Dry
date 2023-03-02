@@ -401,7 +401,6 @@ export const CancelApprovedDate = ({
 
   const submitHandler = () => {
     setIsLoading(true);
-    console.log(id);
     try {
       const res = apiClient
         .put(`Ordering/CancelOrdersInMoveOrder`, { orderNoPkey: id })

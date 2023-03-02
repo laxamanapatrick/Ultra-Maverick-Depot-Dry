@@ -113,7 +113,7 @@ const SubmitButton = ({
 
   //Hygiene Practices
   function validateHygieneLength(variable) {
-    if (variable?.length != 7) {
+    if (variable?.length != 6) {
       return true;
     } else {
       return false;

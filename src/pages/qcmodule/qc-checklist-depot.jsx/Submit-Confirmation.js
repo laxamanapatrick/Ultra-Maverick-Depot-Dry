@@ -99,9 +99,7 @@ const SubmitConfirmation = ({
       itemCode: editData.itemCode,
       totalReject: totalReject,
       qC_ReceiveDate: moment(new Date()).format("yyyy-MM-DD"),
-      qcBy: user?.fullName,
-      isActive: true,
-      expiryIsApprove: true,
+      qcBy: user?.fullName
     },
     checklistForCompliants: [
       {
@@ -459,7 +457,30 @@ const SubmitConfirmation = ({
           fetchPo();
           fetchNotification();
           closeConfirmation();
+          console.log(res)
+        
+
+          const receivingIdWithoutUseContext = res.data.id;
+          const secondSubmit = rejectionInformation.map((data) => {
+            return {
+              pO_ReceivingId: receivingIdWithoutUseContext,
+              quantity: Number(data.rejectQty),
+              remarks: data.reason,
+            };
+          });
+          if (totalReject > 0) {
+            console.log(secondSubmit);  
+            try {
+              const res = apiClient.put(
+                `Receiving/RejectRawMaterialsByReceivingId`,
+                secondSubmit
+              );
+            } catch (err) {
+              console.log(err);
+            }
+          }
           closeEditModal();
+
         })
         .catch((err) => {
           ToastComponent(
@@ -472,7 +493,7 @@ const SubmitConfirmation = ({
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>

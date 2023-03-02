@@ -230,7 +230,7 @@ const MoveOrderPage = ({
   useEffect(() => {
     if (orderListData.length > 0) {
       const variable = orderListData.every(
-        (item) => item.preparedQuantity === item.allocatedQuantity
+        (item) => item.preparedQuantity === item.quantityOrder
       );
       setButtonChanger(variable);
       // orderListData.some(item => {

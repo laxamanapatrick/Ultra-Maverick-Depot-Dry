@@ -114,7 +114,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
         }
     }, [lengthIndicator])
 
-    const stockAvailable = orders?.filter(item => item.stockOnHand >= item.allocatedQuantity)
+    const stockAvailable = orders?.filter(item => item.stockOnHand >= item.quantityOrder)
     const stockData = stockAvailable?.map(item => item.id)
     const parentCheckHandler = (e) => {
         if (e.target.checked) {
@@ -225,15 +225,15 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
                                     )
                                     ?.map((item, i) =>
                                         <Tr
-                                            bgColor={item.stockOnHand < item.allocatedQuantity ? '#dfdfdf5c' : 'none'}
-                                            color={item.stockOnHand < item.allocatedQuantity ? 'black' : 'none'}
+                                            bgColor={item.stockOnHand < item.quantityOrder ? '#dfdfdf5c' : 'none'}
+                                            color={item.stockOnHand < item.quantityOrder ? 'black' : 'none'}
                                             _active={transactId ? { bgColor: 'accent', color: 'white' } : { bgColor: 'none' }}
                                             _hover={transactId ? { bgColor: 'accent', color: 'white' } : { bgColor: 'none' }}
                                             cursor='pointer'
                                             key={i}
                                         >
                                             {
-                                                item.stockOnHand >= item.allocatedQuantity ?
+                                                item.stockOnHand >= item.quantityOrder ?
                                                     <Td>
                                                         <Checkbox
                                                             onChange={childCheckHandler}
