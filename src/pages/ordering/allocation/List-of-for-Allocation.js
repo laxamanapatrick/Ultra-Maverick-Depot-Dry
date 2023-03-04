@@ -34,6 +34,8 @@ export const ListofforAllocation = ({
   currentPage,
   setCurrentPage,
   orderData,
+  setOrderData,
+  setItemCode,
   fetchForAllocationPagination,
   fetchOrdersByItemCode,
   fetchNotification
@@ -54,9 +56,11 @@ export const ListofforAllocation = ({
             `Orders for Item Code ${itemCode} has been proceeded for scheduling of preparation.`,
             "success",
             toast
-          );
-          fetchForAllocationPagination();
-          fetchOrdersByItemCode();
+            );
+            fetchForAllocationPagination();
+            fetchOrdersByItemCode();
+            setOrderData([])
+            setItemCode("")
           fetchNotification()
         });
     } catch (error) {

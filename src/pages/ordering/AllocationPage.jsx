@@ -68,10 +68,12 @@ const AllocationPage = ({ fetchNotification }) => {
     <>
       <ListofforAllocation
         itemCode={itemCode}
+        setItemCode={setItemCode}
         currentPage={currentPage}
         pagesCount={pagesCount}
         setCurrentPage={setCurrentPage}
         orderData={orderData}
+        setOrderData={setOrderData}
         fetchForAllocationPagination={fetchForAllocationPagination}
         fetchOrdersByItemCode={fetchOrdersByItemCode}
         fetchNotification={fetchNotification}

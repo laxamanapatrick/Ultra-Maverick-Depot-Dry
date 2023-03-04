@@ -56,14 +56,16 @@ export const ConfirmFiltteredModal = ({
         )
         .then((res) => {
           ToastComponent("Success", "Orders Synced!", "success", toast);
-          fetchNotification();
+          // fetchNotification();
           // setIsLoading(false)
           onClose();
           closeErrorModal();
         })
         .catch((err) => {
-          ToastComponent("Error", "Orders were not Synced!", "error", toast);
+          // ToastComponent("Error", "Orders were not Synced!", "error", toast);
           onClose();
+          // fetchNotification();
+          closeErrorModal()
         });
     } catch (error) {}
   };

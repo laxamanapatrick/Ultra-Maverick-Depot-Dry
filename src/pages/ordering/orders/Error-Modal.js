@@ -191,8 +191,6 @@ export const ErrorModal = ({ isOpen, onClose, errorData, isLoading, fetchNotific
         }
     })
 
-    console.log(filteredOrders)
-    
     const syncManager = () => {
         openConfirm()
     }

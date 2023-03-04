@@ -63,7 +63,7 @@ const ProductInformation = ({ editData }) => {
                 </VStack>
                 <VStack spacing={0} alignItems="start">
                   <Text sx={textStyle}>Item Type</Text>
-                  <Input readOnly h="35px" value="Item Category not in get" />
+                  <Input readOnly h="35px" value="No masterlist yet" />
                 </VStack>
                 <VStack spacing={0} alignItems="start">
                   <Text sx={textStyle}>Sub Category</Text>
@@ -75,14 +75,14 @@ const ProductInformation = ({ editData }) => {
                   <Text sx={textStyle}>Supplier</Text>
                   <Input readOnly h="35px" value={editData?.supplier} />
                 </VStack>
-                <VStack spacing={0} alignItems="start" w='47%'>
+                {/* <VStack spacing={0} alignItems="start" w='47%'>
                   <Text sx={textStyle}>Unit Price</Text>
                   <Input
                     readOnly
                     h="35px"
                     value="Not included in get request"
                   />
-                </VStack>
+                </VStack> */}
               </HStack>
             </VStack>
           </AccordionPanel>
