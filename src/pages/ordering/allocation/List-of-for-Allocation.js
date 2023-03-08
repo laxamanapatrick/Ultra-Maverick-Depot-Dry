@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Badge,
   Button,
@@ -12,6 +12,7 @@ import {
   Th,
   Thead,
   Tr,
+  useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
@@ -24,9 +25,10 @@ import {
   PaginationContainer,
   PaginationPageGroup,
 } from "@ajna/pagination";
+import { ToastComponent } from "../../../components/Toast";
 import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import apiClient from "../../../services/apiClient";
-import { ToastComponent } from "../../../components/Toast";
+import AllocationPreview from "./Allocation-Preview";
 
 export const ListofforAllocation = ({
   itemCode,
@@ -38,7 +40,7 @@ export const ListofforAllocation = ({
   setItemCode,
   fetchForAllocationPagination,
   fetchOrdersByItemCode,
-  fetchNotification
+  fetchNotification,
 }) => {
   const toast = useToast();
 
@@ -46,22 +48,41 @@ export const ListofforAllocation = ({
     setCurrentPage(nextPage);
   };
 
-  const proceedHandler = async () => {
+  const {
+    isOpen: isAllocationPreviewOpen,
+    onClose: closeAllocationPreview,
+    onOpen: openAllocationPreview,
+  } = useDisclosure();
+
+  const [allocatedData, setAllocatedData] = useState([]);
+
+  const allocateHandler = async () => {
+    const submitArray = orderData?.map((item) => {
+      return {
+        itemCode: itemCode,
+        customerName: item.farm,
+        orderNo: item.id.toString(),
+      }
+    })
     try {
       const res = await apiClient
-        .put(`Ordering/Allocate`, [{ itemCode: itemCode }])
+        .put(`Ordering/Allocate`, submitArray)
         .then((res) => {
           ToastComponent(
             "Success",
             `Orders for Item Code ${itemCode} has been proceeded for scheduling of preparation.`,
             "success",
             toast
-            );
-            fetchForAllocationPagination();
-            fetchOrdersByItemCode();
-            setOrderData([])
-            setItemCode("")
-          fetchNotification()
+          );
+          console.log("My submitted body", submitArray)
+          console.log(res)
+          setAllocatedData(res?.data);
+          openAllocationPreview();
+          // fetchForAllocationPagination();
+          // fetchOrdersByItemCode();
+          // setOrderData([]);
+          // setItemCode("");
+          // fetchNotification();
         });
     } catch (error) {
       console.log(error);
@@ -71,14 +92,22 @@ export const ListofforAllocation = ({
   return (
     <Flex w="full" p={7} flexDirection="column">
       <Flex w="full" justifyContent="space-between">
-        <HStack w="auto">
-          <Badge bgColor="secondary" color="white" px={3}>
-            Item Code:{" "}
-          </Badge>
-          <Text fontSize="sm">{itemCode && itemCode}</Text>
-        </HStack>
+        <VStack alignItems="start">
+          <HStack>
+            <Badge bgColor="secondary" color="white" px={3}>
+              Item Code:{" "}
+            </Badge>
+            <Text fontSize="sm">{itemCode && itemCode}</Text>
+          </HStack>
+          <HStack>
+            <Badge bgColor="secondary" color="white" px={3}>
+              Stock on hand:{" "}
+            </Badge>
+            <Text fontSize="sm">{orderData[0]?.stockOnHand}</Text>
+          </HStack>
+        </VStack>
 
-        <Flex w="auto">
+        <Flex w="auto" alignItems="center">
           <Pagination
             pagesCount={pagesCount}
             currentPage={currentPage}
@@ -154,19 +183,29 @@ export const ListofforAllocation = ({
         <ButtonGroup size="sm" justifyContent="end" w="full" py={2} px={2}>
           {/* <Text fontSize='xs'>Selected Item(s): {checkedItems?.length}</Text> */}
           <Button
-            onClick={proceedHandler}
+            onClick={allocateHandler}
             title={"Proceed to preparation schedule"}
             disabled={!itemCode}
             px={3}
             colorScheme="blue"
           >
-            Proceed
+            Allocate
           </Button>
           {/* <Button px={3} colorScheme="red">
             Cancel and proceed for scheduling
           </Button> */}
         </ButtonGroup>
       </VStack>
+
+      {isAllocationPreviewOpen && (
+        <AllocationPreview
+          isOpen={isAllocationPreviewOpen}
+          onClose={closeAllocationPreview}
+          itemCode={itemCode}
+          soh={orderData[0]?.stockOnHand}
+          allocatedData={allocatedData}
+        />
+      )}
     </Flex>
   );
 };

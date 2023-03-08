@@ -170,7 +170,7 @@ export const ReceivedRMList = () => {
                                     <Th color='white'>Item Code</Th>
                                     <Th color='white'>Item Description</Th>
                                     <Th color='white'>Actual Good</Th>
-                                    <Th color='white'>Expiration Day</Th>
+                                    <Th color='white'>Days to Expire</Th>
                                     <Th color='white'>Expiration Date</Th>
                                     <Th color='white'>Print</Th>
                                 </Tr>
@@ -187,7 +187,7 @@ export const ReceivedRMList = () => {
                                             <Td>{items.itemCode}</Td>
                                             <Td>{items.itemDescription}</Td>
                                             <Td>{items.actualGood}</Td>
-                                            <Td>{items.expirationDay}</Td>
+                                            <Td>{items.expirationDay === 0 ? 'Expired' : items.expirationDay}</Td>
                                             <Td
                                                 color={items.expirationDay <= 0 ? 'red' : ''}
                                                 title={items.expirationDay <= 0 ? 'Expired' : `${items.expirationDay} days before expiration`}

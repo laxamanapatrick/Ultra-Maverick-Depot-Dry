@@ -6,7 +6,7 @@ import { AiFillPlayCircle } from "react-icons/ai";
 export const DisablePreparation = ({ preparingUser }) => {
   return (
     <Flex
-      w="90%"
+      w="full"
       height="100%"
       justifyContent="center"
       alignItems="center"
@@ -17,7 +17,7 @@ export const DisablePreparation = ({ preparingUser }) => {
       zIndex="modal"
     >
       <Flex>
-        <MdConstruction fontSize="400px" color="white" />
+        {/* <MdConstruction fontSize="400px" color="white" /> */}
       </Flex>
       <Flex color="white" mb="80px" fontSize="xl">{`${
         preparingUser && preparingUser
@@ -29,18 +29,18 @@ export const DisablePreparation = ({ preparingUser }) => {
 export const EnablePreparation = () => {
   return (
     <Flex
-      w="90%"
+      w="full"
       height="100%"
       justifyContent="center"
       alignItems="center"
       position="fixed"
       backgroundColor="rgba(52, 52, 52, 0.8)"
       mt="80px"
-      flexDirection="column"
+      flexDirection="row"
       zIndex="modal"
     >
       <Flex>
-        <AiFillPlayCircle fontSize="400px" color="white" />
+        {/* <AiFillPlayCircle fontSize="400px" color="white" /> */}
       </Flex>
       <Flex color="white" mb="80px" fontSize="xl">
         Click on start preparing to prepare this order.

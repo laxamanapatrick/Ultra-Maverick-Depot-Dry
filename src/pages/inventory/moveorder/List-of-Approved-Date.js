@@ -154,24 +154,22 @@ export const ListofApprovedDate = ({
   }, [pageDisable]);
 
   const startPreparationHandler = () => {
-    startSetConnection()
+    startSetConnection();
     setPreparingStatus(true);
     setRequest();
   };
 
   const stopPreparationHandler = () => {
-    startSetConnection()
+    startSetConnection();
     setPreparingStatus(false);
     unsetRequest(MoveOrderId, userFullname);
   };
 
   useEffect(() => {
-    if(connectionTwo){
-      fetchMoveOrder()
+    if (connectionTwo) {
+      fetchMoveOrder();
     }
-  
-  }, [connectionTwo])
-  
+  }, [connectionTwo]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -189,7 +187,9 @@ export const ListofApprovedDate = ({
             size="sm"
             colorScheme="green"
             disabled={isBeingPrepared}
-            title={isBeingPrepared ? 'Someone is already preaparing this order' : ''}
+            title={
+              isBeingPrepared ? "Someone is already preaparing this order" : ""
+            }
           >
             Start Preparing
           </Button>
@@ -207,12 +207,12 @@ export const ListofApprovedDate = ({
           >
             <PaginationContainer>
               <PaginationPrevious
-                disabled={pageDisable}
-                title={
-                  pageDisable
-                    ? "You must finish your progress and save a delivery status"
-                    : ""
-                }
+                disabled={pageDisable || preparingStatus}
+                // title={
+                //   pageDisable
+                //     ? "You must finish your progress and save a delivery status"
+                //     : pageDisable ? "You cannot leave this order unless you stop its preparation" : ""
+                // }
                 border="1px"
                 fontSize="xs"
                 px={2}
@@ -224,12 +224,12 @@ export const ListofApprovedDate = ({
                 {currentPage}
               </Text>
               <PaginationNext
-                disabled={pageDisable}
-                title={
-                  pageDisable
-                    ? "You must finish your progress and save a delivery status"
-                    : ""
-                }
+                disabled={pageDisable || preparingStatus}
+                // title={
+                //   pageDisable
+                //     ? "You must finish your progress and save a delivery status"
+                //     : pageDisable ? "You cannot leave this order unless you stop its preparation" : ""
+                // }
                 border="1px"
                 fontSize="xs"
                 px={4}
