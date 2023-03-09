@@ -43,7 +43,7 @@ export const EnablePreparation = () => {
         {/* <AiFillPlayCircle fontSize="400px" color="white" /> */}
       </Flex>
       <Flex color="white" mb="80px" fontSize="xl">
-        Click on start preparing to prepare this order.
+        This order is ready for preparation.
       </Flex>
     </Flex>
   );

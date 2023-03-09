@@ -129,8 +129,6 @@ const MoveOrderPage = ({
   const fetchMoveOrder = () => {
     fetchMoveOrderApi(currentPage).then((res) => {
       setFarmName(res?.orders[0]?.farm);
-      setIsBeingPrepared(res?.orders[0]?.isBeingPrepared);
-      setPreparingUser(res?.orders[0]?.setBy);
       setPageTotal(res.totalCount);
       // setPaginationData(res);
     });
@@ -171,6 +169,8 @@ const MoveOrderPage = ({
 
   const fetchOrderList = () => {
     fetchOrderListApi(orderId).then((res) => {
+      setIsBeingPrepared(res[lengthIndicator && lengthIndicator - 1]?.isBeingPrepared)
+      setPreparingUser(res[lengthIndicator && lengthIndicator - 1]?.setBy);
       setOrderListData(res);
     });
   };
@@ -304,7 +304,7 @@ const MoveOrderPage = ({
   useEffect(() => {
     startSetConnection();
     unsetRequest(moveData[0]?.id, currentUser?.fullName);
-    setPreparingStatus(false)
+    setPreparingStatus(false);
   }, [currentPage]);
 
   // const pathMO = "/inventory/move-order";
@@ -322,14 +322,19 @@ const MoveOrderPage = ({
   //   }
   // }, [preparingStatus]);
 
+  console.log("Preparing User:", preparingUser)
+  console.log("Is Being Prepared: ",isBeingPrepared)
+
   return (
     <>
-      {isBeingPrepared && preparingUser !== currentUser?.fullName && (
+    {isBeingPrepared && preparingUser !== currentUser?.fullName  && (
         <DisablePreparation preparingUser={preparingUser} />
       )}
-      {preparingStatus === false && !isBeingPrepared && (
-        <EnablePreparation preparingUser={preparingUser} />
-      )}
+      {!preparingStatus &&
+        !isBeingPrepared &&
+        !preparingUser && (
+          <EnablePreparation preparingUser={preparingUser} />
+        )}
       <VStack w="full" p={4} spacing={6}>
         <ListofApprovedDate
           preparingUser={preparingUser}
@@ -358,6 +363,7 @@ const MoveOrderPage = ({
           buttonChanger={buttonChanger}
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
           fetchMoveOrder={fetchMoveOrder}
+          fetchOrderList={fetchOrderList}
           lengthIndicator={lengthIndicator}
           preparedLength={preparedData?.length}
           pageDisable={pageDisable}

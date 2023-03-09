@@ -21,6 +21,7 @@ import {
 import { FiEdit } from "react-icons/fi";
 import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import { ToastComponent } from "../../../components/Toast";
+import apiClient from "../../../services/apiClient";
 
 const AllocationPreview = ({
   isOpen,
@@ -28,6 +29,11 @@ const AllocationPreview = ({
   allocatedData,
   itemCode,
   soh,
+  fetchForAllocationPagination,
+  fetchOrdersByItemCode,
+  setOrderData,
+  setItemCode,
+  fetchNotification,
 }) => {
   const toast = useToast();
   const [editedData, setEditedData] = useState(allocatedData);
@@ -55,10 +61,6 @@ const AllocationPreview = ({
     setEditedData(newData);
   };
 
-  const saveHandler = () => {
-    console.log(editedData);
-  };
-
   const hasEmptyField = editedData?.some((item) => {
     for (const property in item) {
       if (item[property] === "") {
@@ -68,7 +70,7 @@ const AllocationPreview = ({
     return false;
   });
 
-  const [totalAllocatedQuantity, setTotalAllocatedQuantity] = useState("")
+  const [totalAllocatedQuantity, setTotalAllocatedQuantity] = useState("");
 
   useEffect(() => {
     const newData = [...editedData];
@@ -77,19 +79,53 @@ const AllocationPreview = ({
       for (const item of newData) {
         totalAllocated += Number(item.allocatedQuantity);
       }
-      setTotalAllocatedQuantity(totalAllocated)
+      setTotalAllocatedQuantity(totalAllocated);
     }
   }, [editedData]);
 
+  const saveHandler = () => {
+    const submitArray = editedData?.map((item) => {
+      return {
+        id: item.orderNo,
+        customerName: item.customerName,
+        quantityOrdered: Number(item.allocatedQuantity),
+      };
+    });
+    console.log(submitArray);
+    try {
+      const res = apiClient
+        .put(`Ordering/ManualAllocation`, submitArray)
+        .then((res) => {
+          ToastComponent(
+            "Success",
+            `Orders for Item Code ${itemCode} has been proceeded for scheduling of preparation.`,
+            "success",
+            toast
+          );
+          fetchForAllocationPagination();
+          fetchOrdersByItemCode();
+          setOrderData([]);
+          setItemCode("");
+          fetchNotification();
+          onClose();
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
+      <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
         <ModalContent>
           <ModalHeader textAlign="center">
             Allocated Preview for Item Code: {itemCode && itemCode}
           </ModalHeader>
           {/* <ModalCloseButton color='white' pt={3} /> */}
           <ModalBody>
+            <Text fontSize="xs" color="green">
+              Allocated Quantities are editable
+            </Text>
             <PageScrollReusable>
               <Table>
                 <Thead bgColor="primary">
@@ -128,14 +164,20 @@ const AllocationPreview = ({
                 </Tbody>
               </Table>
             </PageScrollReusable>
-            <Text fontSize="xs" color="green">
-              Allocated Quantities are editable
+            <Text fontSize="xs">{` Stock On Hand: ${soh && soh}`}</Text>
+            <Text fontSize="xs">
+              {` Stock Quantity Used: ${Number(totalAllocatedQuantity)}`}
             </Text>
             <Text fontSize="xs">
-              {` Current Stocks Available: ${soh && soh}`}
+              {` Stock Quantity Available: ${
+                Number(soh) - Number(totalAllocatedQuantity)
+              }`}
             </Text>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter justifyContent="space-between">
+            <Text fontSize="xs" color="red">
+              Disclaimer: All available stocks must be used to proceed.
+            </Text>
             <Button
               mr={3}
               colorScheme="blue"
@@ -146,7 +188,9 @@ const AllocationPreview = ({
                   ? "All allocations must be equal to remaining stocks"
                   : ""
               }
-              disabled={hasEmptyField || Number(totalAllocatedQuantity) !== Number(soh)}
+              disabled={
+                hasEmptyField || Number(totalAllocatedQuantity) !== Number(soh)
+              }
               onClick={saveHandler}
             >
               Proceed

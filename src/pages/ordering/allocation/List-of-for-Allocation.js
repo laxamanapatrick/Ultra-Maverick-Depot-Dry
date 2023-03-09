@@ -62,27 +62,20 @@ export const ListofforAllocation = ({
         itemCode: itemCode,
         customerName: item.farm,
         orderNo: item.id.toString(),
-      }
-    })
+      };
+    });
     try {
       const res = await apiClient
         .put(`Ordering/Allocate`, submitArray)
         .then((res) => {
           ToastComponent(
             "Success",
-            `Orders for Item Code ${itemCode} has been proceeded for scheduling of preparation.`,
+            `Orders for Item Code ${itemCode} has been allocated.`,
             "success",
             toast
           );
-          console.log("My submitted body", submitArray)
-          console.log(res)
           setAllocatedData(res?.data);
           openAllocationPreview();
-          // fetchForAllocationPagination();
-          // fetchOrdersByItemCode();
-          // setOrderData([]);
-          // setItemCode("");
-          // fetchNotification();
         });
     } catch (error) {
       console.log(error);
@@ -103,7 +96,7 @@ export const ListofforAllocation = ({
             <Badge bgColor="secondary" color="white" px={3}>
               Stock on hand:{" "}
             </Badge>
-            <Text fontSize="sm">{orderData[0]?.stockOnHand}</Text>
+            <Text fontSize="sm" color={orderData[0]?.stockOnHand === 0 ? 'red' : ''}>{orderData[0]?.stockOnHand}</Text>
           </HStack>
         </VStack>
 
@@ -180,21 +173,27 @@ export const ListofforAllocation = ({
             </Tbody>
           </Table>
         </PageScrollReusable>
-        <ButtonGroup size="sm" justifyContent="end" w="full" py={2} px={2}>
-          {/* <Text fontSize='xs'>Selected Item(s): {checkedItems?.length}</Text> */}
-          <Button
-            onClick={allocateHandler}
-            title={"Proceed to preparation schedule"}
-            disabled={!itemCode}
-            px={3}
-            colorScheme="blue"
-          >
-            Allocate
-          </Button>
-          {/* <Button px={3} colorScheme="red">
+        {orderData[0]?.stockOnHand === 0 ? (
+          <Text color="danger">{`${
+            itemCode && itemCode
+          } currently has no stocks available.`}</Text>
+        ) : (
+          <ButtonGroup size="sm" justifyContent="end" w="full" py={2} px={2}>
+            {/* <Text fontSize='xs'>Selected Item(s): {checkedItems?.length}</Text> */}
+            <Button
+              onClick={allocateHandler}
+              title={"Proceed to preparation schedule"}
+              disabled={!itemCode}
+              px={3}
+              colorScheme="blue"
+            >
+              Allocate
+            </Button>
+            {/* <Button px={3} colorScheme="red">
             Cancel and proceed for scheduling
           </Button> */}
-        </ButtonGroup>
+          </ButtonGroup>
+        )}
       </VStack>
 
       {isAllocationPreviewOpen && (
@@ -204,6 +203,11 @@ export const ListofforAllocation = ({
           itemCode={itemCode}
           soh={orderData[0]?.stockOnHand}
           allocatedData={allocatedData}
+          fetchForAllocationPagination={fetchForAllocationPagination}
+          fetchOrdersByItemCode={fetchOrdersByItemCode}
+          setOrderData={setOrderData}
+          setItemCode={setItemCode}
+          fetchNotification={fetchNotification}
         />
       )}
     </Flex>

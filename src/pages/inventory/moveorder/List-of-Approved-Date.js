@@ -52,6 +52,7 @@ export const ListofApprovedDate = ({
   currentPage,
   fetchApprovedMoveOrders,
   fetchMoveOrder,
+  fetchOrderList,
   lengthIndicator,
   setCurrentPage,
   setItemCode,
@@ -155,6 +156,7 @@ export const ListofApprovedDate = ({
 
   const startPreparationHandler = () => {
     startSetConnection();
+    fetchOrderList()
     setPreparingStatus(true);
     setRequest();
   };
@@ -164,12 +166,6 @@ export const ListofApprovedDate = ({
     setPreparingStatus(false);
     unsetRequest(MoveOrderId, userFullname);
   };
-
-  useEffect(() => {
-    if (connectionTwo) {
-      fetchMoveOrder();
-    }
-  }, [connectionTwo]);
 
   return (
     <Flex w="full" flexDirection="column">
@@ -186,7 +182,7 @@ export const ListofApprovedDate = ({
             onClick={startPreparationHandler}
             size="sm"
             colorScheme="green"
-            disabled={isBeingPrepared}
+            disabled={isBeingPrepared || preparingUser}
             title={
               isBeingPrepared ? "Someone is already preaparing this order" : ""
             }
