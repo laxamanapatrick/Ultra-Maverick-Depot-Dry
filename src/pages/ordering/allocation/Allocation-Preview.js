@@ -174,10 +174,14 @@ const AllocationPreview = ({
               }`}
             </Text>
           </ModalBody>
-          <ModalFooter justifyContent="space-between">
-            <Text fontSize="xs" color="red">
-              Disclaimer: All available stocks must be used to proceed.
+          <ModalFooter justifyContent="end" my={5}>
+            {
+               Number(totalAllocatedQuantity) !== Number(soh) ?
+          
+            <Text fontSize="sm" color="red">
+              All available stocks must be used to proceed.
             </Text>
+            :
             <Button
               mr={3}
               colorScheme="blue"
@@ -195,6 +199,8 @@ const AllocationPreview = ({
             >
               Proceed
             </Button>
+                 
+                }
           </ModalFooter>
         </ModalContent>
       </Modal>

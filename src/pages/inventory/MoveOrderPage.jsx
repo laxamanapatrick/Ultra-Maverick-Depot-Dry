@@ -279,6 +279,8 @@ const MoveOrderPage = ({
     ]);
   };
 
+  console.log(moveData[0]?.id)
+
   // const unsetRequest = (id) => {
   //   apiClient.post("Ordering/UnsetBeingPrepared", [
   //     {
