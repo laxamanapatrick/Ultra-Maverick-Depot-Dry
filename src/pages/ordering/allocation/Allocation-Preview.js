@@ -175,32 +175,33 @@ const AllocationPreview = ({
             </Text>
           </ModalBody>
           <ModalFooter justifyContent="end" my={5}>
-            {
+            {/* {
                Number(totalAllocatedQuantity) !== Number(soh) ?
           
             <Text fontSize="sm" color="red">
               All available stocks must be used to proceed.
             </Text>
-            :
+            : */}
             <Button
               mr={3}
               colorScheme="blue"
               title={
                 hasEmptyField
                   ? "An empty field as been provided, please provide a 0 value if you do not wish to provide a quantity for the specific customer"
-                  : Number(totalAllocatedQuantity) !== Number(soh)
-                  ? "All allocations must be equal to remaining stocks"
+                  // : Number(totalAllocatedQuantity) !== Number(soh)
+                  // ? "All allocations must be equal to remaining stocks"
                   : ""
               }
               disabled={
-                hasEmptyField || Number(totalAllocatedQuantity) !== Number(soh)
+                hasEmptyField 
+                // || Number(totalAllocatedQuantity) !== Number(soh)
               }
               onClick={saveHandler}
             >
               Proceed
             </Button>
                  
-                }
+                 {/* } */}
           </ModalFooter>
         </ModalContent>
       </Modal>

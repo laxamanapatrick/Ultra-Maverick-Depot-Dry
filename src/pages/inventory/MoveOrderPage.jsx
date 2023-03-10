@@ -169,7 +169,9 @@ const MoveOrderPage = ({
 
   const fetchOrderList = () => {
     fetchOrderListApi(orderId).then((res) => {
-      setIsBeingPrepared(res[lengthIndicator && lengthIndicator - 1]?.isBeingPrepared)
+      setIsBeingPrepared(
+        res[lengthIndicator && lengthIndicator - 1]?.isBeingPrepared
+      );
       setPreparingUser(res[lengthIndicator && lengthIndicator - 1]?.setBy);
       setOrderListData(res);
     });
@@ -279,64 +281,20 @@ const MoveOrderPage = ({
     ]);
   };
 
-  console.log(moveData[0]?.id)
-
-  // const unsetRequest = (id) => {
-  //   apiClient.post("Ordering/UnsetBeingPrepared", [
-  //     {
-  //       orderNoPKey: id,
-  //       isBeingPrepared: null,
-  //       setBy: null,
-  //     },
-  //   ]);
-  // };
-
-  // const pathMO = "/inventory/move-order";
-  // useEffect(() => {
-  //   if (path.pathname != pathMO) {
-  //     unsetRequest();
-  //   }
-  // }, [path.pathname != pathMO]);
-
-  // useEffect(() => {
-  //   startSetConnection();
-  //   setRequest();
-  // }, [moveData?.length > 0]);
-
   useEffect(() => {
     startSetConnection();
     unsetRequest(moveData[0]?.id, currentUser?.fullName);
     setPreparingStatus(false);
   }, [currentPage]);
 
-  // const pathMO = "/inventory/move-order";
-
-  // useEffect(() => {
-  //   if (path != pathMO) {
-  //     startSetConnection();
-  //     unsetRequest();
-  //   }
-  // }, [path != pathMO]);
-
-  // useEffect(() => {
-  //   if (preparingStatus) {
-  //     setPageDisable(false);
-  //   }
-  // }, [preparingStatus]);
-
-  console.log("Preparing User:", preparingUser)
-  console.log("Is Being Prepared: ",isBeingPrepared)
-
   return (
     <>
-    {isBeingPrepared && preparingUser !== currentUser?.fullName  && (
+      {isBeingPrepared && preparingUser !== currentUser?.fullName && (
         <DisablePreparation preparingUser={preparingUser} />
       )}
-      {!preparingStatus &&
-        !isBeingPrepared &&
-        !preparingUser && (
-          <EnablePreparation preparingUser={preparingUser} />
-        )}
+      {!preparingStatus && !isBeingPrepared && !preparingUser && (
+        <EnablePreparation preparingUser={preparingUser} />
+      )}
       <VStack w="full" p={4} spacing={6}>
         <ListofApprovedDate
           preparingUser={preparingUser}
