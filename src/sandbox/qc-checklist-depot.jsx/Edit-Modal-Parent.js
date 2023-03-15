@@ -11,19 +11,14 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
-import moment from "moment";
-import PageScrollReusable from "../../../components/PageScroll-Reusable";
-import { decodeUser } from "../../../services/decode-user";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-import { ToastComponent } from "../../../components/Toast";
-import { ReceivingContext } from "../../../context/ReceivingContext";
+import PageScrollReusable from "../../components/PageScroll-Reusable";
+import { ReceivingContext } from "../../context/ReceivingContext";
 import ProductInformation from "./edit-modal-children/Product-Information";
 import ReceivingInformation from "./edit-modal-children/Receiving-Information";
 import RejectInformation from "./edit-modal-children/Reject-Information";
 import ChecklistParent from "./edit-modal-children/Checklist-Parent";
-import { documentationData } from "./edit-modal-children/checklist-children/checklistsData";
 import SubmitButton from "./Submit";
+import { decodeUser } from "../../services/decode-user";
 
 const currentUser = decodeUser();
 

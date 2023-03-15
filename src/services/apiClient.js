@@ -18,7 +18,7 @@ export default axios.create({
 // Aldryn Vega Backend
 
 // export default axios.create({
-//     baseURL: "https://10.10.12.115:5001/api/",
+//     baseURL: "http://10.10.10.1:45455/api/",
 //     headers: {
 //         "Content-Type": "application/json",
 //         "Authorization": 'Bearer '+user?.token
