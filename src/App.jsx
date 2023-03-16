@@ -195,7 +195,7 @@ function App() {
   const unsetRequest = (id, userFullname) => {
     apiClient.post("Ordering/UnsetBeingPrepared", [
       {
-        orderNoPKey: id,
+        orderNoPKey: Number(id),
         isBeingPrepared: null,
         setBy: userFullname,
       },

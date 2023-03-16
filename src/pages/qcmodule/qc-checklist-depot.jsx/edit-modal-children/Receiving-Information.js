@@ -20,7 +20,7 @@ const ReceivingInformation = ({
   submitReceiving,
   setSubmitReceiving,
 }) => {
-  const toast = useToast()
+  const toast = useToast();
   const user = decodeUser();
   const newDate = new Date();
   const dateToday = moment(newDate).format("yyyy-MM-DD");
@@ -30,7 +30,7 @@ const ReceivingInformation = ({
   };
 
   const expiryDateHandler = (data) => {
-    console.log(data)
+    console.log(data);
     const day1 = new Date();
     const day2 = new Date(data);
     const daysDifference =
@@ -145,18 +145,28 @@ const ReceivingInformation = ({
                 <VStack spacing={0} alignItems="start">
                   <Text
                     sx={textStyle}
-                    color={submitReceiving.expiryDate ? "" : "danger"}
+                    color={editData?.isExpirable ? submitReceiving.expiryDate ? "" : "danger" : ""}
                   >
                     Expiry Date
                   </Text>
-                  <Input
-                    bgColor="#fff8dc"
-                    type="date"
-                    w="215px"
-                    h="35px"
-                    min={dateToday}
-                    onChange={(e) => expiryDateHandler(e.target.value)}
-                  />
+                  {editData?.isExpirable ? (
+                    <Input
+                      bgColor="#fff8dc"
+                      type="date"
+                      w="215px"
+                      h="35px"
+                      min={dateToday}
+                      onChange={(e) => expiryDateHandler(e.target.value)}
+                    />
+                  ) : (
+                    <Input
+                      readOnly
+                      w="215px"
+                      h="35px"
+                      value='Item is not expirable'
+                      // onChange={(e) => expiryDateHandler(e.target.value)}
+                    />
+                  )}
                 </VStack>
                 <VStack spacing={0} alignItems="start">
                   <Text

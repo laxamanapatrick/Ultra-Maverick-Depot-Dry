@@ -37,7 +37,7 @@ export const EditModalComponent = ({
   // Submit Data states
   const [submitReceiving, setSubmitReceiving] = useState({
     manufacturingDate: "",
-    expiryDate: "",
+    expiryDate: editData?.isExpirable ? "" : null,
     expectedDelivery: "",
     actualQuantityDelivered: "",
   });
@@ -50,6 +50,8 @@ export const EditModalComponent = ({
   const [deliveryDetails, setDeliveryDetails] = useState(null);
   const [hygieneDetails, setHygieneDetails] = useState(null);
   const [productType, setProductType] = useState(null);
+
+  console.log(submitReceiving)
 
   return (
     <ReceivingContext.Provider

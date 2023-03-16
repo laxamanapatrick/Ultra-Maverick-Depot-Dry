@@ -37,7 +37,7 @@ const SubmitButton = ({
   function checkEmptyReceiving(fields) {
     return (
       fields.manufacturingDate === "" ||
-      fields.expiryDate === "" ||
+      fields.expiryDate === "" || 
       fields.expectedDelivery === "" ||
       fields.actualQuantityDelivered === ""
     );
