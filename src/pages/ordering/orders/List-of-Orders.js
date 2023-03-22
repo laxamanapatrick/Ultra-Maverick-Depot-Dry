@@ -195,9 +195,9 @@ export const ListofOrders = ({
                             <Td>{order.dateOrdered}</Td>
                             <Td>{order.dateNeeded}</Td>
                             <Td>{order.fox}</Td>
-                            <Td>{order.area}</Td>
-                            <Td>{order.route}</Td>
                             <Td>{order.name}</Td>
+                            <Td>{order.route}</Td>
+                            <Td>{order.area}</Td>
                             <Td>{order.productcode}</Td>
                             <Td>{order.products}</Td>
                             <Td>{order.meattype}</Td>

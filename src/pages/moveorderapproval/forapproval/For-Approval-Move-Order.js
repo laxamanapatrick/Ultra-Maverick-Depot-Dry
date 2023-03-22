@@ -19,7 +19,9 @@ export const ForApprovalMoveOrder = ({ setCurrentPage, setPageSize, setSearch, p
 }) => {
 
     const TableHead = [
-        "Line", "Order ID", "Customer Code", "Customer Name", "Category", "Total Quantity Order", "Prepared Date",
+        "Line", "Order ID", "Customer Code", "Customer Name", 
+        // "Category", 
+        "Total Quantity Order", "Prepared Date",
         // "Date Needed", 
         "View", "Approve", "Reject"
     ]
@@ -105,7 +107,7 @@ export const ForApprovalMoveOrder = ({ setCurrentPage, setPageSize, setSearch, p
                                     <Td>{item.orderNo}</Td>
                                     <Td>{item.farmCode}</Td>
                                     <Td>{item.farmName}</Td>
-                                    <Td>{item.category}</Td>
+                                    {/* <Td>{item.category}</Td> */}
                                     <Td>{item.quantity}</Td>
                                     <Td>{moment(item.preparedDate).format("MM/DD/yyyy")}</Td>
                                     {/* <Td>{item.dateNeeded}</Td> */}
