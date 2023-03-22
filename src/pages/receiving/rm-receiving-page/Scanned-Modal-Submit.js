@@ -64,6 +64,7 @@ const ScannedModalSubmit = ({ itemCodeData, code, receivingDate, lotCategory, ac
                 setReceivingId(res.data.id)
                 // fetchItemCodeData()
                 setButtonChanger(true)
+                console.log(res)
                 onClose()
 
                 // take generated id 

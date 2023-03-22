@@ -342,7 +342,7 @@ export const ListofApprovedDate = ({
                   <Td>{order.farm}</Td>
                   {/* <Td>{order.category}</Td> */}
                   <Td>{order.quantityOrder}</Td>
-                  <Td>{moment(order.preparedDate).format("MM/DD/yyyy")}</Td>
+                  <Td>{moment(order.preparedDateTime).format("MM/DD/yyyy")}</Td>
                   <Td>
                     <Button
                       size="xs"

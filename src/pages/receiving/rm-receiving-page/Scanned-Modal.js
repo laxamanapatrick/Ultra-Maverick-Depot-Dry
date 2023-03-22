@@ -71,10 +71,11 @@ const ScannedModal = ({
           undefined,
           { maximumFractionDigits: 2, minimumFractionDigits: 2 }
         ),
-        expiration: moment(itemCodeData.expiration).format("MM/DD/YYYY"),
+        // expiration: moment(itemCodeData.expiration).format("MM/DD/YYYY"),
+        expiration: itemCodeData.expiration,
         expirationDays: itemCodeData.expirationDays,
         manufacturingDate: moment(itemCodeData.manufacturingDate).format(
-          "MM/DD/YYYY"
+          "yyyy-MM-DD"
         ),
         totalStock: itemCodeData.totalStock.toLocaleString(undefined, {
           maximumFractionDigits: 2,
@@ -114,7 +115,7 @@ const ScannedModal = ({
   }, [sumQuantity]);
 
   const receivingDateProvider = (data) => {
-    console.log(data)
+    console.log(data);
     if (data) {
       setReceivingDateDisplay(data);
       setReceivingDate(data);
@@ -124,8 +125,10 @@ const ScannedModal = ({
     }
   };
 
-  const dateToday = moment(new Date()).format('yyyy-MM-DD')
-  const minDate = moment(new Date(new Date().setDate(new Date().getDate() - 3))).format('yyyy-MM-DD')
+  const dateToday = moment(new Date()).format("yyyy-MM-DD");
+  const minDate = moment(
+    new Date(new Date().setDate(new Date().getDate() - 3))
+  ).format("yyyy-MM-DD");
 
   return (
     <Flex justifyContent="space-between" flexDirection="column">
@@ -155,7 +158,7 @@ const ScannedModal = ({
                 onChange={(date) => receivingDateProvider(date.target.value)}
                 min={minDate}
                 max={dateToday}
-                type='date'
+                type="date"
                 bgColor="#fff8dc"
               />
               {/* <DatePicker
@@ -209,14 +212,14 @@ const ScannedModal = ({
 
             <FormLabel w="40%">
               Expiration
-              <Input
-                {...register("displayData.expiration")}
-                placeholder="Alapa Variable"
-                readOnly={true}
-                _disabled={{ color: "black" }}
-                disabled={true}
-                bgColor="gray.300"
-              />
+                <Input
+                  {...register("displayData.expiration")}
+                  placeholder="Alapa Variable"
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  disabled={true}
+                  bgColor="gray.300"
+                />
             </FormLabel>
           </Flex>
 
@@ -234,14 +237,14 @@ const ScannedModal = ({
 
             <FormLabel w="40%">
               Days of Expiry
-              <Input
-                {...register("displayData.expirationDays")}
-                placeholder="Alapa Variable"
-                readOnly={true}
-                _disabled={{ color: "black" }}
-                disabled={true}
-                bgColor="gray.300"
-              />
+                <Input
+                  {...register("displayData.expirationDays")}
+                  placeholder="Alapa Variable"
+                  readOnly={true}
+                  _disabled={{ color: "black" }}
+                  disabled={true}
+                  bgColor="gray.300"
+                />
             </FormLabel>
           </Flex>
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import moment from "moment";
 import {
   Accordion,
@@ -44,6 +44,34 @@ const ReceivingInformation = ({
       expectedDelivery: submitReceiving.expectedDelivery,
       actualQuantityDelivered: submitReceiving.actualQuantityDelivered,
     });
+  };
+
+  const actualQuantityDeliveredRef = useRef();
+  const handleActualQuantityDelivered = (data) => {
+    const allowablePercent = editData.quantityOrdered * 0.1;
+    const allowableAmount = editData.actualRemaining + allowablePercent;
+    if (Number(data) > allowableAmount) {
+      setSubmitReceiving({
+        manufacturingDate: submitReceiving.manufacturingDate,
+        expiryDate: submitReceiving.expiryDate,
+        expectedDelivery: submitReceiving.expectedDelivery,
+        actualQuantityDelivered: "",
+      });
+      actualQuantityDeliveredRef.current.value = "";
+      ToastComponent(
+        "Warning!",
+        "Amount is greater than allowable",
+        "warning",
+        toast
+      );
+    } else {
+      setSubmitReceiving({
+        manufacturingDate: submitReceiving.manufacturingDate,
+        expiryDate: submitReceiving.expiryDate,
+        expectedDelivery: submitReceiving.expectedDelivery,
+        actualQuantityDelivered: data,
+      });
+    }
   };
 
   return (
@@ -145,7 +173,13 @@ const ReceivingInformation = ({
                 <VStack spacing={0} alignItems="start">
                   <Text
                     sx={textStyle}
-                    color={editData?.isExpirable ? submitReceiving.expiryDate ? "" : "danger" : ""}
+                    color={
+                      editData?.isExpirable
+                        ? submitReceiving.expiryDate
+                          ? ""
+                          : "danger"
+                        : ""
+                    }
                   >
                     Expiry Date
                   </Text>
@@ -163,7 +197,7 @@ const ReceivingInformation = ({
                       readOnly
                       w="215px"
                       h="35px"
-                      value='Item is not expirable'
+                      value="Item is not expirable"
                       // onChange={(e) => expiryDateHandler(e.target.value)}
                     />
                   )}
@@ -203,14 +237,18 @@ const ReceivingInformation = ({
                     bgColor="#fff8dc"
                     type="number"
                     h="35px"
+                    ref={actualQuantityDeliveredRef}
                     onChange={(e) =>
-                      setSubmitReceiving({
-                        manufacturingDate: submitReceiving.manufacturingDate,
-                        expiryDate: submitReceiving.expiryDate,
-                        expectedDelivery: submitReceiving.expectedDelivery,
-                        actualQuantityDelivered: e.target.value,
-                      })
+                      handleActualQuantityDelivered(e.target.value)
                     }
+                    // onChange={(e) =>
+                    //   setSubmitReceiving({
+                    //     manufacturingDate: submitReceiving.manufacturingDate,
+                    //     expiryDate: submitReceiving.expiryDate,
+                    //     expectedDelivery: submitReceiving.expectedDelivery,
+                    //     actualQuantityDelivered: e.target.value,
+                    //   })
+                    // }
                   />
                 </VStack>
               </HStack>
