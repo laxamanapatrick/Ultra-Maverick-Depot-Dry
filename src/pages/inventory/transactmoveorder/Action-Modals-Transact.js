@@ -104,7 +104,7 @@ export const ViewModal = ({ isOpen, onClose, moveOrderInformation, moveOrderList
                                                         <Td>{list.category}</Td>
                                                         <Td>{list.uom}</Td>
                                                         <Td>{list.quantity}</Td>
-                                                        <Td>{moment(list.expiration).format('MM/DD/yyyy')}</Td>
+                                                        <Td>{!list.expiration ? 'Not Expirable' : moment(list.expiration).format('MM/DD/yyyy')}</Td>
                                                     </Tr>
                                                 )
                                             }

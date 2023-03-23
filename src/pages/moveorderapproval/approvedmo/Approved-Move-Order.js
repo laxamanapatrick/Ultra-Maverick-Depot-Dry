@@ -19,7 +19,7 @@ export const ApprovedMoveOrder = ({ setCurrentPage, setPageSize, setSearch, page
     setOrderId, orderId, printData, fetchNotification }) => {
 
     const TableHead = [
-        "Line", "Order ID", "Customer Code", "Category", "Total Quantity Order", "Prepared Date",
+        "Line", "Order ID", "Customer Code", "Customer Name", "Total Quantity Order", "Prepared Date",
         // "Date Needed", 
         // "Approved Date", 
         "Track", "Print", "Reject"
@@ -139,7 +139,8 @@ export const ApprovedMoveOrder = ({ setCurrentPage, setPageSize, setSearch, page
                                         <Td>{i + 1}</Td>
                                         <Td>{order.orderNo}</Td>
                                         <Td>{order.farmCode}</Td>
-                                        <Td>{order.category}</Td>
+                                        <Td>{order.farmName}</Td>
+                                        {/* <Td>{order.category}</Td> */}
                                         <Td>{order.quantity}</Td>
                                         <Td>{moment(order.preparedDate).format("MM/DD/yyyy")}</Td>
                                         {/* <Td>{moment(order.dateNeeded).format("MM/DD/yyyy")}</Td> */}
