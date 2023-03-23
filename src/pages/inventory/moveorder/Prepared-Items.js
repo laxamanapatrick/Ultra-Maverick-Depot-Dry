@@ -43,7 +43,7 @@ export const PreparedItems = ({ preparedData, fetchPreparedItems, fetchOrderList
                                     <Td>{items.itemCode}</Td>
                                     <Td>{items.itemDescription}</Td>
                                     <Td>{items.quantity}</Td>
-                                    <Td>{moment(items.expiration).format("yyyy-MM-DD")}</Td>
+                                    <Td>{!items.expiration ? 'Not Expirable' : moment(items.expiration).format("yyyy-MM-DD")}</Td>
                                     <Td>
                                         <Button
                                             onClick={() => cancelHandler(items.id)}

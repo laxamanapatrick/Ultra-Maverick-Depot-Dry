@@ -43,18 +43,20 @@ export const AddQuantityConfirmation = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const submitHandler = () => {
+    const submitData = {
+      warehouseId: warehouseId,
+      orderNoPkey: id,
+      orderNo: orderNo,
+      itemCode: itemCode,
+      quantityOrdered: Number(quantityOrdered),
+      expirationDate: !expirationDate ? null : expirationDate ,
+      preparedBy: currentUser.fullName,
+    }
+    console.log(submitData)
     setIsLoading(true);
     try {
       const res = apiClient
-        .post(`Ordering/PrepareItemsForMoveOrder`, {
-          warehouseId: warehouseId,
-          orderNoPkey: id,
-          orderNo: orderNo,
-          itemCode: itemCode,
-          quantityOrdered: Number(quantityOrdered),
-          expirationDate: !expirationDate ? null : expirationDate ,
-          preparedBy: currentUser.fullName,
-        })
+        .post(`Ordering/PrepareItemsForMoveOrder`, submitData)
         .then((res) => {
           ToastComponent(
             "Success",

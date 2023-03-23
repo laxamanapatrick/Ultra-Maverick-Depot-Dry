@@ -38,7 +38,7 @@ export const ActualItemQuantity = ({ warehouseId, setWarehouseId, barcodeData, o
     const barcodeRef = useRef(null)
 
     const [quantity, setQuantity] = useState('')
-    const expirationDate = moment(barcodeData?.orders?.expirationDate).format("yyyy-MM-DD")
+    const expirationDate = !barcodeData?.orders?.expirationDate ? null : moment(barcodeData?.orders?.expirationDate).format("yyyy-MM-DD")
     const [inputValidate, setInputValidate] = useState(true)
 
     const toast = useToast()
