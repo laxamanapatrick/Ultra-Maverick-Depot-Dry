@@ -183,12 +183,12 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
                   <Th color="white">Transaction ID</Th>
                   <Th color="white">Order Date</Th>
                   <Th color="white">Date Needed</Th>
-                  <Th color="white">Farm</Th>
-                  <Th color="white">Farm Code</Th>
-                  <Th color="white">Category</Th>
+                  <Th color="white">Customer</Th>
+                  <Th color="white">Customer Code</Th>
                   <Th color="white">Item Code</Th>
                   <Th color="white">Item Description</Th>
                   <Th color="white">UOM</Th>
+                  <Th color="white">Category</Th>
                   <Th color="white">Quantity Order</Th>
                 </Tr>
               </Thead>
@@ -200,10 +200,10 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
                     <Td>{ed.dateNeeded}</Td>
                     <Td>{ed.farmName}</Td>
                     <Td>{ed.farmCode}</Td>
-                    <Td>{ed.category}</Td>
                     <Td>{ed.itemCode}</Td>
                     <Td>{ed.itemDescription}</Td>
                     <Td>{ed.uom}</Td>
+                    <Td>{ed.category}</Td>
                     <Td>{ed.quantityOrdered}</Td>
                   </Tr>
                 ))}

@@ -172,7 +172,7 @@ export const ListofApprovedDate = ({
       <Flex w="full" justifyContent="space-between">
         <HStack>
           <Badge bgColor="secondary" color="white" px={3}>
-            Farm:{" "}
+            Customer:{" "}
           </Badge>
           <Text fontSize="sm">{farmName && farmName}</Text>
         </HStack>

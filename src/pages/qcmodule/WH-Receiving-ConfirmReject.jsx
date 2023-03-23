@@ -158,7 +158,7 @@ const WHConfirmReject = ({ fetchNotification }) => {
                   <Th color="white">Actual Good</Th>
                   <Th color="white">Actual Reject</Th>
                   <Th color="white">Receiving Date</Th>
-                  <Th color="white">Confirm Date</Th>
+                  {/* <Th color="white">Confirm Date</Th> */}
                   <Th color="white">View</Th>
                 </Tr>
               </Thead>
@@ -175,7 +175,7 @@ const WHConfirmReject = ({ fetchNotification }) => {
                     <Td>{rmd.actualGood.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
                     <Td>{rmd.actualReject.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
                     <Td>{rmd.receivingDate}</Td>
-                    <Td>{rmd.confirmDate}</Td>
+                    {/* <Td>{rmd.confirmDate}</Td> */}
                     <Td>
                       <Button
                         onClick={() => viewingHandler(rmd, rmd.id)}

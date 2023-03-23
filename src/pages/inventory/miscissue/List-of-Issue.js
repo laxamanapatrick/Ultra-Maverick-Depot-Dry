@@ -65,7 +65,7 @@ export const ListofIssue = ({ miscData, selectorId, setSelectorId, setTotalQuant
                                             <Td>{item?.uom}</Td>
                                             <Td>{item?.totalQuantity}</Td>
                                             {/* <Td>{item?.customer}</Td> */}
-                                            <Td>{item?.expirationDate}</Td>
+                                            <Td>{!item?.expirationDate ? 'Not Expirable' : item?.expirationDate}</Td>
                                             <Td>
                                                 <Button
                                                     onClick={() => cancelHandler(item.id)}

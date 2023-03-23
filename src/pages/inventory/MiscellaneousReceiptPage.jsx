@@ -42,13 +42,14 @@ const MiscellaneousReceiptPage = () => {
   })
 
   const [navigation, setNavigation] = useState('')
+  const [isExpirable, setIsExpirable] = useState(false)
 
   const [rawMatsInfo, setRawMatsInfo] = useState({
     itemCode: '',
     itemDescription: '',
     supplier: '',
     uom: '',
-    expirationDate: '',
+    expirationDate: isExpirable ? '' : null,
     quantity: ''
   })
   const [details, setDetails] = useState('')
@@ -145,6 +146,9 @@ const MiscellaneousReceiptPage = () => {
     }
   }, [navigation])
 
+  console.log(isExpirable)
+  console.log(rawMatsInfo)
+
   return (
     <Flex px={5} pt={5} pb={0} w='full' flexDirection='column'>
 
@@ -184,6 +188,7 @@ const MiscellaneousReceiptPage = () => {
                 setSupplierData={setSupplierData}
                 supplierRef={supplierRef}
                 remarks={remarks} setRemarks={setRemarks} remarksRef={remarksRef}
+                isExpirable={isExpirable} setIsExpirable={setIsExpirable}
               />
               {
                 listDataTempo.length > 0 ?

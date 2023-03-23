@@ -30,6 +30,7 @@ export const AddConfirmation = ({ isOpen, onClose, closeAddModal, details, setDe
                 details: details,
                 preparedBy: currentUser.fullName
             }
+            console.log(addSubmit)
             const res = apiClient.post(`Miscellaneous/AddNewMiscellaneousIssueDetails`, addSubmit)
                 .then(res => {
                     ToastComponent("Success", "Item added", "success", toast)

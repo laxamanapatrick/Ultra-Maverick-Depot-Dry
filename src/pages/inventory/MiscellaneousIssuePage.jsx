@@ -40,12 +40,13 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
   })
 
   const [warehouseId, setWarehouseId] = useState('')
+  const [isExpirable, setIsExpirable] = useState(false)
   const [rawMatsInfo, setRawMatsInfo] = useState({
     itemCode: '',
     itemDescription: '',
     uom: '',
     customer: '',
-    expirationDate: '',
+    expirationDate: isExpirable ? '' : null,
     quantity: ''
   })
   const [details, setDetails] = useState('')
@@ -109,6 +110,9 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
     }
   }, [navigation])
 
+  console.log(isExpirable)
+  console.log(rawMatsInfo)
+
   return (
 
     <Flex px={5} pt={5} pb={0} w='full' flexDirection='column'>
@@ -152,6 +156,7 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
                 customerData={customerData}
                 customerRef={customerRef}
                 remarks={remarks} setRemarks={setRemarks} remarksRef={remarksRef}
+                isExpirable={isExpirable} setIsExpirable={setIsExpirable}
               />
               {
                 miscData?.length > 0

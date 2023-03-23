@@ -72,7 +72,7 @@ export const ApprovedMoveOrder = ({ setCurrentPage, setPageSize, setSearch, page
                 itemCode: data.itemCode,
                 itemDescription: data.itemDescription,
                 quantity: data.quantity,
-                expirationDate: moment(data.expiration).format("MM/DD/yyyy"),
+                expirationDate: !data.expiration ? 'Not expirable' : moment(data.expiration).format("MM/DD/yyyy"),
                 isPrepared: data.isPrepared,
                 isApproved: data.isApprove,
                 isPrint: data.isPrint,

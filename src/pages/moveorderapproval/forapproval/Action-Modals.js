@@ -269,7 +269,7 @@ export const ApproveModal = ({ isOpen, onClose, orderNo, fetchForApprovalMO, pri
                   <Text>Warehouse: {`Dry and Liquid`}</Text>
                   <Text>Customer: {printData[0]?.farmName}</Text>
                   <Text>Address: {printData[0]?.farmName}</Text>
-                  <Text>Batch Number: {printData[0]?.batchNo}</Text>
+                  {/* <Text>Batch Number: {printData[0]?.batchNo}</Text> */}
                 </Flex>
                 <Flex flexDirection='column'>
                   <Barcode width={3} height={50} value={Number(orderNo)} />
@@ -297,7 +297,7 @@ export const ApproveModal = ({ isOpen, onClose, orderNo, fetchForApprovalMO, pri
                         <Td>{item.uom}</Td>
                         <Td>{item.quantity}</Td>
                         <Td></Td>
-                        <Td>{moment(item.expiration).format("MM/DD/yyyy")}</Td>
+                        <Td>{!item.expiration ? 'Not expirable' : moment(item.expiration).format("MM/DD/yyyy")}</Td>
                       </Tr>
                     )
                   }
