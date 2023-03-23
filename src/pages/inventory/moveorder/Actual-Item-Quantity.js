@@ -229,13 +229,13 @@ const AvailableBarcodeModal = ({ isOpen, onClose, availableBarcode, setWarehouse
                                                 <Td>{items.itemCode}</Td>
                                                 <Td>{items.itemDescription}</Td>
                                                 <Td>{items.actualGood}</Td>
-                                                <Td>{items.expirationDay}</Td>
+                                                <Td>{!items.expirationDate ? 'Not expirable' : items.expirationDay}</Td>
                                                 <Td
-                                                    color={items.expirationDay <= 0 ? 'red' : ''}
-                                                    title={items.expirationDay <= 0 ? 'Expired' : `${items.expirationDay} days before expiration`}
+                                                    color={!items.expirationDate ? 'black' : items.expirationDay <= 0 ? 'red' : ''}
+                                                    title={!items.expirationDate ? 'Not expirable' :items.expirationDay <= 0 ? 'Expired' : `${items.expirationDay} days before expiration`}
                                                     cursor='help'
                                                 >
-                                                    {items.expirationDate}
+                                                    {!items.expirationDate ? 'Not expirable' : items.expirationDate}
                                                 </Td>
                                                 <Td>
                                                     <Button

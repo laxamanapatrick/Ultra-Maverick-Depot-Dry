@@ -52,7 +52,7 @@ export const AddQuantityConfirmation = ({
           orderNo: orderNo,
           itemCode: itemCode,
           quantityOrdered: Number(quantityOrdered),
-          expirationDate: expirationDate,
+          expirationDate: !expirationDate ? null : expirationDate ,
           preparedBy: currentUser.fullName,
         })
         .then((res) => {

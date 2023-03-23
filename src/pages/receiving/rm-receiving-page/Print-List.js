@@ -50,6 +50,8 @@ const PrintList = ({
         content: () => componentRef.current,
     })
 
+    console.log(itemCodeData)
+
     const displayData = {
         "Date": moment().format("MM/DD/YYYY, h:mm:ss a"),
         "Receiving Id": receivingId,
@@ -60,7 +62,7 @@ const PrintList = ({
         "Supplier": itemCodeData.supplier,
         "Quantity Good": itemCodeData.actualDelivered,
         "Receiving Date": moment(receivingDate).format("MM/DD/YYYY"),
-        "Expiration Date": moment(itemCodeData.expiration).format("MM/DD/YYYY"),
+        "Expiration Date": !itemCodeData.expiration ? 'Not Expirable' : moment(itemCodeData.expiration).format("MM/DD/YYYY"),
         "Lot Category": lotCategory,
         // "Manufacturing Date": moment(itemCodeData.manufacturingDate).format("MM/DD/YYYY"),
         // "Days of Expiration": itemCodeData.expirationDays,
