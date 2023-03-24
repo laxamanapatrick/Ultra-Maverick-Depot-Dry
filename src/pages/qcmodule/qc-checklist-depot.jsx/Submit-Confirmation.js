@@ -85,9 +85,11 @@ const SubmitConfirmation = ({
     }),
   ];
 
-  const submitChecklist = checklistArray?.map((item, index) => {
-    return { ...item };
-  });
+  // const submitChecklist = checklistArray?.map((item, index) => {
+  //   return { ...item };
+  // });
+
+  const submitChecklist = checklistArray?.flatMap((item) => item)
 
   const submitData = {
     pO_Receiving: {
@@ -317,64 +319,6 @@ const SubmitConfirmation = ({
       },
     ],
     checklistsString: submitChecklist,
-    // [
-    // foodHandlingDetails[1]["Color"]?.map((item) => {
-    //   return {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Color",
-    //     value: item,
-    //   };
-    // })
-    // ,
-    // foodHandlingDetails[2]["Odor"]?.map((item) => {
-    //   return {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Odor",
-    //     value: item,
-    //   };
-    // }),
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Color",
-    //     value: foodHandlingDetails[1]["Color"],
-    //     // value: 'Blue'
-    //     // ?.map(item => {
-    //     //     return {
-    //     //         value: item
-    //     //     }
-    //     // })
-    //   },
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Odor",
-    //     value: foodHandlingDetails[2]["Odor"],
-    //   },
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Appearance",
-    //     value: foodHandlingDetails[3]["Appearance"],
-    //   },
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Texture",
-    //     value: foodHandlingDetails[4]["Texture"],
-    //   },
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Absence Of Contaminants",
-    //     value: foodHandlingDetails[5]["Absence Of Contaminants"],
-    //   },
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Product Condition",
-    //     value: foodHandlingDetails[6]["Product Condition"],
-    //   },
-    //   {
-    //     pO_ReceivingId: editData.id,
-    //     checlist_Type: "Product / Commodity Type",
-    //     value: [productType],
-    //   },
-    // ],
     checkListInput: [
       {
         pO_ReceivingId: editData.id,
@@ -531,3 +475,77 @@ const SubmitConfirmation = ({
 };
 
 export default SubmitConfirmation;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// OLD
+
+    // [
+    // foodHandlingDetails[1]["Color"]?.map((item) => {
+    //   return {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Color",
+    //     value: item,
+    //   };
+    // })
+    // ,
+    // foodHandlingDetails[2]["Odor"]?.map((item) => {
+    //   return {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Odor",
+    //     value: item,
+    //   };
+    // }),
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Color",
+    //     value: foodHandlingDetails[1]["Color"],
+    //     // value: 'Blue'
+    //     // ?.map(item => {
+    //     //     return {
+    //     //         value: item
+    //     //     }
+    //     // })
+    //   },
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Odor",
+    //     value: foodHandlingDetails[2]["Odor"],
+    //   },
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Appearance",
+    //     value: foodHandlingDetails[3]["Appearance"],
+    //   },
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Texture",
+    //     value: foodHandlingDetails[4]["Texture"],
+    //   },
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Absence Of Contaminants",
+    //     value: foodHandlingDetails[5]["Absence Of Contaminants"],
+    //   },
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Product Condition",
+    //     value: foodHandlingDetails[6]["Product Condition"],
+    //   },
+    //   {
+    //     pO_ReceivingId: editData.id,
+    //     checlist_Type: "Product / Commodity Type",
+    //     value: [productType],
+    //   },
+    // ],

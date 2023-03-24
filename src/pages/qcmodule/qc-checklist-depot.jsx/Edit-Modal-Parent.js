@@ -51,8 +51,6 @@ export const EditModalComponent = ({
   const [hygieneDetails, setHygieneDetails] = useState(null);
   const [productType, setProductType] = useState(null);
 
-  console.log(submitReceiving)
-
   return (
     <ReceivingContext.Provider
       value={{

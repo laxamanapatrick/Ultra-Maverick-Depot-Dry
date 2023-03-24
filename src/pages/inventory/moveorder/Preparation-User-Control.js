@@ -26,7 +26,7 @@ export const DisablePreparation = ({ preparingUser }) => {
   );
 };
 
-export const EnablePreparation = () => {
+export const EnablePreparation = ({moveData}) => {
   return (
     <Flex
       w="full"
@@ -43,7 +43,9 @@ export const EnablePreparation = () => {
         {/* <AiFillPlayCircle fontSize="400px" color="white" /> */}
       </Flex>
       <Flex color="white" mb="80px" fontSize="xl">
-        This order is ready for preparation.
+        {
+        !moveData[0]?.length ? `The aren't any orders available for preparation` : 'This order is ready for preparation.'
+        }
       </Flex>
     </Flex>
   );

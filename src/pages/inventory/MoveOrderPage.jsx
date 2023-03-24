@@ -293,7 +293,7 @@ const MoveOrderPage = ({
         <DisablePreparation preparingUser={preparingUser} />
       )}
       {!preparingStatus && !isBeingPrepared && !preparingUser && (
-        <EnablePreparation preparingUser={preparingUser} />
+        <EnablePreparation preparingUser={preparingUser} moveData={moveData} />
       )}
       <VStack w="full" p={4} spacing={6}>
         <ListofApprovedDate
