@@ -159,6 +159,7 @@ export const SaveConfirmation = ({ isOpen, onClose, totalQuantity, details, cust
                     })
             } catch (error) {
             }
+            setIsLoading(false)
         }
     }
 

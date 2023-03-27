@@ -240,7 +240,7 @@ export const ViewModal = ({ isOpen, onClose, receivingId }) => {
                             </Flex>
 
                             {/* Rejection Info */}
-                            <Flex justifyContent='center' p={1} color='white' bgColor='secondary'>
+                            {/* <Flex justifyContent='center' p={1} color='white' bgColor='secondary'>
                                 <Text>REJECTION INFORMATION</Text>
                             </Flex>
 
@@ -255,10 +255,10 @@ export const ViewModal = ({ isOpen, onClose, receivingId }) => {
                                         bgColor='gray.300'
                                     />
                                 </FormLabel>
-                            </Flex>
+                            </Flex> */}
 
                             {/* Checklists Info -- TRUCK INSPECTION */}
-                            <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
+                            {/* <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
                                 <Text w='40%'>TRUCK INSPECTION</Text>
                                 <Text w='20%' ml={2}>Yes/No</Text>
                                 <Text w='40%'>Remarks</Text>
@@ -306,10 +306,10 @@ export const ViewModal = ({ isOpen, onClose, receivingId }) => {
                                 <Text w='40%'>
                                     {viewData[0]?.truckApprovalRemarks4 ? viewData[0]?.truckApprovalRemarks4 : 'No Remarks'}
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
                             {/* Checklists Info -- UNLOADING OF RAW MATERIALS */}
-                            <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
+                            {/* <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
                                 <Text w='40%'>UNLOADING OF RAW MATERIALS</Text>
                                 <Text w='20%' ml={2}>Yes/No</Text>
                                 <Text w='40%'>Remarks</Text>
@@ -357,10 +357,10 @@ export const ViewModal = ({ isOpen, onClose, receivingId }) => {
                                 <Text w='40%'>
                                     {viewData[0]?.unloadingApprovalRemarks4 ? viewData[0]?.unloadingApprovalRemarks4 : 'No Remarks'}
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
                             {/* Checklists Info -- CHECKING OF PHYSICAL APPEARANCE / SAMPLING */}
-                            <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
+                            {/* <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
                                 <Text w='40%'>CHECKING OF PHYSICAL APPEARANCE / SAMPLING</Text>
                                 <Text w='20%' ml={2}>Yes/No</Text>
                                 <Text w='40%'>Remarks</Text>
@@ -386,10 +386,10 @@ export const ViewModal = ({ isOpen, onClose, receivingId }) => {
                                 <Text w='40%'>
                                     {viewData[0]?.checkingApprovalRemarks2 ? viewData[0]?.checkingApprovalRemarks2 : 'No Remarks'}
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
                             {/* Checklists Info -- QA CHECKLIST APPROVAL */}
-                            <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
+                            {/* <Flex justifyContent='space-between' p={1} color='white' bgColor='secondary'>
                                 <Text w='40%'>QA CHECKLIST APPROVAL</Text>
                                 <Text w='20%' ml={2}>Yes/No</Text>
                                 <Text w='40%'>Remarks</Text>
@@ -404,7 +404,7 @@ export const ViewModal = ({ isOpen, onClose, receivingId }) => {
                                 <Text w='40%'>
                                     {viewData[0]?.qaApprovalRemarks ? viewData[0]?.qaApprovalRemarks : 'No Remarks'}
                                 </Text>
-                            </Flex>
+                            </Flex> */}
 
                         </Stack>
 

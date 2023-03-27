@@ -29,7 +29,6 @@ const Conformance = () => {
       setConformanceDetails([])
     }
   }, [formValues])
-  
 
   return (
     <Box w="98%" border="1px solid gray" borderRadius="5px">

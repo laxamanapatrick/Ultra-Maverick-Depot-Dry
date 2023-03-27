@@ -323,7 +323,7 @@ const SubmitConfirmation = ({
       {
         pO_ReceivingId: editData.id,
         checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "Width",
+        parameter: "WIDTH",
         value: conformanceDetails.width,
       },
       {
@@ -388,6 +388,7 @@ const SubmitConfirmation = ({
   };
 
   const handleSubmit = async () => {
+    // console.log(submitData)
     try {
       const res = await apiClient
         .post(`Receiving/AddNewReceivingInformationInPO`, submitData)
