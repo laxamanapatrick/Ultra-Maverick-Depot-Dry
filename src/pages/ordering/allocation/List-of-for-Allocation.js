@@ -5,6 +5,7 @@ import {
   ButtonGroup,
   Flex,
   HStack,
+  Input,
   Table,
   Tbody,
   Td,
@@ -96,7 +97,8 @@ export const ListofforAllocation = ({
             <Badge bgColor="secondary" color="white" px={3}>
               Stock on hand:{" "}
             </Badge>
-            <Text fontSize="sm" color={orderData[0]?.stockOnHand === 0 ? 'red' : ''}>{orderData[0]?.stockOnHand}</Text>
+            {/* <Input borderColor='black' readOnly color={orderData[0]?.stockOnHand === 0 ? 'red' : ''} value={orderData[0]?.stockOnHand}/> */}
+            <Text borderBottom='1px' borderColor='black' color={orderData[0]?.stockOnHand === 0 ? 'red' : ''}>{orderData[0]?.stockOnHand}</Text>
           </HStack>
         </VStack>
 

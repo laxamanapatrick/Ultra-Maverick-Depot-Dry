@@ -33,6 +33,7 @@ import moment from "moment";
 import { CancelApprovedDate } from "./Action-Modals";
 import { DisablePreparation } from "./Preparation-User-Control";
 import { ToastComponent } from "../../../components/Toast";
+import Swal from "sweetalert2";
 
 export const ListofApprovedDate = ({
   preparingUser,
@@ -155,10 +156,29 @@ export const ListofApprovedDate = ({
   }, [pageDisable]);
 
   const startPreparationHandler = () => {
-    startSetConnection();
-    fetchOrderList()
-    setPreparingStatus(true);
-    setRequest();
+    if (preparedLength > 0) {
+      Swal.fire({
+        title: "Items prepared are present.",
+        text: "Continue preparing items for this order?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          startSetConnection();
+          fetchOrderList();
+          setPreparingStatus(true);
+          setRequest();
+        }
+      });
+    } else {
+      startSetConnection();
+      fetchOrderList();
+      setPreparingStatus(true);
+      setRequest();
+    }
   };
 
   const stopPreparationHandler = () => {

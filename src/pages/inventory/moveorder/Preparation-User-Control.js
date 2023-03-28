@@ -37,14 +37,14 @@ export const EnablePreparation = ({moveData}) => {
       backgroundColor="rgba(52, 52, 52, 0.8)"
       mt="80px"
       flexDirection="row"
-      zIndex="modal"
+      zIndex={1}
     >
       <Flex>
         {/* <AiFillPlayCircle fontSize="400px" color="white" /> */}
       </Flex>
       <Flex color="white" mb="80px" fontSize="xl">
         {
-        !moveData[0]?.length ? `The aren't any orders available for preparation` : 'This order is ready for preparation.'
+        moveData[0]?.length === 0 ? `The aren't any orders available for preparation` : 'This order is ready for preparation.'
         }
       </Flex>
     </Flex>
