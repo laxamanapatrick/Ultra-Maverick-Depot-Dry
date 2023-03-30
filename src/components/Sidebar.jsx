@@ -6,6 +6,7 @@ import apiClient from '../services/apiClient';
 import { decodeUser } from '../services/decode-user';
 import { HiOutlineArrowCircleRight } from 'react-icons/hi'
 import { MdOutlineNotificationsActive } from 'react-icons/md'
+import moment from 'moment';
 
 const currentUser = decodeUser()
 
@@ -23,7 +24,7 @@ const SidebarFooter = () => {
     const navigate = useNavigate()
     return <Flex justifyContent='center' alignItems='center' flexDirection='column' pb='3'>
         <Image src='/images/logo.svg' w='120px' onClick={currentUser?.role === 1 ? () => navigate('/sandbox') : null}></Image>
-        <Text color='white' fontSize='xs' textAlign='center'>© 2022, Ultra Maverick Dry Powered by Process Automation (MIS)</Text>
+        <Text color='white' fontSize='xs' textAlign='center'>{`© ${moment(new Date()).format('YYYY')}, Ultra Maverick Dry Powered by Process Automation (MIS)`}</Text>
     </Flex>
 }
 

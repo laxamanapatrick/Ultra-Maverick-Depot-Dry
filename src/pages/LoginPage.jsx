@@ -65,7 +65,7 @@ const LoginPage = () => {
                     <Button width='full' bgColor='#18b58f' size='sm' type='sumbit' disabled={!isValid} isLoading={isLoading}>
                         Login
                     </Button>
-                    <Text color='gray.300' fontSize='10px'>© 2022, Ultra Maverick Dry Depot Powered by MIS</Text>
+                    <Text color='gray.300' fontSize='10px'>{`© ${moment(new Date()).format('YYYY')}, Ultra Maverick Dry Powered by Process Automation (MIS)`}</Text>
                 </VStack>
             </form>
         </Flex>
