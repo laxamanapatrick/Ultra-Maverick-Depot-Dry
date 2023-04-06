@@ -89,8 +89,8 @@ const ImportPoPage = () => {
       pR_date: moment(newPrDate).format("YYYY-MM-DD"),
       pO_number: item.po_number,
       pO_date: moment(newPoDate).format("YYYY-MM-DD"),
-      itemCode: item.item_code.toString(),
-      itemDescription: item.item_description,
+      itemCode: item.item_code.toString()?.trimEnd(),
+      itemDescription: item.item_description?.trimEnd(),
       ordered: item.qty_ordered,
       delivered: item.qty_delivered,
       billed: item.qty_billed,
@@ -204,7 +204,7 @@ const ImportPoPage = () => {
 
               <Input 
               ref={fileClear}
-              ml={1} w='47%' type='file' p={1} mr={.2} bgColor='white' onChange={(e) => fileHandler(e.target.files)} />
+              ml={1} w='47%' type='file' p={1} mr={.2} bgColor='white' onClick={() => fileClear.current.value = ""} onChange={(e) => fileHandler(e.target.files)} />
 
               <Select
                 onChange={(e) => sheetNumberHandlder(e.target.selectedIndex)}
