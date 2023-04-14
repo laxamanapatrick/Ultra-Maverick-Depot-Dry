@@ -31,7 +31,7 @@ import { decodeUser } from '../../../services/decode-user'
 
 const currentUser = decodeUser()
 
-const ScannedModalSubmit = ({ itemCodeData, code, receivingDate, lotCategory, actualGood, sumQuantity, submitRejectData, buttonChanger, receivingId, setCode }) => {
+const ScannedModalSubmit = ({ itemCodeData, code, receivingDate, lotCategory, actualGood, sumQuantity, submitRejectData, buttonChanger, receivingId, setCode, quantity, remarks }) => {
 
     const { setReceivingId, setButtonChanger } = useContext(WarehouseContext)
 
@@ -179,6 +179,10 @@ const ScannedModalSubmit = ({ itemCodeData, code, receivingDate, lotCategory, ac
                                 size='md'
                                 onClick={onOpen}
                                 colorScheme='blue' _hover={{ bgColor: 'accent' }}
+                                disabled={
+                                    quantity || remarks
+                                }
+                                title={quantity || remarks ? `Cannot receive this item code if there's an existing quantity / remark provided` : ''}
                             >
                                 Receive
                             </Button>

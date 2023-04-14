@@ -228,7 +228,10 @@ export const SaveButton = ({
   unsetRequest,
   userId,
   unsetOrderId,
-  setPageDisable
+  setPageDisable,
+  setPreparingStatus,
+  setFarmName,
+  setOrderListData
 }) => {
   const {
     isOpen: isPlateNumber,
@@ -276,6 +279,9 @@ export const SaveButton = ({
           userId={userId}
           unsetOrderId={unsetOrderId}
           setPageDisable={setPageDisable}
+          setPreparingStatus={setPreparingStatus}
+          setFarmName={setFarmName}
+          setOrderListData={setOrderListData}
         />
       }
     </Flex>
@@ -300,7 +306,10 @@ export const DeliveryStatusConfirmation = ({
   unsetRequest,
   userId,
   unsetOrderId,
-  setPageDisable
+  setPageDisable,
+  setPreparingStatus,
+  setFarmName,
+  setOrderListData
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -328,13 +337,16 @@ export const DeliveryStatusConfirmation = ({
           setOrderId("");
           setHighlighterId("");
           setItemCode("");
+          setFarmName("")
           setDeliveryStatus("");
-          setButtonChanger(false);
           setCurrentPage(currentPage);
+          setOrderListData([])
           fetchApprovedMoveOrders();
           fetchOrderList();
           unsetRequest(unsetOrderId, userId)
           setPageDisable(false)
+          setButtonChanger(false);
+          setPreparingStatus(false)
           setIsLoading(false);
           onClose();
         })

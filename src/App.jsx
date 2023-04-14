@@ -105,6 +105,8 @@ import ReportsPage from "./pages/ReportsPage";
 import Reports from "./pages/reports/Reports";
 
 import Sandbox from "./sandbox/Sandbox";
+import LaboratoryTesting from "./pages/LaboratoryTesting";
+import ForTesting from "./pages/laboratorytesting/For-Testing";
 
 const fetchNotificationApi = async () => {
   const res = await apiClient.get(`Receiving/GetNotification`);
@@ -764,6 +766,16 @@ function App() {
             <Route
               path="reports"
               element={user ? <Reports /> : <Navigate to="/login" />}
+            />
+          </Route>
+
+          <Route
+            path="laboratory-testing"
+            element={user ? <LaboratoryTesting /> : <Navigate to="/login" />}
+          >
+            <Route
+              path="for-testing"
+              element={user ? <ForTesting /> : <Navigate to="/login" />}
             />
           </Route>
 

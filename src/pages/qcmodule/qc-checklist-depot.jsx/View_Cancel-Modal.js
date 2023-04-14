@@ -129,7 +129,7 @@ export const CancelModalComponent = ({
                     ))}
                   </Select>
                 ) : (
-                  "loading"
+                  "Loading"
                 )}
               </VStack>
             </Flex>

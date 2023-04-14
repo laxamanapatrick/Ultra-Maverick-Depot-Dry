@@ -66,6 +66,7 @@ export const ListofApprovedDate = ({
   buttonChanger,
   preparedLength,
   pageDisable,
+  orderListData
 }) => {
   const toast = useToast();
 
@@ -258,7 +259,7 @@ export const ListofApprovedDate = ({
         </Flex>
       </Flex>
 
-      {buttonChanger ? (
+      {buttonChanger || orderListData?.length !== 0 ? (
         <VStack spacing={1}>
           <HStack w="full" justifyContent="start">
             <Badge bgColor="secondary" color="white" px={3}>

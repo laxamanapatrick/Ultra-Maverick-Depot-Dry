@@ -78,7 +78,7 @@ const schema = yup.object().shape({
     itemCategoryId: yup.string().required("Item Category is required"),
     uomId: yup.string().required("UOM is required"),
     bufferLevel: yup.number().required().typeError("Must be a number"),
-    isExpirable: yup.boolean().required("This field is required"),
+    isExpirable: yup.boolean().required().typeError("This field is required"),
   }),
 });
 

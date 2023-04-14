@@ -240,6 +240,8 @@ const MoveOrderPage = ({
       //     setButtonChanger(false)
       //   }
       // })
+    } else {
+      setButtonChanger(false)
     }
   }, [orderListData]);
 
@@ -286,6 +288,9 @@ const MoveOrderPage = ({
     unsetRequest(moveData[0]?.id, currentUser?.fullName);
     setPreparingStatus(false);
   }, [currentPage]);
+  
+  console.log(orderListData),
+  console.log(buttonChanger)
 
   return (
     <>
@@ -327,6 +332,7 @@ const MoveOrderPage = ({
           lengthIndicator={lengthIndicator}
           preparedLength={preparedData?.length}
           pageDisable={pageDisable}
+          orderListData={orderListData}
         />
         {orderId ? (
           <ListofOrders
@@ -363,6 +369,9 @@ const MoveOrderPage = ({
             userId={currentUser?.id}
             unsetOrderId={moveData[0]?.id}
             setPageDisable={setPageDisable}
+            setPreparingStatus={setPreparingStatus}
+            setFarmName={setFarmName}
+            setOrderListData={setOrderListData}
           />
         ) : (
           itemCode &&

@@ -262,7 +262,7 @@ const QCReceivingPage = ({ fetchNotification }) => {
                           _hover={{ bgColor: "secondary", color: "white" }}
                           size="xs"
                         >
-                          Edit
+                          Checklist
                         </Button>
 
                         <Button

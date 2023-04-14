@@ -166,6 +166,8 @@ const RmReceivingPage = () => {
               fetchItemCodeData={fetchItemCodeData}
               receivingId={receivingId}
               buttonChanger={buttonChanger}
+              quantity={quantity}
+              remarks={remarks}
             />
           )
         }

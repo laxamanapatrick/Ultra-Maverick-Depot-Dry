@@ -49,12 +49,12 @@ const AllocationPreview = ({
 
     // Adjust the other quantities if the total allocated quantity exceeds the SOH
     if (totalAllocated > Number(soh)) {
-      ToastComponent(
-        "Warning",
-        "You are providing a value which exceeds the stocks remaining",
-        "warning",
-        toast
-      );
+      // ToastComponent(
+      //   "Warning",
+      //   "You are providing a value which exceeds the stocks remaining",
+      //   "warning",
+      //   toast
+      // );
       newData[index].allocatedQuantity = "";
     }
 

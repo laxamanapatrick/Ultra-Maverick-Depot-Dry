@@ -69,7 +69,7 @@ export const MoveOrderTransactionHistory = ({ dateFrom, dateTo, sample, setSheet
                       <Th color='white'>UOM</Th>
                       <Th color='white'>Category</Th>
                       <Th color='white'>Quantity</Th>
-                      <Th color='white'>Batch Number</Th>
+                      {/* <Th color='white'>Batch Number</Th> */}
                     </>
                     :
                     <>
@@ -100,7 +100,7 @@ export const MoveOrderTransactionHistory = ({ dateFrom, dateTo, sample, setSheet
                           <Td>{item.uom}</Td>
                           <Td>{item.category}</Td>
                           <Td>{item.quantity}</Td>
-                          <Td>{item.batchNo}</Td>
+                          {/* <Td>{item.batchNo}</Td> */}
                         </>
                         :
                         <>
