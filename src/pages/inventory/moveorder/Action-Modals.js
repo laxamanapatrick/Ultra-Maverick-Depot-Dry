@@ -19,6 +19,7 @@ import { RiQuestionnaireLine } from "react-icons/ri";
 import apiClient from "../../../services/apiClient";
 import { ToastComponent } from "../../../components/Toast";
 import { decodeUser } from "../../../services/decode-user";
+import COA from "../../coa-modal/COA";
 
 const currentUser = decodeUser();
 
@@ -49,10 +50,10 @@ export const AddQuantityConfirmation = ({
       orderNo: orderNo,
       itemCode: itemCode,
       quantityOrdered: Number(quantityOrdered),
-      expirationDate: !expirationDate ? null : expirationDate ,
+      expirationDate: !expirationDate ? null : expirationDate,
       preparedBy: currentUser.fullName,
-    }
-    console.log(submitData)
+    };
+    console.log(submitData);
     setIsLoading(true);
     try {
       const res = apiClient
@@ -231,13 +232,57 @@ export const SaveButton = ({
   setPageDisable,
   setPreparingStatus,
   setFarmName,
-  setOrderListData
+  setOrderListData,
 }) => {
   const {
     isOpen: isPlateNumber,
     onClose: closePlateNumber,
     onOpen: openPlateNumber,
   } = useDisclosure();
+
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const submitHandler = () => {
+    const submitArray = orderListData?.map((item) => {
+      return {
+        id: item.id,
+        deliveryStatus: deliveryStatus,
+        // batchNo: ""
+      };
+    })
+    setIsLoading(true)
+    try {
+      const res = apiClient.put(`Ordering/AddDeliveryStatus`, submitArray).then((res) => {
+          ToastComponent(
+            "Success",
+            "Items prepared successfully.",
+            "success",
+            toast
+          )
+          unsetRequest(unsetOrderId, userId)
+          fetchNotification()
+          setOrderId("")
+          setHighlighterId("")
+          setItemCode("")
+          setFarmName("")
+          setDeliveryStatus("")
+          setCurrentPage(currentPage ? currentPage : 1)
+          setOrderListData([])
+          fetchApprovedMoveOrders()
+          fetchOrderList()
+          setPageDisable(false)
+          setButtonChanger(false)
+          setPreparingStatus(false)
+          setIsLoading(false)
+          onClose()
+        })
+        .catch((err) => {
+          ToastComponent("Error", "Save failed.", "error", toast)
+          setIsLoading(false)
+        })
+    } catch (error) {}
+  };
 
   return (
     <Flex w="full" justifyContent="end">
@@ -258,7 +303,7 @@ export const SaveButton = ({
       >
         Save
       </Button>
-      {
+      {/* {
         <DeliveryStatusConfirmation
           isOpen={isPlateNumber}
           onClose={closePlateNumber}
@@ -283,124 +328,152 @@ export const SaveButton = ({
           setFarmName={setFarmName}
           setOrderListData={setOrderListData}
         />
+      } */}
+      {
+        <COA
+          isOpen={isPlateNumber}
+          onClose={closePlateNumber}
+          deliveryStatus={deliveryStatus}
+          batchNumber={batchNumber}
+          orderListData={orderListData}
+          fetchApprovedMoveOrders={fetchApprovedMoveOrders}
+          fetchOrderList={fetchOrderList}
+          setOrderId={setOrderId}
+          setHighlighterId={setHighlighterId}
+          setItemCode={setItemCode}
+          setDeliveryStatus={setDeliveryStatus}
+          setButtonChanger={setButtonChanger}
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          fetchNotification={fetchNotification}
+          unsetRequest={unsetRequest}
+          userId={userId}
+          unsetOrderId={unsetOrderId}
+          setPageDisable={setPageDisable}
+          setPreparingStatus={setPreparingStatus}
+          setFarmName={setFarmName}
+          setOrderListData={setOrderListData}
+          isLoading={isLoading}
+          submitTransaction={submitHandler}
+        />
       }
     </Flex>
   );
 };
-export const DeliveryStatusConfirmation = ({
-  isOpen,
-  onClose,
-  deliveryStatus,
-  batchNumber,
-  orderListData,
-  fetchApprovedMoveOrders,
-  fetchOrderList,
-  setOrderId,
-  setHighlighterId,
-  setItemCode,
-  setDeliveryStatus,
-  setButtonChanger,
-  setCurrentPage,
-  currentPage,
-  fetchNotification,
-  unsetRequest,
-  userId,
-  unsetOrderId,
-  setPageDisable,
-  setPreparingStatus,
-  setFarmName,
-  setOrderListData
-}) => {
-  const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+// export const DeliveryStatusConfirmation = ({
+//   isOpen,
+//   onClose,
+//   deliveryStatus,
+//   batchNumber,
+//   orderListData,
+//   fetchApprovedMoveOrders,
+//   fetchOrderList,
+//   setOrderId,
+//   setHighlighterId,
+//   setItemCode,
+//   setDeliveryStatus,
+//   setButtonChanger,
+//   setCurrentPage,
+//   currentPage,
+//   fetchNotification,
+//   unsetRequest,
+//   userId,
+//   unsetOrderId,
+//   setPageDisable,
+//   setPreparingStatus,
+//   setFarmName,
+//   setOrderListData,
+// }) => {
+//   const toast = useToast();
+//   const [isLoading, setIsLoading] = useState(false);
 
-  const submitHandler = () => {
-    const submitArray = orderListData?.map((item) => {
-      return {
-        id: item.id,
-        deliveryStatus: deliveryStatus,
-        // batchNo: ""
-      };
-    });
-    setIsLoading(true);
-    try {
-      const res = apiClient
-        .put(`Ordering/AddDeliveryStatus`, submitArray)
-        .then((res) => {
-          ToastComponent(
-            "Success",
-            "Items prepared successfully.",
-            "success",
-            toast
-          );
-          fetchNotification();
-          setOrderId("");
-          setHighlighterId("");
-          setItemCode("");
-          setFarmName("")
-          setDeliveryStatus("");
-          setCurrentPage(currentPage);
-          setOrderListData([])
-          fetchApprovedMoveOrders();
-          fetchOrderList();
-          unsetRequest(unsetOrderId, userId)
-          setPageDisable(false)
-          setButtonChanger(false);
-          setPreparingStatus(false)
-          setIsLoading(false);
-          onClose();
-        })
-        .catch((err) => {
-          ToastComponent("Error", "Save failed.", "error", toast);
-          setIsLoading(false);
-        });
-    } catch (error) {}
-  };
+//   const submitHandler = () => {
+//     const submitArray = orderListData?.map((item) => {
+//       return {
+//         id: item.id,
+//         deliveryStatus: deliveryStatus,
+//         // batchNo: ""
+//       };
+//     });
+//     setIsLoading(true);
+//     try {
+//       const res = apiClient
+//         .put(`Ordering/AddDeliveryStatus`, submitArray)
+//         .then((res) => {
+//           ToastComponent(
+//             "Success",
+//             "Items prepared successfully.",
+//             "success",
+//             toast
+//           );
+//           fetchNotification();
+//           setOrderId("");
+//           setHighlighterId("");
+//           setItemCode("");
+//           setFarmName("");
+//           setDeliveryStatus("");
+//           setCurrentPage(currentPage);
+//           setOrderListData([]);
+//           fetchApprovedMoveOrders();
+//           fetchOrderList();
+//           unsetRequest(unsetOrderId, userId);
+//           setPageDisable(false);
+//           setButtonChanger(false);
+//           setPreparingStatus(false);
+//           setIsLoading(false);
+//           onClose();
+//         })
+//         .catch((err) => {
+//           ToastComponent("Error", "Save failed.", "error", toast);
+//           setIsLoading(false);
+//         });
+//     } catch (error) {}
+//   };
 
-  return (
-    <>
-      <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
-        <ModalContent>
-          <ModalHeader>
-            <Flex justifyContent="center">
-              <RiQuestionnaireLine fontSize="35px" />
-            </Flex>
-          </ModalHeader>
-          <ModalCloseButton onClick={onClose} />
+//   return (
+//     <>
+//       <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
+//         <ModalContent>
+//           <ModalHeader>
+//             <Flex justifyContent="center">
+//               <RiQuestionnaireLine fontSize="35px" />
+//             </Flex>
+//           </ModalHeader>
+//           <ModalCloseButton onClick={onClose} />
 
-          <ModalBody>
-            <VStack justifyContent="center">
-              <Text>Are you sure you want to save these prepared items?</Text>
-            </VStack>
-          </ModalBody>
+//           <ModalBody>
+//             <VStack justifyContent="center">
+//               <Text>Are you sure you want to save these prepared items?</Text>
+//             </VStack>
+//           </ModalBody>
 
-          <ModalFooter>
-            <ButtonGroup size="sm" mt={3}>
-              <Button
-                onClick={submitHandler}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="blue"
-                px={4}
-              >
-                Yes
-              </Button>
-              <Button
-                onClick={onClose}
-                isLoading={isLoading}
-                disabled={isLoading}
-                colorScheme="red"
-                px={4}
-              >
-                No
-              </Button>
-            </ButtonGroup>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-};
+//           <ModalFooter>
+//             <ButtonGroup size="sm" mt={3}>
+//               <Button
+//                 onClick={submitHandler}
+//                 isLoading={isLoading}
+//                 disabled={isLoading}
+//                 colorScheme="blue"
+//                 px={4}
+//               >
+//                 Yes
+//               </Button>
+//               <Button
+//                 onClick={onClose}
+//                 isLoading={isLoading}
+//                 disabled={isLoading}
+//                 colorScheme="red"
+//                 px={4}
+//               >
+//                 No
+//               </Button>
+//             </ButtonGroup>
+//           </ModalFooter>
+//         </ModalContent>
+//       </Modal>
+//     </>
+//   );
+// };
 
 //Cancel Approved Date
 export const CancelApprovedDate = ({

@@ -289,9 +289,6 @@ const MoveOrderPage = ({
     setPreparingStatus(false);
   }, [currentPage]);
   
-  console.log(orderListData),
-  console.log(buttonChanger)
-
   return (
     <>
       {isBeingPrepared && preparingUser !== currentUser?.fullName && (

@@ -93,8 +93,8 @@ export const NearlyExpiryReports = ({ expiryDays, setSheetData }) => {
                                                 :
                                                 <> */}
                                         <Td>{item.manufacturingDate}</Td>
-                                        <Td>{item.expirationDate}</Td>
-                                        <Td>{item.expirationDays}</Td>
+                                        <Td>{item.expirationDate ? item.expirationDate : 'NA'}</Td>
+                                        <Td>{item.expirationDays? item.expirationDays : 'NA'}</Td>
                                         <Td>{item.receivedBy}</Td>
                                         {/* </>
                                         } */}

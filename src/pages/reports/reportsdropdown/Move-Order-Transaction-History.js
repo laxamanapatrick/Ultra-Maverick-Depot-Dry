@@ -104,7 +104,7 @@ export const MoveOrderTransactionHistory = ({ dateFrom, dateTo, sample, setSheet
                         </>
                         :
                         <>
-                          <Td>{item.expirationDate ? moment(item.expirationDate).format('yyyy-MM-DD') : ''}</Td>
+                          <Td>{item.expirationDate ? moment(item.expirationDate).format('yyyy-MM-DD') : 'NA'}</Td>
                           <Td>{item.transactionType}</Td>
                           <Td>{item.moveOrderDate ? moment(item.moveOrderDate).format('yyyy-MM-DD'): ''}</Td>
                           <Td>{item.moveOrderBy}</Td>
