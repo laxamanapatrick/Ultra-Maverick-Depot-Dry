@@ -168,6 +168,7 @@ export const RawMaterialsInformation = ({
               {transactions.length > 0 ? (
                 <Select
                   onChange={(e) => setRemarks(e.target.value)}
+                  ref={remarksRef}
                   placeholder=" "
                   bgColor="#fff8dc"
                 >

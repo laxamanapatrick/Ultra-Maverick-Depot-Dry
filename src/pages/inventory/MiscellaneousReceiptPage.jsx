@@ -146,9 +146,6 @@ const MiscellaneousReceiptPage = () => {
     }
   }, [navigation])
 
-  console.log(isExpirable)
-  console.log(rawMatsInfo)
-
   return (
     <Flex px={5} pt={5} pb={0} w='full' flexDirection='column'>
 

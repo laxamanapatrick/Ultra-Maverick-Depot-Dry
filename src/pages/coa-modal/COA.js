@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
   Box,
@@ -35,11 +35,21 @@ const schema = yup.object().shape({
   }),
 });
 
-const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
+const COA = ({
+  isOpen,
+  onClose,
+  submitTransaction,
+  isLoading,
+  transactionId,
+  transactionType,
+}) => {
   const [company, setCompany] = useState([]);
   const [department, setDepartment] = useState([]);
   const [location, setLocation] = useState([]);
   const [account, setAccount] = useState([]);
+
+  const departmentRef = useRef();
+  const locationRef = useRef();
 
   const {
     register,
@@ -61,6 +71,8 @@ const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
         locationName: "",
         accountTitles: "",
         addedBy: currentUser.userName,
+        transactionId: transactionId,
+        transactionType: transactionType,
       },
     },
   });
@@ -135,10 +147,42 @@ const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
     fetchAccountApi();
   }, []);
 
+  useEffect(() => {
+    if (watch("formData.companyCode")) {
+      departmentRef.current.value = "";
+      locationRef.current.value = "";
+      setValue("formData.departmentCode", "");
+      setValue("formData.departmentName", "");
+      setValue("formData.locationCode", "");
+      setValue("formData.locationName", "");
+      fetchDepartmentApi();
+    }
+  }, [watch("formData.companyCode")]);
+
+  useEffect(() => {
+    if (watch("formData.departmentCode")) {
+      locationRef.current.value = "";
+      setValue("formData.locationCode", "");
+      setValue("formData.locationName", "");
+      fetchLocationApi();
+    }
+  }, [watch("formData.departmentCode")]);
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   const submitHandler = (data) => {
-    console.log("Submit Data", data);
-    // submitTransaction()
-  }
+    submitTransaction();
+    console.log(transactionId)
+    if (transactionId) {
+      console.log("Submit COA Data", data.formData);
+      onClose()
+    }
+    // console.log('Transaction Type:', transactionType)
+    // console.log('Transaction Id:', transactionId)
+  };
 
   return (
     <>
@@ -147,7 +191,7 @@ const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
         <form onSubmit={handleSubmit(submitHandler)}>
           <ModalContent>
             <ModalHeader textAlign="center">Charge Of Accounts</ModalHeader>
-            <ModalCloseButton onClick={onClose} />
+            <ModalCloseButton onClick={handleClose} />
             <ModalBody>
               <Stack spacing={2} p={6}>
                 <Box>
@@ -190,6 +234,7 @@ const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
                   <Select
                     fontSize="sm"
                     placeholder="Select Department"
+                    ref={departmentRef}
                     onChange={(e) => {
                       setValue(
                         "formData.departmentCode",
@@ -224,6 +269,7 @@ const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
                   <Select
                     fontSize="sm"
                     placeholder="Select Location"
+                    ref={locationRef}
                     onChange={(e) => {
                       setValue(
                         "formData.locationCode",
@@ -301,7 +347,7 @@ const COA = ({ isOpen, onClose, submitTransaction, isLoading }) => {
               <Button
                 size="sm"
                 colorScheme="red"
-                onClick={onClose}
+                onClick={handleClose}
                 isLoading={isLoading}
                 disabled={isLoading}
               >

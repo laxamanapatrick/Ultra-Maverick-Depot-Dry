@@ -6,13 +6,13 @@ const user = decodeUser()
 
 // Local Backend
 
-// export default axios.create({
-//     baseURL: "https://localhost:44342/api/",
-//     headers: {
-//         "Content-Type": "application/json",
-//         "Authorization": 'Bearer '+user?.token
-//     },
-// })
+export default axios.create({
+    baseURL: "https://localhost:44342/api/",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer '+user?.token
+    },
+})
 
 
 // Aldryn Vega Backend
@@ -28,10 +28,10 @@ const user = decodeUser()
 
 //Live Depot Version
 
-export default axios.create({
-    baseURL: "http://10.10.2.6:8002/api/",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'Bearer '+user?.token
-    }
-})
+// export default axios.create({
+//     baseURL: "http://10.10.2.6:8002/api/",
+//     headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": 'Bearer '+user?.token
+//     }
+// })

@@ -41,6 +41,7 @@ export const ListofOrders = ({
   setPageDisable,
   preparedData,
   preparingStatus,
+  setButtonChanger
 }) => {
   const TableHead = [
     "Line",
@@ -71,12 +72,7 @@ export const ListofOrders = ({
 
   const [keyword, setKeyword] = useState("");
 
-  const rowHandler = ({
-    id,
-    itemCode,
-    quantityOrder,
-    preparedQuantity,
-  }) => {
+  const rowHandler = ({ id, itemCode, quantityOrder, preparedQuantity }) => {
     setWarehouseId("");
     if (id && itemCode) {
       setItemCode(itemCode);
@@ -95,17 +91,6 @@ export const ListofOrders = ({
     //   setPageDisable(false);
     // }
   };
-
-  useEffect(() => {
-    if (preparingStatus) {
-      setPageDisable(false);
-    } else {
-      const validate = orderListData.some(
-        (item) => item.quantityOrder === item.preparedQuantity
-      );
-      setPageDisable(validate);
-    }
-  }, [preparedData, orderListData]);
 
   //   orderListData, ...orderListData?.map(item => item.quantityOrder), ...orderListData?.map(item => item.preparedQuantity)
 

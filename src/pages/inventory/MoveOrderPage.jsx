@@ -231,17 +231,17 @@ const MoveOrderPage = ({
   //UseEffect for button change Add-Save
   useEffect(() => {
     if (orderListData.length > 0) {
-      const variable = orderListData.every(
-        (item) => item.preparedQuantity === item.quantityOrder
-      );
+      const variable =
+        orderListData.length > 0 &&
+        orderListData.every(
+          (item) => item.preparedQuantity === item.quantityOrder
+        );
       setButtonChanger(variable);
       // orderListData.some(item => {
       //   if (item.preparedQuantity !== item.quantityOrder) {
       //     setButtonChanger(false)
       //   }
       // })
-    } else {
-      setButtonChanger(false)
     }
   }, [orderListData]);
 
@@ -266,9 +266,7 @@ const MoveOrderPage = ({
 
   useEffect(() => {
     if (connectionTwo) {
-      connectionTwo.on("SetBeingPrepared", (res) => {
-        // console.log(res);
-      });
+      connectionTwo.on("SetBeingPrepared", (res) => {});
     }
   }, [connectionTwo]);
 
@@ -288,7 +286,21 @@ const MoveOrderPage = ({
     unsetRequest(moveData[0]?.id, currentUser?.fullName);
     setPreparingStatus(false);
   }, [currentPage]);
-  
+
+  useEffect(() => {
+    if (orderListData.length === 0) {
+      setButtonChanger(false);
+      return;
+    }
+
+    fetchOrderList()
+    const variable = orderListData?.every(
+      (item) => item.preparedQuantity === item.quantityOrder
+    );
+
+    setButtonChanger(variable);
+  }, [orderListData]);
+
   return (
     <>
       {isBeingPrepared && preparingUser !== currentUser?.fullName && (
@@ -330,6 +342,7 @@ const MoveOrderPage = ({
           preparedLength={preparedData?.length}
           pageDisable={pageDisable}
           orderListData={orderListData}
+          preparedData={preparedData}
         />
         {orderId ? (
           <ListofOrders
@@ -343,17 +356,19 @@ const MoveOrderPage = ({
             setPageDisable={setPageDisable}
             preparedData={preparedData}
             preparingStatus={preparingStatus}
+            setButtonChanger={setButtonChanger}
           />
         ) : (
           ""
         )}
-        {buttonChanger ? (
+        {buttonChanger && preparedData?.length !== 0 ? (
           <SaveButton
             deliveryStatus={deliveryStatus}
             // batchNumber={batchNumber}
             orderListData={orderListData}
             fetchApprovedMoveOrders={fetchApprovedMoveOrders}
             fetchOrderList={fetchOrderList}
+            orderId={orderId}
             setOrderId={setOrderId}
             setHighlighterId={setHighlighterId}
             setItemCode={setItemCode}
