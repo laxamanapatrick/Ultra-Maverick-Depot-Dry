@@ -107,7 +107,8 @@ const ImportRawMaterialsPage = () => {
       itemDescription: item.item_description,
       uom: item.uom,
       itemCategory: item.item_category,
-      bufferLevel: item.buffer_level
+      bufferLevel: item.buffer_level,
+      isExpirable: item.isexpirable
     }
 
   })
@@ -132,6 +133,7 @@ const ImportRawMaterialsPage = () => {
         uomId: functionUOM(item.uom),
         itemCategoryId: functionItemCategory(item.itemCategory),
         bufferLevel: item.bufferLevel,
+        isExpirable: item.isExpirable === 'Yes' ? true : false,
         addedBy: currentUser.fullName
       }))
       try {
@@ -153,7 +155,6 @@ const ImportRawMaterialsPage = () => {
       ToastComponent("Error!", "No data provided, please check your import", "error", toast)
     }
   }
-
 
   return (
     <Flex w='full'>
@@ -187,6 +188,7 @@ const ImportRawMaterialsPage = () => {
                   <Th color='white'>UOM</Th>
                   <Th color='white'>Item Category</Th>
                   <Th color='white'>Buffer Level</Th>
+                  <Th color='white'>IS Expirable</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -197,6 +199,7 @@ const ImportRawMaterialsPage = () => {
                     <Td>{ed.uom ? ed.uom : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materias . is uploaded.</Text>}</Td>
                     <Td>{ed.itemCategory ? ed.itemCategory : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materials is uploaded.</Text>}</Td>
                     <Td>{ed.bufferLevel ? ed.bufferLevel : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materials is uploaded.</Text>}</Td>
+                    <Td>{ed.isExpirable}</Td>
                   </Tr>
                 )}
               </Tbody>

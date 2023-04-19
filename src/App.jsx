@@ -17,7 +17,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Header } from "./components/Header";
-import Sidebar from "./components/Sidebar";
+import { NewSidebar } from "./components/Sidebar";
 import { Navigate, Outlet } from "react-router-dom";
 import { Route, Routes } from "react-router-dom";
 import { decodeUser } from "./services/decode-user";
@@ -811,12 +811,14 @@ function Layout({
   moveOrderIdOnApp,
   userFullname,
 }) {
+
   return (
     <Flex bgColor="white" h="100vh">
       {!isSidebarVisible && (
-        <Sidebar
+        <NewSidebar
           notification={notification}
           fetchNotification={fetchNotification}
+          sideBarHandler={sideBarHandler}
         />
       )}
       <AppScroll>
