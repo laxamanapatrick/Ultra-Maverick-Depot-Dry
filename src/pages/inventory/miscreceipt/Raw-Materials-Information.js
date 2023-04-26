@@ -40,6 +40,8 @@ export const RawMaterialsInformation = ({
   remarksRef,
   isExpirable,
   setIsExpirable,
+  transactionDate,
+  setTransactionDate,
 }) => {
   const {
     isOpen: isModal,
@@ -102,9 +104,11 @@ export const RawMaterialsInformation = ({
     }
   };
 
-  const newDate = new Date()
-  const maxDate = moment(newDate).format('yyyy-MM-DD')
-  const minDate = moment(newDate.setDate(newDate.getDate() - 7)).format('yyyy-MM-DD')
+  const newDate = new Date();
+  const maxDate = moment(newDate).format("yyyy-MM-DD");
+  const minDate = moment(newDate.setDate(newDate.getDate() - 7)).format(
+    "yyyy-MM-DD"
+  );
 
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
@@ -227,15 +231,9 @@ export const RawMaterialsInformation = ({
                 Transaction Date:{" "}
               </Text>
               <Input
-                // onChange={(e) => setDeliveryDate(e.target.value)}
+                onChange={(e) => setTransactionDate(e.target.value)}
                 min={minDate}
                 max={maxDate}
-                // disabled={checkedItems <= 0}
-                // title={
-                //   checkedItems <= 0
-                //     ? "Please select items to transact first"
-                //     : ""
-                // }
                 type="date"
                 bgColor="#fff8dc"
               />
@@ -267,7 +265,7 @@ export const RawMaterialsInformation = ({
         <Flex w="full" justifyContent="end" mt={4}>
           <Button
             onClick={() => openModal()}
-            disabled={!rawMatsInfo.supplier || !details || !remarks}
+            disabled={!rawMatsInfo.supplier || !details || !remarks || !transactionDate}
             size="xs"
             colorScheme="blue"
           >

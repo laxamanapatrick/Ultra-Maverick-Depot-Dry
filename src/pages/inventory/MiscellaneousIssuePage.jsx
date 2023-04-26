@@ -36,7 +36,11 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
   const [totalQuantity, setTotalQuantity] = useState('')
   const [customerData, setCustomerData] = useState({
     customerCode: '',
-    customer: ''
+    customer: '',
+    companyCode: '',
+    companyName: '',
+    departmentName: '',
+    locationName: ''
   })
 
   const [warehouseId, setWarehouseId] = useState('')
@@ -51,6 +55,7 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
   })
   const [details, setDetails] = useState('')
   const [remarks, setRemarks] = useState('')
+  const [transactionDate, setTransactionDate] = useState('')
 
   const itemCode = rawMatsInfo.itemCode
 
@@ -154,6 +159,8 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
                 customerRef={customerRef}
                 remarks={remarks} setRemarks={setRemarks} remarksRef={remarksRef}
                 isExpirable={isExpirable} setIsExpirable={setIsExpirable}
+                setTransactionDate={setTransactionDate}
+                transactionDate={transactionDate}
               />
               {
                 miscData?.length > 0
@@ -183,6 +190,7 @@ const MiscellaneousIssuePage = ({ miscData, fetchActiveMiscIssues, navigation, s
                       warehouseId={warehouseId}
                       fetchExpiryDates={fetchExpiryDates}
                       remarks={remarks} setRemarks={setRemarks} remarksRef={remarksRef}
+                      transactionDate={transactionDate}
                     />
                   </>
                   : ''

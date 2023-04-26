@@ -155,7 +155,7 @@ export const ListofIssues = () => {
                                         <Td>{issue.customerCode}</Td>
                                         <Td>{issue.customer}</Td>
                                         <Td>{issue.totalQuantity}</Td>
-                                        <Td>{issue.preparedDate}</Td>
+                                        <Td>{issue.transactionDate}</Td>
                                         <Td>{issue.preparedBy}</Td>
                                         <Td>
                                             <Button

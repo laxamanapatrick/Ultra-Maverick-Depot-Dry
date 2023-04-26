@@ -134,6 +134,7 @@ export const SaveConfirmation = ({
   remarks,
   setRemarks,
   remarksRef,
+  transactionDate,
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -272,6 +273,7 @@ export const SaveConfirmation = ({
       totalQuantity: totalQuantity,
       details: listDataTempo[0]?.description,
       remarks: listDataTempo[0]?.remarks,
+      transactionDate: transactionDate,
       preparedBy: currentUser?.fullName,
       companyCode: data.formData.companyCode,
       companyName: data.formData.companyName,
@@ -307,30 +309,33 @@ export const SaveConfirmation = ({
                 };
               });
               try {
-                const res = apiClient.post(
-                  `Miscellaneous/AddNewMiscellaneousReceiptInWarehouse`,
-                  submitArray
-                );
-                ToastComponent(
-                  "Success",
-                  "Information saved",
-                  "success",
-                  toast
-                );
-                setListDataTempo([]);
-                supplierRef.current.value = "";
-                remarksRef.current.value = "";
-                setDetails("");
-                setRawMatsInfo({
-                  itemCode: "",
-                  itemDescription: "",
-                  supplier: "",
-                  uom: "",
-                  expirationDate: "",
-                  quantity: "",
-                });
-                setIsLoading(false);
-                onClose();
+                const res = apiClient
+                  .post(
+                    `Miscellaneous/AddNewMiscellaneousReceiptInWarehouse`,
+                    submitArray
+                  )
+                  .then((res) => {
+                    ToastComponent(
+                      "Success",
+                      "Information saved",
+                      "success",
+                      toast
+                    );
+                    setListDataTempo([]);
+                    supplierRef.current.value = "";
+                    remarksRef.current.value = "";
+                    setDetails("");
+                    setRawMatsInfo({
+                      itemCode: "",
+                      itemDescription: "",
+                      supplier: "",
+                      uom: "",
+                      expirationDate: "",
+                      quantity: "",
+                    });
+                    setIsLoading(false);
+                    onClose();
+                  });
               } catch (error) {
                 console.log(error);
               }

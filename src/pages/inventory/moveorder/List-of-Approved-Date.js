@@ -339,7 +339,7 @@ export const ListofApprovedDate = ({
               </Tr>
             </Thead>
             <Tbody>
-              {moveData?.sort(getComparator(order)).map((order, i) => (
+              {moveData?.sort(getComparator(order))?.map((order, i) => (
                 <Tr
                   key={i}
                   title={order.isReject ? order.remarks : ""}
@@ -361,7 +361,7 @@ export const ListofApprovedDate = ({
                   )}
                   <Td>{order.id}</Td>
                   <Td>{order.farmCode}</Td>
-                  <Td>{order.farm}</Td>
+                  <Td>{order.farmName}</Td>
                   {/* <Td>{order.category}</Td> */}
                   <Td>{order.quantityOrder}</Td>
                   <Td>{moment(order.preparedDateTime).format("MM/DD/yyyy")}</Td>

@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Flex,
   FormLabel,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -37,18 +38,18 @@ export const AddConfirmation = ({
   onClose,
   closeAddModal,
   details,
-//   setDetails,
+  //   setDetails,
   rawMatsInfo,
   setRawMatsInfo,
-//   customerRef,
+  //   customerRef,
   warehouseId,
-//   setSelectorId,
+  //   setSelectorId,
   setWarehouseId,
   fetchActiveMiscIssues,
   customerData,
   remarks,
-//   setRemarks,
-//   remarksRef,
+  //   setRemarks,
+  //   remarksRef,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -148,9 +149,9 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     companyCode: yup.string().required("Company Name is required"),
     companyName: yup.string().required("Company Name is required"),
-    departmentCode: yup.string().required("Department Name is required"),
+    // departmentCode: yup.string().required("Department Name is required"),
     departmentName: yup.string().required("Department Category is required"),
-    locationCode: yup.string().required("Location Name is required"),
+    // locationCode: yup.string().required("Location Name is required"),
     locationName: yup.string().required("Location Name is required"),
     accountTitles: yup.string().required("Account Name is required"),
   }),
@@ -174,6 +175,7 @@ export const SaveConfirmation = ({
   remarks,
   setRemarks,
   remarksRef,
+  transactionDate,
 }) => {
   const toast = useToast();
 
@@ -192,68 +194,68 @@ export const SaveConfirmation = ({
     mode: "onChange",
     defaultValues: {
       formData: {
-        companyCode: "",
-        companyName: "",
-        departmentCode: "",
-        departmentName: "",
-        locationCode: "",
-        locationName: "",
+        companyCode: customerData?.companyCode,
+        companyName: customerData?.companyName,
+        // departmentCode: "",
+        departmentName: customerData?.departmentName,
+        // locationCode: "",
+        locationName: customerData?.locationName,
         accountTitles: "",
         addedBy: currentUser.userName,
       },
     },
   });
 
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
+  // const [company, setCompany] = useState([]);
+  // const [department, setDepartment] = useState([]);
+  // const [location, setLocation] = useState([]);
   const [account, setAccount] = useState([]);
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setCompany(res.data.result.companies);
-    } catch (error) {}
-  };
+  // // FETCH COMPANY API
+  // const fetchCompanyApi = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+  //         },
+  //       }
+  //     );
+  //     setCompany(res.data.result.companies);
+  //   } catch (error) {}
+  // };
 
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id) => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setDepartment(res.data.result.departments);
-    } catch (error) {}
-  };
+  // // FETCH DEPT API
+  // const fetchDepartmentApi = async (id) => {
+  //   try {
+  //     const res = await axios.get(
+  //       "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
+  //         id,
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+  //         },
+  //       }
+  //     );
+  //     setDepartment(res.data.result.departments);
+  //   } catch (error) {}
+  // };
 
-  // FETCH Loc API
-  const fetchLocationApi = async (id) => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
+  // // FETCH Loc API
+  // const fetchLocationApi = async (id) => {
+  //   try {
+  //     const res = await axios.get(
+  //       "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&company_id=" +
+  //         id,
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+  //         },
+  //       }
+  //     );
+  //     setLocation(res.data.result.locations);
+  //   } catch (error) {}
+  // };
 
   // FETCH ACcount API
   const fetchAccountApi = async () => {
@@ -270,39 +272,34 @@ export const SaveConfirmation = ({
     } catch (error) {}
   };
 
-  useEffect(() => {
-    fetchCompanyApi();
-  }, []);
+  // useEffect(() => {
+  //   fetchCompanyApi();
+  // }, []);
 
   useEffect(() => {
     fetchAccountApi();
   }, []);
 
-  useEffect(() => {
-    if (watch("formData.companyCode")) {
-      departmentRef.current.value = "";
-      locationRef.current.value = "";
-      setValue("formData.departmentCode", "");
-      setValue("formData.departmentName", "");
-      setValue("formData.locationCode", "");
-      setValue("formData.locationName", "");
-      fetchDepartmentApi();
-    }
-  }, [watch("formData.companyCode")]);
+  // useEffect(() => {
+  //   if (watch("formData.companyCode")) {
+  //     departmentRef.current.value = "";
+  //     locationRef.current.value = "";
+  //     setValue("formData.departmentCode", "");
+  //     setValue("formData.departmentName", "");
+  //     setValue("formData.locationCode", "");
+  //     setValue("formData.locationName", "");
+  //     fetchDepartmentApi();
+  //   }
+  // }, [watch("formData.companyCode")]);
 
-  useEffect(() => {
-    if (watch("formData.departmentCode")) {
-      locationRef.current.value = "";
-      setValue("formData.locationCode", "");
-      setValue("formData.locationName", "");
-      fetchLocationApi();
-    }
-  }, [watch("formData.departmentCode")]);
-
-  const handleClose = () => {
-    reset();
-    onClose();
-  };
+  // useEffect(() => {
+  //   if (watch("formData.departmentCode")) {
+  //     locationRef.current.value = "";
+  //     setValue("formData.locationCode", "");
+  //     setValue("formData.locationName", "");
+  //     fetchLocationApi();
+  //   }
+  // }, [watch("formData.departmentCode")]);
 
   const saveSubmitHandler = (data) => {
     if (totalQuantity > 0) {
@@ -316,11 +313,12 @@ export const SaveConfirmation = ({
             preparedBy: currentUser.fullName,
             remarks: remarks,
             details: details,
+            transactionDate: transactionDate,
             companyCode: data.formData.companyCode,
             companyName: data.formData.companyName,
-            departmentCode: data.formData.departmentCode,
+            // departmentCode: data.formData.departmentCode,
             departmentName: data.formData.departmentName,
-            locationCode: data.formData.locationCode,
+            // locationCode: data.formData.locationCode,
             locationName: data.formData.locationName,
             accountTitles: data.formData.accountTitles,
             addedBy: currentUser.fullName,
@@ -383,7 +381,8 @@ export const SaveConfirmation = ({
   };
 
   const closeHandler = () => {
-    setIsLoading(false)
+    reset();
+    setIsLoading(false);
     setHideButton(false);
     onClose();
   };
@@ -400,7 +399,12 @@ export const SaveConfirmation = ({
               <Stack spacing={2} p={6}>
                 <Box>
                   <FormLabel fontSize="sm">Company</FormLabel>
-                  <Select
+                  <Input
+                    readOnly
+                    {...register("formData.companyName")}
+                    bgColor="gray.200"
+                  />
+                  {/* <Select
                     fontSize="sm"
                     onChange={(e) => {
                       setValue(
@@ -430,16 +434,21 @@ export const SaveConfirmation = ({
                   </Select>
                   <Text color="red" fontSize="xs">
                     {errors.formData?.companyName?.message}
-                  </Text>
+                  </Text> */}
                 </Box>
 
                 <Box>
                   <FormLabel fontSize="sm">Department</FormLabel>
-                  <Select
+                  <Input
+                    readOnly
+                    {...register("formData.departmentName")}
+                    bgColor="gray.200"
+                  />
+                  {/* <Select
                     fontSize="sm"
                     placeholder="Select Department"
-                    disabled={!watch("formData.companyCode")}
                     ref={departmentRef}
+                    disabled={!watch("formData.companyCode")}
                     onChange={(e) => {
                       setValue(
                         "formData.departmentCode",
@@ -466,12 +475,17 @@ export const SaveConfirmation = ({
                   </Select>
                   <Text color="red" fontSize="xs">
                     {errors.formData?.departmentName?.message}
-                  </Text>
+                  </Text> */}
                 </Box>
 
                 <Box>
                   <FormLabel fontSize="sm">Location</FormLabel>
-                  <Select
+                  <Input
+                    readOnly
+                    {...register("formData.locationName")}
+                    bgColor="gray.200"
+                  />
+                  {/* <Select
                     fontSize="sm"
                     placeholder="Select Location"
                     disabled={!watch("formData.departmentCode")}
@@ -502,11 +516,12 @@ export const SaveConfirmation = ({
                   </Select>
                   <Text color="red" fontSize="xs">
                     {errors.formData?.locationName?.message}
-                  </Text>
+                  </Text> */}
                 </Box>
                 <Box>
                   <FormLabel fontSize="sm">Account Title</FormLabel>
                   <Select
+                    bgColor="#fff8dc"
                     fontSize="sm"
                     onChange={(e) => {
                       // setValue(
@@ -546,7 +561,7 @@ export const SaveConfirmation = ({
                 colorScheme="blue"
                 type="submit"
                 isLoading={isLoading}
-                disabled={isLoading}
+                disabled={isLoading || !watch("formData.accountTitles")}
               >
                 Yes
               </Button>

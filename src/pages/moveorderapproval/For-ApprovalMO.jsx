@@ -1,91 +1,108 @@
-import React, { useState, useEffect } from 'react'
-import { usePagination } from '@ajna/pagination'
-import apiClient from '../../services/apiClient'
-import { ForApprovalMoveOrder } from './forapproval/For-Approval-Move-Order'
+import React, { useState, useEffect } from "react";
+import { usePagination } from "@ajna/pagination";
+import apiClient from "../../services/apiClient";
+import { ForApprovalMoveOrder } from "./forapproval/For-Approval-Move-Order";
+import { Button, VStack } from "@chakra-ui/react";
 
 const fetchForApprovalMOApi = async (pageNumber, pageSize, search) => {
-  const res = await apiClient.get(`Ordering/GetAllForApprovalMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}`)
-  return res.data
-}
+  const res = await apiClient.get(
+    `Ordering/GetAllForApprovalMoveOrderPaginationOrig?pageSize=${pageSize}&pageNumber=${pageNumber}&search=${search}`
+  );
+  return res.data;
+};
 
 const fetchViewApi = async (orderId) => {
-  const res = await apiClient.get(`Ordering/ViewMoveOrderForApproval?id=${orderId}`)
-  return res.data
-}
+  const res = await apiClient.get(
+    `Ordering/ViewMoveOrderForApproval?id=${orderId}`
+  );
+  return res.data;
+};
 
 const ForApprovalMO = ({ notification, fetchNotification }) => {
+  const [forApprovalData, setForApprovalData] = useState([]);
 
-  const [forApprovalData, setForApprovalData] = useState([])
+  const [search, setSearch] = useState("");
+  const [pageTotal, setPageTotal] = useState(undefined);
 
-  const [search, setSearch] = useState("")
-  const [pageTotal, setPageTotal] = useState(undefined)
+  const [orderId, setOrderId] = useState("");
 
-  const [orderId, setOrderId] = useState('')
+  const [viewData, setViewData] = useState([]);
 
-  const [viewData, setViewData] = useState([])
+  const [orderNos, setOrderNos] = useState([]);
 
   const outerLimit = 2;
   const innerLimit = 2;
-  const { currentPage, setCurrentPage, pagesCount, pages, setPageSize, pageSize } = usePagination({
+  const {
+    currentPage,
+    setCurrentPage,
+    pagesCount,
+    pages,
+    setPageSize,
+    pageSize,
+  } = usePagination({
     total: pageTotal,
     limits: {
       outer: outerLimit,
       inner: innerLimit,
     },
     initialState: { currentPage: 1, pageSize: 10 },
-  })
+  });
 
   //List
 
   const fetchForApprovalMO = () => {
-    fetchForApprovalMOApi(currentPage, pageSize, search).then(res => {
-      setForApprovalData(res)
-      setPageTotal(res.totalCount)
-    })
-  }
+    fetchForApprovalMOApi(currentPage, pageSize, search).then((res) => {
+      setForApprovalData(res);
+      setPageTotal(res.totalCount);
+    });
+  };
 
   useEffect(() => {
-    fetchForApprovalMO()
+    fetchForApprovalMO();
 
     return () => {
-      setForApprovalData([])
-    }
-  }, [pageSize, currentPage, search])
-
+      setForApprovalData([]);
+    };
+  }, [pageSize, currentPage, search]);
 
   //For View and Printing Layout
 
   const fetchView = () => {
-    fetchViewApi(orderId).then(res => {
-      setViewData(res)
-    })
-  }
+    fetchViewApi(orderId).then((res) => {
+      setViewData(res);
+    });
+  };
 
   useEffect(() => {
     if (orderId) {
-      fetchView()
+      fetchView();
     }
 
     return () => {
-      setViewData([])
-    }
-  }, [orderId])
+      setViewData([]);
+    };
+  }, [orderId]);
 
   return (
-    <ForApprovalMoveOrder
-      setCurrentPage={setCurrentPage}
-      setPageSize={setPageSize}
-      setSearch={setSearch}
-      pagesCount={pagesCount}
-      currentPage={currentPage}
-      pageSize={pageSize}
-      forApprovalData={forApprovalData}
-      fetchForApprovalMO={fetchForApprovalMO}
-      orderId={orderId} setOrderId={setOrderId}
-      viewData={viewData}
-      fetchNotification={fetchNotification}
-    />
-  )
-}
+    <VStack w='full'>
+      <ForApprovalMoveOrder
+        setCurrentPage={setCurrentPage}
+        setPageSize={setPageSize}
+        setSearch={setSearch}
+        pagesCount={pagesCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        forApprovalData={forApprovalData}
+        fetchForApprovalMO={fetchForApprovalMO}
+        orderId={orderId}
+        setOrderId={setOrderId}
+        viewData={viewData}
+        fetchNotification={fetchNotification}
+        orderNos={orderNos}
+        setOrderNos={setOrderNos}
+      />
+    </VStack>
+  );
+};
 
-export default ForApprovalMO
+export default ForApprovalMO;

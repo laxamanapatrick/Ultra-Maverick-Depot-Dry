@@ -384,6 +384,7 @@ const MoveOrderPage = ({
             setPreparingStatus={setPreparingStatus}
             setFarmName={setFarmName}
             setOrderListData={setOrderListData}
+            moveData={moveData}
           />
         ) : (
           itemCode &&

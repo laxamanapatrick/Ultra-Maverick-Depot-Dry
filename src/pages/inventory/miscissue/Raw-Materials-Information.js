@@ -42,6 +42,8 @@ export const RawMaterialsInformation = ({
   remarksRef,
   isExpirable,
   setIsExpirable,
+  setTransactionDate,
+  transactionDate
 }) => {
   const {
     isOpen: isModal,
@@ -76,6 +78,10 @@ export const RawMaterialsInformation = ({
       const newData = JSON.parse(data);
       const customerCode = newData.customerCode;
       const customer = newData.customerName;
+      const companyCode = newData.companyCode;
+      const companyName = newData.companyName;
+      const departmentName = newData.departmentName;
+      const locationName = newData.locationName;
       setRawMatsInfo({
         itemCode: rawMatsInfo.itemCode,
         itemDescription: rawMatsInfo.itemDescription,
@@ -87,6 +93,10 @@ export const RawMaterialsInformation = ({
       setCustomerData({
         customerCode: customerCode,
         customer: customer,
+        companyCode: companyCode,
+        companyName: companyName,
+        departmentName: departmentName,
+        locationName: locationName,
       });
     } else {
       setRawMatsInfo({
@@ -100,6 +110,10 @@ export const RawMaterialsInformation = ({
       setCustomerData({
         customerCode: "",
         customer: "",
+        companyCode: "",
+        companyName: "",
+        departmentName: "",
+        locationName: "",
       });
     }
   };
@@ -226,15 +240,9 @@ export const RawMaterialsInformation = ({
                 Transaction Date:{" "}
               </Text>
               <Input
-                // onChange={(e) => setDeliveryDate(e.target.value)}
+                onChange={(e) => setTransactionDate(e.target.value)}
                 min={minDate}
                 max={maxDate}
-                // disabled={checkedItems <= 0}
-                // title={
-                //   checkedItems <= 0
-                //     ? "Please select items to transact first"
-                //     : ""
-                // }
                 type="date"
                 bgColor="#fff8dc"
               />
@@ -267,7 +275,7 @@ export const RawMaterialsInformation = ({
         <Flex w="full" justifyContent="end" mt={4}>
           <Button
             onClick={() => openModal()}
-            disabled={!rawMatsInfo.customer || !details || !remarks}
+            disabled={!rawMatsInfo.customer || !details || !remarks || !transactionDate}
             size="xs"
             colorScheme="blue"
           >
