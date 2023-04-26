@@ -299,7 +299,7 @@ const MoveOrderPage = ({
     );
 
     setButtonChanger(variable);
-  }, [orderListData]);
+  }, [orderListData.length]);
 
   return (
     <>

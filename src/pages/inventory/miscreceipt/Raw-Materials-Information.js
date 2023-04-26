@@ -102,6 +102,10 @@ export const RawMaterialsInformation = ({
     }
   };
 
+  const newDate = new Date()
+  const maxDate = moment(newDate).format('yyyy-MM-DD')
+  const minDate = moment(newDate.setDate(newDate.getDate() - 7)).format('yyyy-MM-DD')
+
   return (
     <Flex justifyContent="center" flexDirection="column" w="full">
       <VStack w="full" spacing={6}>
@@ -207,6 +211,34 @@ export const RawMaterialsInformation = ({
                   ? rawMatsInfo.supplier
                   : "Please select a supplier"}
               </Text>
+            </HStack>
+            {/* Transaction Date */}
+            <HStack w="full">
+              <Text
+                minW="50%"
+                w="auto"
+                bgColor="secondary"
+                color="white"
+                pl={2}
+                pr={10}
+                py={2.5}
+                fontSize="xs"
+              >
+                Transaction Date:{" "}
+              </Text>
+              <Input
+                // onChange={(e) => setDeliveryDate(e.target.value)}
+                min={minDate}
+                max={maxDate}
+                // disabled={checkedItems <= 0}
+                // title={
+                //   checkedItems <= 0
+                //     ? "Please select items to transact first"
+                //     : ""
+                // }
+                type="date"
+                bgColor="#fff8dc"
+              />
             </HStack>
           </VStack>
         </Flex>
@@ -347,7 +379,7 @@ export const RawMatsInfoModal = ({
                   >
                     Item Code:{" "}
                   </Text>
-                  
+
                   {rawMats.length > 0 ? (
                     <Select
                       onChange={(e) => itemCodeHandler(e.target.value)}
@@ -398,11 +430,7 @@ export const RawMatsInfoModal = ({
                       bgColor="#fff8dc"
                     />
                   ) : (
-                    <Input
-                      w="full"
-                      value="Item is not expirable"
-                      readOnly
-                    />
+                    <Input w="full" value="Item is not expirable" readOnly />
                   )}
                 </HStack>
 
@@ -508,8 +536,9 @@ export const RawMatsInfoModal = ({
                   !rawMatsInfo.itemCode ||
                   !rawMatsInfo.supplier ||
                   !rawMatsInfo.uom ||
-                  !rawMatsInfo.expirationDate  && isExpirable === true ||
-                  rawMatsInfo.expirationDate !== null && isExpirable === false ||
+                  (!rawMatsInfo.expirationDate && isExpirable === true) ||
+                  (rawMatsInfo.expirationDate !== null &&
+                    isExpirable === false) ||
                   !rawMatsInfo.quantity ||
                   !details
                 }

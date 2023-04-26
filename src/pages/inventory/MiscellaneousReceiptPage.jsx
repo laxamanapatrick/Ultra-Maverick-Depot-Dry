@@ -135,7 +135,6 @@ const MiscellaneousReceiptPage = () => {
     fetchReceipts()
   }, [status, pageSize, currentPage, search]);
 
-
   //Refetch on change navigation
   useEffect(() => {
     if (navigation) {

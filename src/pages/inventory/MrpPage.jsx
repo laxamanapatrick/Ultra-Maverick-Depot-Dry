@@ -17,6 +17,8 @@ const fetchMRPForSheetApi = async (pageTotal) => {
 
 const MrpPage = () => {
 
+  const [isLoading, setIsLoading] = useState(true)
+
   const [pageTotal, setPageTotal] = useState(undefined)
   const [search, setSearch] = useState("")
   const outerLimit = 2;
@@ -46,6 +48,7 @@ const MrpPage = () => {
 
   const fetchMRP = () => {
     fetchMRPApi(currentPage, pageSize, search).then(res => {
+      setIsLoading(false)
       setMrpData(res)
       setPageTotal(res.totalCount)
     })
@@ -91,6 +94,8 @@ const MrpPage = () => {
           setSearch={setSearch}
           pageTotal={pageTotal}
           sheetData={sheetData}
+          isLoading={isLoading} setIsLoading={setIsLoading}
+          fetchMRP={fetchMRP}
         />
         {
           selectorId ?
