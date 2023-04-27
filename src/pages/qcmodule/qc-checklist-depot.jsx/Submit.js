@@ -36,7 +36,7 @@ const SubmitButton = ({
   //Receiving Information
   function checkEmptyReceiving(fields) {
     return (
-      fields.manufacturingDate === "" ||
+      // fields.manufacturingDate === "" ||
       fields.expiryDate === "" || 
       fields.expectedDelivery === "" ||
       fields.actualQuantityDelivered === ""
@@ -71,14 +71,14 @@ const SubmitButton = ({
     });
 
   //Conformance Details
-  const hasConformanceCount =
-    conformanceDetails && Object.keys(conformanceDetails).length !== 7;
-  const hasConformanceEmpty =
-    conformanceDetails &&
-    Object.keys(conformanceDetails).some(
-      (key) => conformanceDetails[key].trim() === ""
-    );
-  const hasEmptyConformance = hasConformanceCount || hasConformanceEmpty;
+  // const hasConformanceCount =
+  //   conformanceDetails && Object.keys(conformanceDetails).length !== 7;
+  // const hasConformanceEmpty =
+  //   conformanceDetails &&
+  //   Object.keys(conformanceDetails).some(
+  //     (key) => conformanceDetails[key].trim() === ""
+  //   );
+  // const hasEmptyConformance = hasConformanceCount || hasConformanceEmpty;
 
   //Other Conformance Details
   function validateOtherConformanceLength(variable) {
@@ -138,7 +138,7 @@ const SubmitButton = ({
     hasEmptyReceiving ||
     hasEmptyChecklist ||
     hasEmptyCheckbox ||
-    hasEmptyConformance ||
+    // hasEmptyConformance ||
     hasEmptyOtherConformance ||
     hasEmptyDelivery ||
     hasEmptyHygiene ||

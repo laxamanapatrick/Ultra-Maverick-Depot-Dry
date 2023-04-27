@@ -71,7 +71,7 @@ const DocumentationRequirements = () => {
         bgColor="secondary"
         color="white"
       >
-        1. Documentation Requirements
+        Documentation Requirements
       </Text>
       <Table variant="simple">
         <Thead>

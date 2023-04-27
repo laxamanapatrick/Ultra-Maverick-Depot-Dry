@@ -40,7 +40,7 @@ const Conformance = () => {
         bgColor="secondary"
         color="white"
       >
-        3. Conformance to set standard specifications
+        Conformance to set standard specifications
       </Text>
       <Table variant="simple">
         <Thead>

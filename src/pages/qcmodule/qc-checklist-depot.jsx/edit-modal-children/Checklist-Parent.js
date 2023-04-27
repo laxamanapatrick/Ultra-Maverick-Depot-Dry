@@ -41,7 +41,7 @@ const ChecklistParent = () => {
             <VStack w="full" spacing={8} mx={0}>
               <DocumentationRequirements />
               <FoodHandlingDetails />
-              <Conformance />
+              {/* <Conformance /> */}
               <OtherConformance />
               <DeliveryVehicleCondition />
               <HygienePractices />

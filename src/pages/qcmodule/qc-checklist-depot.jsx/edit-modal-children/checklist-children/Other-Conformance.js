@@ -71,7 +71,7 @@ const OtherConformance = () => {
         bgColor="secondary"
         color="white"
       >
-        4. Other Conformance Parameters on Product Condition/s
+        Other Conformance Parameters on Product Condition/s
       </Text>
       <Table variant="simple">
         <Thead>

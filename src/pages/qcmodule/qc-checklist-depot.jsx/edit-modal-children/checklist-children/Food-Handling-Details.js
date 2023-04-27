@@ -67,7 +67,7 @@ const FoodHandlingDetails = () => {
         bgColor="secondary"
         color="white"
       >
-        2. Food Handling Details
+        Food Handling Details
       </Text>
       <Table variant="simple">
         <Thead>

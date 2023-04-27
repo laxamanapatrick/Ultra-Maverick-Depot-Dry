@@ -646,7 +646,7 @@ const DrawerComponent = ({
                     {farms.length > 0 ? (
                       <Select
                         {...register("formData.farmTypeId")}
-                        placeholder="Select Farm Type"
+                        placeholder="Select Customer Type"
                       >
                         {farms.map((farm) => (
                           <option key={farm.id} value={farm.id}>

@@ -320,51 +320,51 @@ const SubmitConfirmation = ({
     ],
     checklistsString: submitChecklist,
     checkListInput: [
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "WIDTH",
-        value: conformanceDetails.width,
-      },
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "HEIGHT",
-        value: conformanceDetails.height,
-      },
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "LENGTH",
-        value: conformanceDetails.length,
-      },
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "THICKNESS",
-        value: conformanceDetails.thickness,
-      },
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "DIAMETER",
-        value: conformanceDetails.diameter,
-      },
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "RADIUS",
-        value: conformanceDetails.radius,
-      },
-      {
-        pO_ReceivingId: editData.id,
-        checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
-        parameter: "INTERNAL / SURFACE TEMPERATURE (if cold products)",
-        value:
-          conformanceDetails[
-            "internal / surface temperature (if cold products)"
-          ],
-      },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "WIDTH",
+      //   value: conformanceDetails.width,
+      // },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "HEIGHT",
+      //   value: conformanceDetails.height,
+      // },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "LENGTH",
+      //   value: conformanceDetails.length,
+      // },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "THICKNESS",
+      //   value: conformanceDetails.thickness,
+      // },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "DIAMETER",
+      //   value: conformanceDetails.diameter,
+      // },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "RADIUS",
+      //   value: conformanceDetails.radius,
+      // },
+      // {
+      //   pO_ReceivingId: editData.id,
+      //   checlist_Type: "CONFORMANCE TO SET STANDARD SPECIFICATIONS",
+      //   parameter: "INTERNAL / SURFACE TEMPERATURE (if cold products)",
+      //   value:
+      //     conformanceDetails[
+      //       "internal / surface temperature (if cold products)"
+      //     ],
+      // },
       {
         pO_ReceivingId: editData.id,
         checlist_Type: "DELIVERY VEHICLE CONDITION",
@@ -402,8 +402,6 @@ const SubmitConfirmation = ({
           fetchPo();
           fetchNotification();
           closeConfirmation();
-          console.log(res)
-        
 
           const receivingIdWithoutUseContext = res.data.id;
           const secondSubmit = rejectionInformation.map((data) => {

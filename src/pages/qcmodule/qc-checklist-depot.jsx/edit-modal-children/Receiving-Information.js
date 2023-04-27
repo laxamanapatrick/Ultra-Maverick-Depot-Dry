@@ -149,12 +149,12 @@ const ReceivingInformation = ({
                 <VStack spacing={0} alignItems="start">
                   <Text
                     sx={textStyle}
-                    color={submitReceiving.manufacturingDate ? "" : "danger"}
+                    // color={submitReceiving.manufacturingDate ? "" : "danger"}
                   >
-                    Manufacturing Date
+                    Manufacturing Date (if applicable)
                   </Text>
                   <Input
-                    bgColor="#fff8dc"
+                    // bgColor="#fff8dc"
                     type="date"
                     w="215px"
                     h="35px"

@@ -89,7 +89,7 @@ const DeliveryVehicleCondition = () => {
         bgColor="secondary"
         color="white"
       >
-        5. Delivery Vehicle Condition
+        Delivery Vehicle Condition
       </Text>
       <Table variant="simple">
         <Thead>

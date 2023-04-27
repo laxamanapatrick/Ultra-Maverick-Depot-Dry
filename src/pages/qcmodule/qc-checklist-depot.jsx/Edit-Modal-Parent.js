@@ -36,7 +36,7 @@ export const EditModalComponent = ({
 }) => {
   // Submit Data states
   const [submitReceiving, setSubmitReceiving] = useState({
-    manufacturingDate: "",
+    manufacturingDate: null,
     expiryDate: editData?.isExpirable ? "" : null,
     expectedDelivery: "",
     actualQuantityDelivered: "",

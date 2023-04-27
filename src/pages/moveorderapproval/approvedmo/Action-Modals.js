@@ -297,7 +297,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                         <PageScrollReusable minHeight='150px' maxHeight='300px'>
                             <VStack spacing={20} w='93%' ml={3} ref={componentRef}>
                                 {/* Survey Form */}
-                                <Flex w='full' mb='500px' p={5} flexDirection='column'>
+                                {/* <Flex w='full' mb='500px' p={5} flexDirection='column'>
 
                                     <HStack w='full' border='1px'>
                                         <Image
@@ -380,7 +380,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                                         <Text fontWeight='semibold' fontSize='xs'>Evaluated By: __________________________________________</Text>
                                     </Flex>
 
-                                </Flex>
+                                </Flex> */}
                                 {/* MO SLIP Print*/}
                                 <Flex w='full' mt={2} p={5} flexDirection='column'>
 

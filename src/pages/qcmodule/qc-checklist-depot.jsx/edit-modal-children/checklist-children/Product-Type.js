@@ -17,7 +17,7 @@ const ProductType = () => {
           bgColor="secondary"
           color="white"
         >
-          7. Product / Commodity Type
+          Product / Commodity Type
         </Text>
         <HStack m={5}>
           <Text w="50%">Detail</Text>

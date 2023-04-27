@@ -89,7 +89,7 @@ const HygienePractices = () => {
         bgColor="secondary"
         color="white"
       >
-        6. Hygiene Practices
+        Hygiene Practices
       </Text>
       <Table variant="simple">
         <Thead>
