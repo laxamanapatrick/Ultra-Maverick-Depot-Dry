@@ -7,6 +7,7 @@ import {
   Tbody,
   Td,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
@@ -15,7 +16,8 @@ import { hygienePracticesData } from "./checklistData-partTwo";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
 
 const HygienePractices = () => {
-  const { setHygieneDetails } = useContext(ReceivingContext);
+  const { setHygieneDetails, remarksParent, setRemarksParent } =
+    useContext(ReceivingContext);
 
   const [checklistValues, setChecklistValues] = useState(
     Object.fromEntries(hygienePracticesData.map((item) => [item.id, ""]))
@@ -35,8 +37,8 @@ const HygienePractices = () => {
           value = checklistValues[item.details];
         }
         const camelCaseItemDetails = item.details
-          .toLowerCase()
-          .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+          // .toLowerCase()
+          // .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
         submittedData.push({
           [camelCaseItemDetails]: value,
         });
@@ -144,6 +146,21 @@ const HygienePractices = () => {
           ))}
         </Tbody>
       </Table>
+      <Box m={2}>
+        <Textarea
+          placeholder="Additional Remarks here"
+          borderColor="blackAlpha.400"
+          onChange={(e) =>
+            setRemarksParent({
+              documentationRemarks: remarksParent.documentationRemarks,
+              foodHandlingRemarks: remarksParent.foodHandlingRemarks,
+              otherConformanceRemarks: remarksParent.otherConformanceRemarks,
+              deliveryVehicleRemarks: remarksParent.deliveryVehicleRemarks,
+              hygieneRemarks: e.target.value,
+            })
+          }
+        />
+      </Box>
     </Box>
   );
 };

@@ -23,9 +23,9 @@ export const deliveryConditionData = [
     details: "Plastic curtains are available, complete and in good condition",
     type: "radio",
   },
-  { id: 5, details: "Delivery vehicle temperature", type: "input" },
-  { id: 6, details: "Delivery vehicle's plate number", type: "input" },
-  {id: 7, details: "Name of delivery personnel", type: "input"}
+  // { id: 5, details: "Delivery vehicle temperature", type: "input" },
+  // { id: 6, details: "Delivery vehicle's plate number", type: "input" },
+  // {id: 7, details: "Name of delivery personnel", type: "input"}
 ];
 
 export const hygienePracticesData = [

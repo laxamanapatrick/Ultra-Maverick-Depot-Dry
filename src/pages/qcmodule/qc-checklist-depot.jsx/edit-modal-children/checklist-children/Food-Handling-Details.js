@@ -12,13 +12,14 @@ import {
   RadioGroup,
   Box,
   Text,
+  Textarea,
 } from "@chakra-ui/react";
 import { foodHandlingData } from "./checklistsData";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
 
 const FoodHandlingDetails = () => {
 
-  const { setFoodHandlingDetails } = useContext(ReceivingContext);
+  const { setFoodHandlingDetails, remarksParent, setRemarksParent } = useContext(ReceivingContext);
 
   const [state, setState] = useState(() => {
     const initialState = {};
@@ -126,6 +127,21 @@ const FoodHandlingDetails = () => {
           )).sort((a, b) => a.id - b.id)}
         </Tbody>
       </Table>
+      <Box m={2}>
+        <Textarea
+          placeholder="Additional Remarks here"
+          borderColor="blackAlpha.400"
+          onChange={(e) =>
+            setRemarksParent({
+              documentationRemarks: remarksParent.documentationRemarks,
+              foodHandlingRemarks: e.target.value,
+              otherConformanceRemarks: remarksParent.otherConformanceRemarks,
+              deliveryVehicleRemarks: remarksParent.deliveryVehicleRemarks,
+              hygieneRemarks: remarksParent.hygieneRemarks,
+            })
+          }
+        />
+      </Box>
     </Box>
   );
 };

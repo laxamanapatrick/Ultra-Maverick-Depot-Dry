@@ -32,6 +32,7 @@ const SubmitButton = ({
   deliveryDetails,
   hygieneDetails,
   productType,
+  remarksParent
 }) => {
   //Receiving Information
   function checkEmptyReceiving(fields) {
@@ -94,22 +95,23 @@ const SubmitButton = ({
 
   //Delivery Vehicle Condition
   function validateDeliveryLength(variable) {
-    if (variable?.length != 7) {
+    if (variable?.length != 4) {
       return true;
     } else {
       return false;
     }
   }
   const hasDeliveryCount = validateDeliveryLength(deliveryDetails);
-  const hasDeliveryEmpty = deliveryDetails?.some((item) => {
-    for (const property in item) {
-      if (item[property] === "") {
-        return true;
-      }
-    }
-    return false;
-  });
-  const hasEmptyDelivery = hasDeliveryCount || hasDeliveryEmpty;
+  // const hasDeliveryEmpty = deliveryDetails?.some((item) => {
+  //   for (const property in item) {
+  //     if (item[property] === "") {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // });
+  const hasEmptyDelivery = hasDeliveryCount 
+  // || hasDeliveryEmpty;
 
   //Hygiene Practices
   function validateHygieneLength(variable) {
@@ -203,6 +205,7 @@ const SubmitButton = ({
           deliveryDetails={deliveryDetails}
           hygieneDetails={hygieneDetails}
           productType={productType}
+          remarksParent={remarksParent}
         />
       )}
 

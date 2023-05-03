@@ -40,6 +40,7 @@ export const EditModalComponent = ({
     expiryDate: editData?.isExpirable ? "" : null,
     expectedDelivery: "",
     actualQuantityDelivered: "",
+    monitoredBy: ''
   });
   const [rejectionInformation, setRejectionInformation] = useState(null);
   const [totalReject, setTotalReject] = useState(0);
@@ -51,6 +52,14 @@ export const EditModalComponent = ({
   const [hygieneDetails, setHygieneDetails] = useState(null);
   const [productType, setProductType] = useState(null);
 
+  const [remarksParent, setRemarksParent] = useState({
+    documentationRemarks: "",
+    foodHandlingRemarks: "",
+    otherConformanceRemarks: "",
+    deliveryVehicleRemarks: "",
+    hygieneRemarks: ""
+  })
+
   return (
     <ReceivingContext.Provider
       value={{
@@ -61,6 +70,10 @@ export const EditModalComponent = ({
         setDeliveryDetails,
         setHygieneDetails,
         setProductType,
+        submitReceiving,
+        setSubmitReceiving,
+        remarksParent,
+        setRemarksParent
       }}
     >
       <Flex>
@@ -109,6 +122,7 @@ export const EditModalComponent = ({
                 deliveryDetails={deliveryDetails}
                 hygieneDetails={hygieneDetails}
                 productType={productType}
+                remarksParent={remarksParent}
               />
             </ModalFooter>
           </ModalContent>

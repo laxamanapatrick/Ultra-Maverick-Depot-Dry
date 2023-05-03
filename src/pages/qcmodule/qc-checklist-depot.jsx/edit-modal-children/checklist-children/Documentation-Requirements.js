@@ -6,15 +6,17 @@ import {
   Tbody,
   Td,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
 } from "@chakra-ui/react";
-import { documentationData } from "./checklistsData";
+import { documentationData, otherConformanceData } from "./checklistsData";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
 
 const DocumentationRequirements = () => {
-  const { setDocumentationChecklist } = useContext(ReceivingContext);
+  const { setDocumentationChecklist, remarksParent, setRemarksParent } =
+    useContext(ReceivingContext);
 
   const [checklistValues, setChecklistValues] = useState(
     Object.fromEntries(documentationData.map((item) => [item.id, false]))
@@ -24,9 +26,9 @@ const DocumentationRequirements = () => {
     const submittedData = [];
     documentationData.forEach((item) => {
       if (item.details === name || values[item.details] != null) {
-        const camelCaseItemDetails = item.details
-          .toLowerCase()
-          .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+        const camelCaseItemDetails = item.details;
+        // .toLowerCase()
+        // .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
         submittedData.push({
           [camelCaseItemDetails]: values[item.details] || false,
         });
@@ -85,7 +87,9 @@ const DocumentationRequirements = () => {
             <Tr key={index}>
               <Td>{item.details}</Td>
               <Td>
-                <div style={{ display: "flex", gap:"10px", position: 'relative' }}>
+                <div
+                  style={{ display: "flex", gap: "10px", position: "relative" }}
+                >
                   <Radio
                     name={item.details}
                     value="true"
@@ -112,6 +116,21 @@ const DocumentationRequirements = () => {
           ))}
         </Tbody>
       </Table>
+      <Box m={2}>
+        <Textarea
+          placeholder="Additional Remarks here"
+          borderColor="blackAlpha.400"
+          onChange={(e) =>
+            setRemarksParent({
+              documentationRemarks: e.target.value,
+              foodHandlingRemarks: remarksParent.foodHandlingRemarks,
+              otherConformanceRemarks: remarksParent.otherConformanceRemarks,
+              deliveryVehicleRemarks: remarksParent.deliveryVehicleRemarks,
+              hygieneRemarks: remarksParent.hygieneRemarks,
+            })
+          }
+        />
+      </Box>
     </Box>
   );
 };

@@ -7,6 +7,7 @@ import {
   Tbody,
   Td,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
@@ -15,7 +16,7 @@ import { deliveryConditionData } from "./checklistData-partTwo";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
 
 const DeliveryVehicleCondition = () => {
-  const { setDeliveryDetails } = useContext(ReceivingContext);
+  const { setDeliveryDetails, remarksParent, setRemarksParent } = useContext(ReceivingContext);
 
   const [checklistValues, setChecklistValues] = useState(
     Object.fromEntries(deliveryConditionData.map((item) => [item.id, ""]))
@@ -35,8 +36,8 @@ const DeliveryVehicleCondition = () => {
           value = checklistValues[item.details];
         }
         const camelCaseItemDetails = item.details
-          .toLowerCase()
-          .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+          // .toLowerCase()
+          // .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
         submittedData.push({
           [camelCaseItemDetails]: value,
         });
@@ -103,7 +104,8 @@ const DeliveryVehicleCondition = () => {
             <Tr key={index}>
               <Td>{item.details}</Td>
               <Td>
-                {item.type === "radio" ? (
+                {/* {
+                item.type === "radio" ? ( */}
                   <div
                     style={{
                       display: "flex",
@@ -132,18 +134,33 @@ const DeliveryVehicleCondition = () => {
                       No
                     </Radio>
                   </div>
-                ) : (
+                {/* ) : (
                   <Input
                     name={item.details}
                     placeholder="Input Value"
                     onChange={handleChange}
                   />
-                )}
+                )} */}
               </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
+      <Box m={2}>
+        <Textarea
+          placeholder="Additional Remarks here"
+          borderColor="blackAlpha.400"
+          onChange={(e) =>
+            setRemarksParent({
+              documentationRemarks: remarksParent.documentationRemarks,
+              foodHandlingRemarks: remarksParent.foodHandlingRemarks,
+              otherConformanceRemarks: remarksParent.otherConformanceRemarks,
+              deliveryVehicleRemarks: e.target.value,
+              hygieneRemarks: remarksParent.hygieneRemarks,
+            })
+          }
+        />
+      </Box>
     </Box>
   );
 };

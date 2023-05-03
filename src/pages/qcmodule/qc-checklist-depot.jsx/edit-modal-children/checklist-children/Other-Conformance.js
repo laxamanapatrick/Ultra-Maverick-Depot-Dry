@@ -6,6 +6,7 @@ import {
   Tbody,
   Td,
   Text,
+  Textarea,
   Th,
   Thead,
   Tr,
@@ -25,8 +26,8 @@ const OtherConformance = () => {
     otherConformanceData.forEach((item) => {
       if (item.details === name || values[item.details] != null) {
         const camelCaseItemDetails = item.details
-          .toLowerCase()
-          .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
+          // .toLowerCase()
+          // .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
         submittedData.push({
           [camelCaseItemDetails]: values[item.details] || false,
         });
@@ -114,6 +115,21 @@ const OtherConformance = () => {
           ))}
         </Tbody>
       </Table>
+      <Box m={2}>
+        <Textarea
+          placeholder="Additional Remarks here"
+          borderColor="blackAlpha.400"
+          onChange={(e) =>
+            setRemarksParent({
+              documentationRemarks: remarksParent.documentationRemarks,
+              foodHandlingRemarks: remarksParent.foodHandlingRemarks,
+              otherConformanceRemarks: e.target.value,
+              deliveryVehicleRemarks: remarksParent.deliveryVehicleRemarks,
+              hygieneRemarks: remarksParent.hygieneRemarks,
+            })
+          }
+        />
+      </Box>
     </Box>
   );
 };

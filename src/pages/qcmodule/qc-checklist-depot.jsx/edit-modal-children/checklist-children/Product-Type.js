@@ -1,10 +1,11 @@
 import React, { useContext } from "react";
-import { Box, HStack, Select, Text } from "@chakra-ui/react";
+import { Box, HStack, Input, Select, Text } from "@chakra-ui/react";
 import { productTypeData } from "./checklistData-partTwo";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
 
 const ProductType = () => {
-  const { setProductType } = useContext(ReceivingContext);
+  const { setProductType, submitReceiving, setSubmitReceiving } =
+    useContext(ReceivingContext);
 
   return (
     <>
@@ -32,6 +33,23 @@ const ProductType = () => {
               </option>
             ))}
           </Select>
+        </HStack>
+        <HStack m={5}>
+          <Text w="50%">Monitored By</Text>
+          <Input
+            w="98%"
+            bgColor="#fff8dc"
+            onChange={(e) =>
+              setSubmitReceiving({
+                manufacturingDate: submitReceiving.manufacturingDate,
+                expiryDate: submitReceiving.expiryDate,
+                expectedDelivery: submitReceiving.expectedDelivery,
+                actualQuantityDelivered:
+                  submitReceiving.actualQuantityDelivered,
+                monitoredBy: e.target.value,
+              })
+            }
+          />
         </HStack>
       </Box>
     </>
