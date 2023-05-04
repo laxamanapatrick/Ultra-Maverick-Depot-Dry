@@ -1,6 +1,6 @@
 // Raw Materials Nearly Expire
 
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Badge,
   Button,
@@ -20,7 +20,6 @@ import {
   Th,
   Thead,
   Tr,
-  useToast
 } from '@chakra-ui/react';
 import apiClient from '../../services/apiClient';
 import { useDisclosure } from '@chakra-ui/react';
@@ -36,10 +35,8 @@ import {
   PaginationPageGroup,
 } from '@ajna/pagination'
 import PageScroll from '../../components/PageScroll';
-import ApproveModal from './rm-nearly-expire-page/Approve-Modal';
-import RejectModal from './rm-nearly-expire-page/Reject-Modal';
-import { NotificationContext } from '../../context/NotificationContext';
-import { ViewModal } from './rm-nearly-expire-page/View-Modal';
+// import { NotificationContext } from '../../context/NotificationContext';
+import { InspectModal } from './rm-nearly-expire-page/Inspect-Modal';
 
 const fetchRMNearlyExpireApi = async (pageNumber, pageSize, search) => {
   const res = await apiClient.get(`Receiving/GetAllNearlyExpireWithPaginationOrig?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}`)
@@ -49,16 +46,13 @@ const fetchRMNearlyExpireApi = async (pageNumber, pageSize, search) => {
 const RMNearlyExpirePage = ({ fetchNotification }) => {
 
   const [nearlyExpireData, setNearlyExpireData] = useState([])
+  const [poSummaryId, setPoSummaryId] = useState(null)
   const [receivingId, setReceivingId] = useState(null)
   const [search, setSearch] = useState("")
   const [pageTotal, setPageTotal] = useState(undefined);
   const [isLoading, setIsLoading] = useState(true)
 
   const { isOpen: isView, onOpen: openView, onClose: closeView } = useDisclosure()
-  const { isOpen: isApproveModalOpen, onOpen: openApproveModal, onClose: closeApproveModal } = useDisclosure()
-  const { isOpen: isRejectModalOpen, onOpen: openRejectModal, onClose: closeRejectModal } = useDisclosure()
-
-  const toast = useToast()
 
   const outerLimit = 2;
   const innerLimit = 2;
@@ -101,24 +95,18 @@ const RMNearlyExpirePage = ({ fetchNotification }) => {
     setSearch(inputValue)
   }
 
-  const approveHandler = (data) => {
-    openApproveModal()
-    setReceivingId(data)
-  }
-
-  const rejectHandler = (data) => {
-    openRejectModal()
-    setReceivingId(data)
-  }
-
-  const viewHandler = (id) => {
-    if (id) {
-      setReceivingId(id)
+  const inspectHandler = (poSummaryId , receivingId) => {
+    if (poSummaryId || receivingId) {
+      setPoSummaryId(poSummaryId)
+      setReceivingId(receivingId)
       openView()
     } else {
+      setPoSummaryId('')
       setReceivingId('')
     }
   }
+
+  console.log(nearlyExpireData)
 
   return (
     <Flex p={5} w="full" flexDirection='column'>
@@ -177,9 +165,9 @@ const RMNearlyExpirePage = ({ fetchNotification }) => {
                   <Th color="white">Actual Good</Th>
                   <Th color="white">Actual Remaining</Th>
                   <Th color="white">Expiry Date</Th>
-                  {/* <Th color="white">View</Th> */}
-                  <Th color="white">Approve</Th>
-                  <Th color="white">Reject</Th>
+                  <Th color="white">Action</Th>
+                  {/* <Th color="white">Approve</Th>
+                  <Th color="white">Reject</Th> */}
                 </Tr>
               </Thead>
               <Tbody>
@@ -195,16 +183,16 @@ const RMNearlyExpirePage = ({ fetchNotification }) => {
                     <Td>{ne.actualRemaining.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td>
                     <Td>{ne.expiryDate}</Td>
 
-                    {/* <Td>
+                    <Td>
                       <Button
-                        onClick={() => viewHandler(ne.receivingId)}
+                        onClick={() => inspectHandler(ne.id ,ne.receivingId)}
                         color='white' colorScheme='green' _hover={{ bgColor: 'secondary', color: 'white' }} size='xs'
                       >
-                        View
+                        Inspect
                       </Button>
-                    </Td> */}
+                    </Td>
 
-                    <Td>
+                    {/* <Td>
                       <Button
                         onClick={() => approveHandler(ne.receivingId)}
                         color='white' bgColor='#3C8DBC' _hover={{ bgColor: 'secondary', color: 'white' }} size='xs'
@@ -220,7 +208,7 @@ const RMNearlyExpirePage = ({ fetchNotification }) => {
                       >
                         Reject
                       </Button>
-                    </Td>
+                    </Td> */}
                   </Tr>
                 )
                 }
@@ -270,34 +258,15 @@ const RMNearlyExpirePage = ({ fetchNotification }) => {
 
       {
         isView && (
-          <ViewModal
+          <InspectModal
             isOpen={isView}
             onClose={closeView}
+            poSummaryId={poSummaryId}
+            setPoSummaryId={setPoSummaryId}
             receivingId={receivingId}
-          />
-        )
-      }
-
-      {
-        isApproveModalOpen && (
-          <ApproveModal
-            receivingId={receivingId}
-            fetchRMNearlyExpire={fetchRMNearlyExpire}
-            isOpen={isApproveModalOpen}
-            onClose={closeApproveModal}
+            setReceivingId={setReceivingId}
             fetchNotification={fetchNotification}
-          />
-        )
-      }
-
-      {
-        isRejectModalOpen && (
-          <RejectModal
-            receivingId={receivingId}
             fetchRMNearlyExpire={fetchRMNearlyExpire}
-            isOpen={isRejectModalOpen}
-            onClose={closeRejectModal}
-            fetchNotification={fetchNotification}
           />
         )
       }

@@ -15,7 +15,7 @@ import { otherConformanceData } from "./checklistsData";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
 
 const OtherConformance = () => {
-  const { setOtherConformanceDetails } = useContext(ReceivingContext);
+  const { setOtherConformanceDetails, remarksParent, setRemarksParent } = useContext(ReceivingContext);
 
   const [checklistValues, setChecklistValues] = useState(
     Object.fromEntries(otherConformanceData.map((item) => [item.id, false]))

@@ -161,6 +161,10 @@ const SubmitConfirmation = ({
           closeConfirmation();
 
           const receivingIdWithoutUseContext = res.data.id;
+
+          // Update receiving id
+          apiClient.put(`Receiving/UpdateReceivingId/${receivingIdWithoutUseContext}`, receivingIdWithoutUseContext)
+
           const secondSubmit = rejectionInformation.map((data) => {
             return {
               pO_ReceivingId: receivingIdWithoutUseContext,
