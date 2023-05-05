@@ -107,6 +107,7 @@ export const NewSidebar = ({
   }, []);
 
   const mainHandler = (children, title) => {
+    fetchNotification()
     setSubData(children);
     // setSelectedModule(title)
   };

@@ -132,7 +132,7 @@ const ImportRawMaterialsPage = () => {
         itemDescription: item.itemDescription,
         uomId: functionUOM(item.uom),
         itemCategoryId: functionItemCategory(item.itemCategory),
-        bufferLevel: item.bufferLevel,
+        bufferLevel: Number(item.bufferLevel),
         isExpirable: item.isExpirable === 'Yes' ? true : false,
         addedBy: currentUser.fullName
       }))
@@ -198,7 +198,7 @@ const ImportRawMaterialsPage = () => {
                     <Td>{ed.itemDescription ? ed.itemDescription : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materials is uploaded.</Text>}</Td>
                     <Td>{ed.uom ? ed.uom : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materias . is uploaded.</Text>}</Td>
                     <Td>{ed.itemCategory ? ed.itemCategory : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materials is uploaded.</Text>}</Td>
-                    <Td>{ed.bufferLevel ? ed.bufferLevel : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materials is uploaded.</Text>}</Td>
+                    <Td>{ed.bufferLevel || ed.bufferLevel === 0  ? Number(ed.bufferLevel) : <Text fontWeight='semibold' color='danger'>Data missing. Please make sure correct excel file for raw materials is uploaded.</Text>}</Td>
                     <Td>{ed.isExpirable}</Td>
                   </Tr>
                 )}
