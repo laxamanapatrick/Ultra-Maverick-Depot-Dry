@@ -64,8 +64,10 @@ import {
 } from "@ajna/pagination";
 import { FaSearch } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
+import { GiChecklist } from "react-icons/gi";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
+import PrintChecklistModal from "../../qcmodule/Print-Checklist-Modal";
 
 const fetchWarehouseIdApi = async (search) => {
   const res = await apiClient.get(
@@ -150,6 +152,21 @@ export const ReceivedRMList = () => {
     setSearch(data);
   };
 
+  const [qcReceivingId, setqcReceivingId] = useState("");
+  const {
+    isOpen: isChecklist,
+    onClose: closeChecklist,
+    onOpen: openChecklist,
+  } = useDisclosure();
+  const checklistHandler = (id) => {
+    if (id) {
+      setqcReceivingId(id);
+      openChecklist();
+    } else {
+      setqcReceivingId("");
+    }
+  };
+
   return (
     <Flex p={5} w="full" flexDirection="column">
       <Flex justifyContent="start">
@@ -189,6 +206,7 @@ export const ReceivedRMList = () => {
                 <Th color="white">Actual Good</Th>
                 <Th color="white">Days to Expire</Th>
                 <Th color="white">Expiration Date</Th>
+                <Th color="white">Checklist</Th>
                 <Th color="white">Print</Th>
               </Tr>
             </Thead>
@@ -227,6 +245,22 @@ export const ReceivedRMList = () => {
                       cursor="help"
                     >
                       {items.expirationDate ? items.expirationDate : "NA"}
+                    </Td>
+                    <Td>
+                      <Button
+                        disabled={!items.qcReceivingId}
+                        onClick={() => checklistHandler(items.qcReceivingId)}
+                        p={0}
+                        background="none"
+                        color="secondary"
+                        title={
+                          !items.qcReceivingId
+                            ? "This raw material was received through miscellaneous transaction"
+                            : ""
+                        }
+                      >
+                        <GiChecklist />
+                      </Button>
                     </Td>
                     <Td>
                       <Button
@@ -270,6 +304,14 @@ export const ReceivedRMList = () => {
             isOpen={isPrintAll}
             onClose={closePrintAll}
             warehouseIdData={warehouseIdData}
+          />
+        )}
+
+        {isChecklist && (
+          <PrintChecklistModal
+            isOpen={isChecklist}
+            onClose={closeChecklist}
+            receivingId={qcReceivingId}
           />
         )}
       </Flex>
@@ -362,8 +404,8 @@ const PrintAllBarcodeModal = ({ isOpen, onClose, warehouseIdData }) => {
                       <Td>
                         {!item.expirationDate
                           ? "Not Expirable"
-                        //   ? Number(item.expirationDay) <= 0 : 'Expired' 
-                          : item.expirationDay}
+                          : //   ? Number(item.expirationDay) <= 0 : 'Expired'
+                            item.expirationDay}
                       </Td>
                       <Td>
                         {item.expirationDate

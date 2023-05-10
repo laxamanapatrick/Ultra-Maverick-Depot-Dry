@@ -382,17 +382,17 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
 
                                 </Flex> */}
                                 {/* MO SLIP Print*/}
-                                <Flex w='full' mt={2} p={5} flexDirection='column'>
+                                <Flex w='full' flexDirection='column'>
 
                                     <Flex spacing={0} justifyContent='start' flexDirection='column'>
                                         <Image
                                             src='/images/RDF Logo.png'
-                                            w='13%' ml={3}
+                                            w='13%'
                                         />
-                                        <Text fontSize='8px' ml={2}>Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines</Text>
+                                        <Text fontSize='8px'>Purok 6, Brgy. Lara, City of San Fernando, Pampanga, Philippines</Text>
                                     </Flex>
 
-                                    <Flex justifyContent='center' my={4}>
+                                    <Flex justifyContent='center'>
                                         <Text fontSize='lg' fontWeight='semibold'>Move Order Slip</Text>
                                     </Flex>
 
@@ -400,7 +400,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                                         <Text fontSize='xs' fontWeight='semibold'>(reprinted copy)</Text>
                                     </Flex>
 
-                                    <Flex justifyContent='space-between' mb={3}>
+                                    <Flex justifyContent='space-between'>
                                         <Flex flexDirection='column'>
                                             <Text>Order ID: {orderId && orderId}</Text>
                                             <Text>Warehouse: {`Dry and Liquid`}</Text>
@@ -414,7 +414,7 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                                         </Flex>
                                     </Flex>
 
-                                    <Table size='sm'>
+                                    <Table size='xs'>
                                         <Thead bgColor='secondary'>
                                             <Tr>
                                                 <Th color='white'>ITEM CODE</Th>
@@ -440,12 +440,12 @@ export const PrintModal = ({ isOpen, onClose, printData, closeApprove, fetchAppr
                                             }
                                         </Tbody>
                                     </Table>
-
-                                    <Flex justifyContent='start' mb={3}>
+{/* 
+                                    <Flex justifyContent='start'>
                                         <Text>Total Quantity: {totalQuantity && totalQuantity}</Text>
-                                    </Flex>
+                                    </Flex> */}
 
-                                    <Flex justifyContent='space-between' mb={5} mt={2}>
+                                    <Flex justifyContent='space-between'>
                                         <HStack>
                                             <Text>Delivery Status:</Text>
                                             <Text textDecoration='underline'>

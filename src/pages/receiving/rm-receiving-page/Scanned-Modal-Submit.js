@@ -112,7 +112,7 @@ const ScannedModalSubmit = ({ itemCodeData, code, receivingDate, lotCategory, ac
         "Item Description": itemCodeData.itemDescription,
         "UOM": itemCodeData.uom,
         "Supplier": itemCodeData.supplier,
-        "Quantity Good": itemCodeData.actualDelivered,
+        "Quantity Good": itemCodeData.actualDelivered - Number(sumQuantity),
         "Receiving Date": moment(receivingDate).format("MM/DD/YYYY"),
         "Expiration Date": !itemCodeData.expiration ? 'Not Expirable' : moment(itemCodeData.expiration).format("MM/DD/YYYY"),
         "Lot Category": lotCategory,

@@ -95,6 +95,13 @@ import SupplierPage from "./pages/setup/SupplierPage";
 import TransformationManagementPage from "./pages/setup/TransformationManagementPage";
 import ReasonPage from "./pages/setup/ReasonPage";
 import TransactionTypePage from "./pages/setup/TransactionTypePage";
+import CommodityType from "./pages/setup/Commodity-Type";
+import SampleType from "./pages/setup/Sample-Type";
+import TypeOfSwap from "./pages/setup/Type-Of-Swap";
+import Analysis from "./pages/setup/Analysis";
+import Parameters from "./pages/setup/Parameters";
+import ProductCondition from "./pages/setup/Product-Condition";
+import Dispotion from "./pages/setup/Dispotion";
 
 import MoveOrderApproval from "./pages/MoveOrderApproval";
 import ForApprovalMO from "./pages/moveorderapproval/For-ApprovalMO";
@@ -701,6 +708,48 @@ function App() {
               path="transaction-type"
               element={
                 user ? <TransactionTypePage /> : <Navigate to="/login" />
+              }
+            />
+              <Route
+              path="commodity-type"
+              element={
+                user ? <CommodityType /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="sample-type"
+              element={
+                user ? <SampleType /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="type-of-swap"
+              element={
+                user ? <TypeOfSwap /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="analysis"
+              element={
+                user ? <Analysis /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="parameters"
+              element={
+                user ? <Parameters /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="product-condition"
+              element={
+                user ? <ProductCondition /> : <Navigate to="/login" />
+              }
+            />
+            <Route
+              path="disposition"
+              element={
+                user ? <Dispotion /> : <Navigate to="/login" />
               }
             />
           </Route>

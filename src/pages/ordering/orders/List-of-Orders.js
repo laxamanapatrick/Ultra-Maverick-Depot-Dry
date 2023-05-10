@@ -78,6 +78,11 @@ export const ListofOrders = ({
     "yyyy-MM-DD"
   );
 
+  const filteredLength = genusOrders?.filter((val) => {
+    const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+    return val.name?.toLowerCase().match(newKeyword, "*");
+  });
+
   return (
     <Flex w="full" p={5} flexDirection="column">
       <Flex justifyContent="center">
@@ -136,7 +141,14 @@ export const ListofOrders = ({
             {fetchingData || isLoading ? (
               <Spinner cursor="pointer" onClick={() => setIsLoading(false)} />
             ) : (
-              <Button size='sm' colorScheme='blue' cursor="pointer" onClick={() => openConfirm()}>Sync</Button>
+              <Button
+                size="sm"
+                colorScheme="blue"
+                cursor="pointer"
+                onClick={() => openConfirm()}
+              >
+                Sync
+              </Button>
             )}
           </Flex>
 
@@ -217,7 +229,12 @@ export const ListofOrders = ({
       )}
       {fromDate && toDate ? (
         <Text mt={3} fontSize="xs">
-          Number of records: {fetchingData ? 'loading orders' : genusOrders?.length}
+          {fetchingData
+            ? "loading orders"
+            : !keyword
+            ? `Number of records: ${genusOrders?.length}`
+            : // : `Results for ${keyword}`}
+              `Number of filtered records: ${filteredLength?.length}`}
         </Text>
       ) : (
         ""

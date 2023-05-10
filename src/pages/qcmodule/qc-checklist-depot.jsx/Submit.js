@@ -40,7 +40,8 @@ const SubmitButton = ({
       // fields.manufacturingDate === "" ||
       fields.expiryDate === "" || 
       fields.expectedDelivery === "" ||
-      fields.actualQuantityDelivered === ""
+      fields.actualQuantityDelivered === "" ||
+      fields.monitoredBy === ""
     );
   }
   const hasEmptyReceiving = checkEmptyReceiving(submitReceiving);

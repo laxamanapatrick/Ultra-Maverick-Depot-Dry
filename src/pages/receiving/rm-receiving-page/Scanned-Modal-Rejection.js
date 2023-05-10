@@ -275,7 +275,7 @@ const ScannedModalRejection = ({
                           color="secondary"
                           onClick={() => deleteRejectionHandler(data.remarks)}
                         >
-                          <AiFillMinusCircle fontSize="20px" />
+                          <AiFillMinusCircle fontSize="20px" color="#de4b58" />
                         </Button>
                       </Td>
                     </Tr>
