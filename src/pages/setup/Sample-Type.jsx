@@ -56,27 +56,31 @@ import {
   PaginationPageGroup,
 } from "@ajna/pagination";
 import { FaSearch } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const currentUser = decodeUser();
 
-// const schema = yup.object().shape({
-//   formData: yup.object().shape({
-//     id: yup.string(),
-//     uoM_Code: yup.string().required("UOM is required"),
-//     uoM_Description: yup.string().required("Description is required")
-//   })
-// })
+const schema = yup.object().shape({
+  formData: yup.object().shape({
+    id: yup.string(),
+    sampleTypeName: yup.string().required("Sample Type Name is required"),
+  }),
+});
 
-// const fetchUomApi = async (pageNumber, pageSize, status, search) => {
-//   const res = await apiClient.get(`Uom/GetAllUomWithPaginationOrig/${status}?pageNumber=${pageNumber}&pageSize=${pageSize}&search=${search}`)
-//   return res.data
-// }
+const fetchSampleTypeApi = async (pageNumber, pageSize, status, search) => {
+  const res = await apiClient.get(
+    `LabTestMasterList/GetAllSampleTypePaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+  );
+  return res.data;
+};
 
 const SampleType = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState(true);
   const [search, setSearch] = useState("");
   const [codeDisable, setCodeDisable] = useState(false);
+
+  const [sampleTypes, setSampleTypes] = useState([]);
 
   const toast = useToast();
 
@@ -87,18 +91,24 @@ const SampleType = () => {
     onClose: closeDrawer,
   } = useDisclosure();
 
-  // const { register, handleSubmit, formState: { errors, isValid }, setValue, reset } = useForm({
-  //   resolver: yupResolver(schema),
-  //   mode: "onChange",
-  //   defaultValues: {
-  //     formData: {
-  //       id: "",
-  //       uoM_Code: "",
-  //       uoM_Description: "",
-  //       addedBy: currentUser.userName,
-  //     }
-  //   }
-  // })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    setValue,
+    reset,
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    defaultValues: {
+      formData: {
+        id: "",
+        sampleTypeName: "",
+        modifiedBy: currentUser.fullName,
+      },
+    },
+  });
 
   const outerLimit = 2;
   const innerLimit = 2;
@@ -118,17 +128,21 @@ const SampleType = () => {
     initialState: { currentPage: 1, pageSize: 5 },
   });
 
-  // const fetchUom = () => {
-  //   fetchUomApi(currentPage, pageSize, status, search).then(res => {
-  //     setIsLoading(false)
-  //     setUom(res)
-  //     setPageTotal(res.totalCount)
-  //   })
-  // }
+  const fetchSampleType = () => {
+    fetchSampleTypeApi(currentPage, pageSize, status, search).then((res) => {
+      setIsLoading(false);
+      setSampleTypes(res);
+      setPageTotal(res.totalCount);
+    });
+  };
 
-  // useEffect(() => {
-  //   fetchUom()
-  // }, [status, pageSize, currentPage, search])
+  useEffect(() => {
+    fetchSampleType();
+
+    return () => {
+      setSampleTypes([]);
+    };
+  }, [status, pageSize, currentPage, search]);
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -143,33 +157,48 @@ const SampleType = () => {
     setStatus(data);
   };
 
-  // const changeStatusHandler = (id, status) => {
-  //   let routeLabel;
-  //   if (status) {
-  //     routeLabel = "InActiveUom"
-  //   } else {
-  //     routeLabel = "ActivateUom"
-  //   }
-
-  //   apiClient.put(`Uom/${routeLabel}/${id}`, { id: id }).then((res) => {
-  //     ToastComponent("Success", "Uom Updated", "success", toast)
-  //     fetchUom()
-  //   }).catch(err => {
-  //     console.log(err);
-  //   })
-  // }
+  const changeStatusHandler = (id, status) => {
+    if (id) {
+      Swal.fire({
+        title: `Change Sample Type status`,
+        text: `Are you sure you want to set this sample type ${
+          status ? "inactive" : "active"
+        }?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          apiClient
+            .put(`LabTestMasterList/UpdateSampleTypeStatus`, {
+              id: id,
+              isActive: !status,
+              modifiedBy: currentUser.fullName,
+            })
+            .then((res) => {
+              ToastComponent("Success", res?.data, "success", toast);
+              fetchSampleType()
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    }
+  };
 
   const searchHandler = (inputValue) => {
     setSearch(inputValue);
   };
 
-  const editHandler = (uom) => {
+  const editHandler = (data) => {
     openDrawer();
     setValue("formData", {
-      id: uom.id,
-      uoM_Code: uom.uoM_Code,
-      uoM_Description: uom.uoM_Description,
-      modifiedBy: currentUser.userName,
+      id: data.id,
+      sampleTypeName: data.sampleTypeName,
+      modifiedBy: currentUser.fullName,
     });
     setCodeDisable(true);
   };
@@ -222,32 +251,49 @@ const SampleType = () => {
             <Thead>
               <Tr bgColor="secondary">
                 <Th color="white">ID</Th>
-                <Th color="white">UOM</Th>
-                <Th color="white">Description</Th>
-                <Th color="white">Date Added</Th>
-                <Th color="white">Added By</Th>
+                <Th color="white">Sample Type Name</Th>
+                {/* <Th color="white">Date Added</Th> */}
+                <Th color="white">Modified By</Th>
                 <Th color="white">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {/* {uom.uom?.map(uom =>
-                  <Tr key={uom.id}>
-                    <Td>{uom.id}</Td>
-                    <Td>{uom.uoM_Code}</Td>
-                    <Td>{uom.uoM_Description}</Td>
-                    <Td>{uom.dateAdded}</Td>
-                    <Td>{uom.addedBy}</Td>
+              {sampleTypes?.sampleTypes
+                ?.map((sampleType) => (
+                  <Tr key={sampleType.id}>
+                    <Td>{sampleType.id}</Td>
+                    <Td>{sampleType.sampleTypeName}</Td>
+                    <Td>{sampleType.modifiedBy}</Td>
+                    {/* <Td>{sampleType.dateAdded}</Td> */}
                     <Td>
                       <Flex>
                         <HStack>
-                          <Button p={0} background='none' color='secondary'
-                            onClick={() => editHandler(uom)}
+                          <Button
+                            p={0}
+                            background="none"
+                            color="secondary"
+                            onClick={() => editHandler(sampleType)}
                           >
                             <RiEditBoxFill />
                           </Button>
-                          <Popover>
+                          <Button
+                            p={0}
+                            background="none"
+                            color="secondary"
+                            onClick={() =>
+                              changeStatusHandler(
+                                sampleType.id,
+                                sampleType.isActive
+                              )
+                            }
+                          >
+                            <GiChoice />
+                          </Button>
+                          {/* <Popover>
                             <PopoverTrigger>
-                              <Button p={0} background='none'><GiChoice /></Button>
+                              <Button p={0} background="none">
+                                <GiChoice />
+                              </Button>
                             </PopoverTrigger>
                             <Portal>
                               <PopoverContent>
@@ -255,9 +301,27 @@ const SampleType = () => {
                                 <PopoverCloseButton />
                                 <PopoverBody>
                                   <VStack>
-                                    {uom.isActive === true ? <Text>Are you sure you want to set this UOM inactive?</Text> : <Text>Are you sure you want to set this UOM active?</Text>}
-                                    <Button bgColor='secondary' color='white' _hover={{ bgColor: 'accent' }}
-                                      onClick={() => changeStatusHandler(uom.id, uom.isActive)}
+                                    {sampleType.isActive === true ? (
+                                      <Text>
+                                        Are you sure you want to set this Sample
+                                        Type inactive?
+                                      </Text>
+                                    ) : (
+                                      <Text>
+                                        Are you sure you want to set this Sample
+                                        Type active?
+                                      </Text>
+                                    )}
+                                    <Button
+                                      bgColor="secondary"
+                                      color="white"
+                                      _hover={{ bgColor: "accent" }}
+                                      onClick={() =>
+                                        changeStatusHandler(
+                                          sampleType.id,
+                                          sampleType.isActive
+                                        )
+                                      }
                                     >
                                       Yes
                                     </Button>
@@ -265,13 +329,13 @@ const SampleType = () => {
                                 </PopoverBody>
                               </PopoverContent>
                             </Portal>
-                          </Popover>
+                          </Popover> */}
                         </HStack>
                       </Flex>
                     </Td>
                   </Tr>
-                ).reverse()
-                } */}
+                ))
+                .reverse()}
             </Tbody>
           </Table>
         )}
@@ -284,7 +348,7 @@ const SampleType = () => {
           onClick={handleAdd}
           _hover={{ bgColor: "accent" }}
         >
-          <Text color="white">New Description Here</Text>
+          <Text color="white">New Sample Type Here</Text>
         </Button>
 
         {isDrawerOpen && (
@@ -295,7 +359,8 @@ const SampleType = () => {
             errors={errors}
             isValid={isValid}
             handleSubmit={handleSubmit}
-            // fetchUom={fetchUom}
+            fetchSampleType={fetchSampleType}
+            watch={watch}
             codeDisable={codeDisable}
           />
         )}
@@ -360,49 +425,58 @@ const DrawerComponent = ({
   errors,
   isValid,
   handleSubmit,
-  // fetchUom,
+  fetchSampleType,
+  watch,
   codeDisable,
 }) => {
   const [isLoading, setisLoading] = useState(false);
   const toast = useToast();
 
   const submitHandler = (data) => {
-    // try {
-    //   if (data.formData.id === "") {
-    //     delete data.formData["id"];
-    //     setisLoading(true);
-    //     const res = apiClient
-    //       .post("Uom/AddNewUOM", data.formData)
-    //       .then((res) => {
-    //         ToastComponent("Success", "New uom create", "success", toast);
-    //         setisLoading(false);
-    //         fetchUom();
-    //         onClose(onClose);
-    //       })
-    //       .catch((err) => {
-    //         setisLoading(false);
-    //         ToastComponent("Error", err.response.data, "error", toast);
-    //         data.formData.id = ""; // add property id to objects for if condition
-    //       });
-    //   } else {
-    //     const res = apiClient
-    //       .put(`Uom/UpdateUom/${data.formData.id}`, data.formData)
-    //       .then((res) => {
-    //         ToastComponent("Success", "Uom Updated", "success", toast);
-    //         setisLoading(false);
-    //         fetchUom();
-    //         onClose(onClose);
-    //       })
-    //       .catch((err) => {
-    //         ToastComponent(
-    //           "Update Failed",
-    //           err.response.data,
-    //           "warning",
-    //           toast
-    //         );
-    //       });
-    //   }
-    // } catch (err) {}
+    try {
+      if (data.formData.id === "") {
+        delete data.formData["id"];
+        setisLoading(true);
+        const res = apiClient
+          .post("LabTestMasterlist/AddNewSampleType", data.formData)
+          .then((res) => {
+            ToastComponent(
+              "Success",
+              "New sample type created",
+              "success",
+              toast
+            );
+            setisLoading(false);
+            fetchSampleType();
+            onClose(onClose);
+          })
+          .catch((err) => {
+            setisLoading(false);
+            ToastComponent("Error", err.response.data, "error", toast);
+            data.formData.id = ""; // add property id to objects for if condition
+          });
+      } else {
+        const res = apiClient
+          .put(
+            `LabTestMasterlist/UpdateSampleType/${data.formData.id}`,
+            data.formData
+          )
+          .then((res) => {
+            ToastComponent("Success", "Sample Type Updated", "success", toast);
+            setisLoading(false);
+            fetchSampleType();
+            onClose(onClose);
+          })
+          .catch((err) => {
+            ToastComponent(
+              "Update Failed",
+              err.response.data,
+              "warning",
+              toast
+            );
+          });
+      }
+    } catch (err) {}
   };
 
   return (
@@ -412,35 +486,24 @@ const DrawerComponent = ({
         <form onSubmit={handleSubmit(submitHandler)}>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader borderBottomWidth="1px">UOM Form</DrawerHeader>
+            <DrawerHeader borderBottomWidth="1px">
+              {watch("formData.id")
+                ? "Edit Sample Type Form"
+                : "Add Sample Type Form"}
+            </DrawerHeader>
             <DrawerBody>
-              {/* <Stack spacing="7px">
+              <Stack spacing="7px">
                 <Box>
-                  <FormLabel>UOM Name:</FormLabel>
-                  <Input
-                    disabled={codeDisable}
-                    readOnly={codeDisable}
-                    _disabled={{ color: "black" }}
-                    bgColor={codeDisable && "gray.300"}
-                    placeholder="Please enter UOM Name"
-                    {...register("formData.uoM_Code")}
-                  />
-                  <Text color="danger" fontSize="xs">
-                    {errors.formData?.uoM_Code?.message}
-                  </Text>
-                </Box>
-
-                <Box>
-                  <FormLabel>Description Name:</FormLabel>
+                  <FormLabel>Sample Type Name:</FormLabel>
                   <Input
                     placeholder="Please enter Description Name"
-                    {...register("formData.uoM_Description")}
+                    {...register("formData.sampleTypeName")}
                   />
                   <Text color="danger" fontSize="xs">
-                    {errors.formData?.uoM_Description?.message}
+                    {errors.formData?.sampleTypeName?.message}
                   </Text>
                 </Box>
-              </Stack> */}
+              </Stack>
             </DrawerBody>
 
             <DrawerFooter borderTopWidth="1px">

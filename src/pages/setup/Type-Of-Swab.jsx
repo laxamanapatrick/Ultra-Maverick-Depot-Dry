@@ -55,24 +55,24 @@ const currentUser = decodeUser();
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
-    analysisName: yup.string().required("UOM is required"),
+    typeofSwabName: yup.string().required("Type of Swab is required"),
   }),
 });
 
-const fetchAnalysisApi = async (pageNumber, pageSize, status, search) => {
+const fetchTypeOfSwabApi = async (pageNumber, pageSize, status, search) => {
   const res = await apiClient.get(
-    `LabTestMasterList/GetAllAnalysesPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+    `LabTestMasterList/GetAllTypeOfSwabPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
   );
   return res.data;
 };
 
-const Analysis = () => {
+const TypeOfSwab = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState(true);
   const [search, setSearch] = useState("");
   const [codeDisable, setCodeDisable] = useState(false);
 
-  const [analyses, setAnalyses] = useState([]);
+  const [typeOfSwabs, setTypeOfSwabs] = useState([]);
 
   const toast = useToast();
 
@@ -96,7 +96,7 @@ const Analysis = () => {
     defaultValues: {
       formData: {
         id: "",
-        analysisName: "",
+        typeofSwabName: "",
         modifiedBy: currentUser.fullName,
       },
     },
@@ -120,19 +120,19 @@ const Analysis = () => {
     initialState: { currentPage: 1, pageSize: 5 },
   });
 
-  const fetchAnalysis = () => {
-    fetchAnalysisApi(currentPage, pageSize, status, search).then((res) => {
+  const fetchTypeOfSwab = () => {
+    fetchTypeOfSwabApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
-      setAnalyses(res);
+      setTypeOfSwabs(res);
       setPageTotal(res.totalCount);
     });
   };
 
   useEffect(() => {
-    fetchAnalysis();
+    fetchTypeOfSwab();
 
     return () => {
-      setAnalyses([]);
+      setTypeOfSwabs([]);
     };
   }, [status, pageSize, currentPage, search]);
 
@@ -152,8 +152,8 @@ const Analysis = () => {
   const changeStatusHandler = (id, status) => {
     if (id) {
       Swal.fire({
-        title: `Change Analysis status`,
-        text: `Are you sure you want to set this analysis ${
+        title: `Change Type Of Swab status`,
+        text: `Are you sure you want to set this type of swab ${
           status ? "inactive" : "active"
         }?`,
         icon: "question",
@@ -164,7 +164,7 @@ const Analysis = () => {
       }).then((res) => {
         if (res.isConfirmed) {
           apiClient
-            .put(`LabTestMasterList/UpdateAnalysisStatus`, {
+            .put(`LabTestMasterList/UpdateTypeOfSwabStatus`, {
               id: id,
               isActive: !status,
               modifiedBy: currentUser.fullName,
@@ -189,7 +189,7 @@ const Analysis = () => {
     openDrawer();
     setValue("formData", {
       id: data.id,
-      analysisName: data.analysisName,
+      typeofSwabName: data.typeofSwabName,
       modifiedBy: currentUser.fullName,
     });
     setCodeDisable(true);
@@ -243,20 +243,20 @@ const Analysis = () => {
             <Thead>
               <Tr bgColor="secondary">
                 <Th color="white">ID</Th>
-                <Th color="white">Analysis Name</Th>
+                <Th color="white">Type of Swab Name</Th>
                 {/* <Th color="white">Date Added</Th> */}
                 <Th color="white">Modified By</Th>
                 <Th color="white">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {analyses?.analyses
-                ?.map((anal) => (
-                  <Tr key={anal.id}>
-                    <Td>{anal.id}</Td>
-                    <Td>{anal.sampleTypeName}</Td>
-                    {/* <Td>{sampleType.addedBy}</Td> */}
-                    <Td>{anal.modifiedBy}</Td>
+              {typeOfSwabs?.typeOfSwab
+                ?.map((tos) => (
+                  <Tr key={tos.id}>
+                    <Td>{tos.id}</Td>
+                    <Td>{tos.typeofSwabName}</Td>
+                    {/* <Td>{tos.addedBy}</Td> */}
+                    <Td>{tos.modifiedBy}</Td>
                     <Td>
                       <Flex>
                         <HStack>
@@ -264,7 +264,7 @@ const Analysis = () => {
                             p={0}
                             background="none"
                             color="secondary"
-                            onClick={() => editHandler(anal)}
+                            onClick={() => editHandler(tos)}
                           >
                             <RiEditBoxFill />
                           </Button>
@@ -274,8 +274,8 @@ const Analysis = () => {
                             color="secondary"
                             onClick={() =>
                               changeStatusHandler(
-                                anal.id,
-                                anal.isActive
+                                tos.id,
+                                tos.isActive
                               )
                             }
                           >
@@ -299,7 +299,7 @@ const Analysis = () => {
           onClick={handleAdd}
           _hover={{ bgColor: "accent" }}
         >
-          <Text color="white">New Analysis Here</Text>
+          <Text color="white">New Type Of Swab Here</Text>
         </Button>
 
         {isDrawerOpen && (
@@ -310,7 +310,7 @@ const Analysis = () => {
             errors={errors}
             isValid={isValid}
             handleSubmit={handleSubmit}
-            fetchAnalysis={fetchAnalysis}
+            fetchTypeOfSwab={fetchTypeOfSwab}
             watch={watch}
             codeDisable={codeDisable}
           />
@@ -367,7 +367,7 @@ const Analysis = () => {
   );
 };
 
-export default Analysis;
+export default TypeOfSwab;
 
 const DrawerComponent = ({
   isOpen,
@@ -376,7 +376,7 @@ const DrawerComponent = ({
   errors,
   isValid,
   handleSubmit,
-  fetchAnalysis,
+  fetchTypeOfSwab,
   watch,
   codeDisable,
 }) => {
@@ -389,16 +389,16 @@ const DrawerComponent = ({
         delete data.formData["id"];
         setisLoading(true);
         const res = apiClient
-          .post("LabTestMasterlist/AddNewAnalysis", data.formData)
+          .post("LabTestMasterlist/AddNewTypeOfSwab", data.formData)
           .then((res) => {
             ToastComponent(
               "Success",
-              "New analysis created",
+              "New type of swab created",
               "success",
               toast
             );
             setisLoading(false);
-            fetchAnalysis();
+            fetchTypeOfSwab();
             onClose(onClose);
           })
           .catch((err) => {
@@ -409,13 +409,13 @@ const DrawerComponent = ({
       } else {
         const res = apiClient
           .put(
-            `LabTestMasterlist/UpdateAnalysis/${data.formData.id}`,
+            `LabTestMasterlist/UpdateTypeOfSwab/${data.formData.id}`,
             data.formData
           )
           .then((res) => {
-            ToastComponent("Success", "Analysis Updated", "success", toast);
+            ToastComponent("Success", "Type Of Swab Updated", "success", toast);
             setisLoading(false);
-            fetchAnalysis();
+            fetchTypeOfSwab();
             onClose(onClose);
           })
           .catch((err) => {
@@ -439,19 +439,19 @@ const DrawerComponent = ({
             <DrawerCloseButton />
             <DrawerHeader borderBottomWidth="1px">
               {watch("formData.id")
-                ? "Analysis Form"
-                : "Analysis Form"}
+                ? "Edit Type Of Swab Form"
+                : "Add Type Of Swab Form"}
             </DrawerHeader>
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
-                  <FormLabel>Analysis Name:</FormLabel>
+                  <FormLabel>Type Of Swab Name:</FormLabel>
                   <Input
                     placeholder="Please enter Sample Type Name"
-                    {...register("formData.analysisName")}
+                    {...register("formData.typeofSwabName")}
                   />
                   <Text color="danger" fontSize="xs">
-                    {errors.formData?.analysisName?.message}
+                    {errors.formData?.typeofSwabName?.message}
                   </Text>
                 </Box>
               </Stack>

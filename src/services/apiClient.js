@@ -15,7 +15,7 @@ export default axios.create({
 })
 
 
-// Aldryn Vega Backend
+// Backend Local
 
 // export default axios.create({
 //     baseURL: "http://10.10.10.1:45455/api/",

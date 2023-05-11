@@ -97,7 +97,7 @@ import ReasonPage from "./pages/setup/ReasonPage";
 import TransactionTypePage from "./pages/setup/TransactionTypePage";
 import CommodityType from "./pages/setup/Commodity-Type";
 import SampleType from "./pages/setup/Sample-Type";
-import TypeOfSwap from "./pages/setup/Type-Of-Swap";
+import TypeOfSwab from "./pages/setup/Type-Of-Swab";
 import Analysis from "./pages/setup/Analysis";
 import Parameters from "./pages/setup/Parameters";
 import ProductCondition from "./pages/setup/Product-Condition";
@@ -723,9 +723,9 @@ function App() {
               }
             />
             <Route
-              path="type-of-swap"
+              path="type-of-swab"
               element={
-                user ? <TypeOfSwap /> : <Navigate to="/login" />
+                user ? <TypeOfSwab /> : <Navigate to="/login" />
               }
             />
             <Route
