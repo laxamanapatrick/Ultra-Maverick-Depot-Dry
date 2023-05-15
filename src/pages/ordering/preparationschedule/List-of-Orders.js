@@ -103,16 +103,16 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
     }, [orders])
 
     //refetch if data length === 0
-    useEffect(() => {
-        if (lengthIndicator === 0 && currentPage === 1) {
-            fetchFarmOrders()
-            fetchOrders()
-        }
-        if (lengthIndicator === 0 && currentPage !== 1) {
-            setCurrentPage(1)
-            fetchOrders()
-        }
-    }, [lengthIndicator])
+    // useEffect(() => {
+    //     if (lengthIndicator === 0 && currentPage === 1) {
+    //         fetchFarmOrders()
+    //         fetchOrders()
+    //     }
+    //     if (lengthIndicator === 0 && currentPage !== 1) {
+    //         setCurrentPage(1)
+    //         fetchOrders()
+    //     }
+    // }, [lengthIndicator])
 
     const stockAvailable = orders?.filter(item => item.stockOnHand >= item.quantityOrder)
     const stockData = stockAvailable?.map(item => item.id)

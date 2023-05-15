@@ -180,7 +180,7 @@ const FarmPage = () => {
               pointerEvents='none'
               children={<FaSearch color='gray.300' />}
             />
-            <Input type='text' placeholder='Search: Farm Code'
+            <Input type='text' placeholder='Search: Customer Code'
               onChange={(e) => searchHandler(e.target.value)}
               focusBorderColor='accent'
             />
@@ -215,7 +215,7 @@ const FarmPage = () => {
                 <Tr bgColor='secondary'>
                   <Th color='white'>Id</Th>
                   <Th color='white'>Code</Th>
-                  <Th color='white'>Customer/Farm Type</Th>
+                  <Th color='white'>Customer Type</Th>
                   <Th color='white'>Added By</Th>
                   <Th color='white'>Date Added</Th>
                   <Th color='white'>Actions</Th>
@@ -264,7 +264,7 @@ const FarmPage = () => {
       </PageScroll>
       <Flex justifyContent='space-between' mt={5}>
         <Button leftIcon={<FcAddDatabase color='white' />} bgColor='secondary' onClick={newFarmHandler} _hover={{ bgColor: 'accent' }}>
-          <Text color='white'>New Farm</Text>
+          <Text color='white'>New Customer</Text>
         </Button>
         {
           isDrawerOpen && (
@@ -370,7 +370,7 @@ const DrawerComponent = ({ isOpen, onClose, register, errors, isValid, handleSub
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader borderBottomWidth='1px'>
-              Farm Form
+              Customer Form
             </DrawerHeader>
             <DrawerBody>
 
@@ -379,7 +379,7 @@ const DrawerComponent = ({ isOpen, onClose, register, errors, isValid, handleSub
                 <Flex mt={1.5}></Flex>
 
                 <Box>
-                  <FormLabel>Farm Code:</FormLabel>
+                  <FormLabel>Customer Code:</FormLabel>
                   <Input
                     disabled={codeDisable}
                     readOnly={codeDisable}
@@ -392,7 +392,7 @@ const DrawerComponent = ({ isOpen, onClose, register, errors, isValid, handleSub
                 </Box>
 
                 <Box>
-                  <FormLabel>Farm Name:</FormLabel>
+                  <FormLabel>Customer Name:</FormLabel>
                   <Input
                     placeholder='Please enter Farm Name'
                     {...register("formData.farmName")}

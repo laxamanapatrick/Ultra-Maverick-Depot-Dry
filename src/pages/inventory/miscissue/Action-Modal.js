@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   Flex,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -147,12 +148,12 @@ export const AddConfirmation = ({
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
-    companyCode: yup.string().required("Company Name is required"),
-    companyName: yup.string().required("Company Name is required"),
-    // departmentCode: yup.string().required("Department Name is required"),
-    departmentName: yup.string().required("Department Category is required"),
-    // locationCode: yup.string().required("Location Name is required"),
-    locationName: yup.string().required("Location Name is required"),
+    companyId: yup.number().required().typeError("Company Name is required"),
+    departmentId: yup
+      .number()
+      .required()
+      .typeError("Department Category is required"),
+    locationId: yup.number().required().typeError("Location Name is required"),
     accountTitles: yup.string().required("Account Name is required"),
   }),
 });
@@ -179,83 +180,59 @@ export const SaveConfirmation = ({
 }) => {
   const toast = useToast();
 
-  const departmentRef = useRef();
-  const locationRef = useRef();
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid },
-    setValue,
-    reset,
-    watch,
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: "onChange",
-    defaultValues: {
-      formData: {
-        companyCode: customerData?.companyCode,
-        companyName: customerData?.companyName,
-        // departmentCode: "",
-        departmentName: customerData?.departmentName,
-        // locationCode: "",
-        locationName: customerData?.locationName,
-        accountTitles: "",
-        addedBy: currentUser.userName,
-      },
-    },
-  });
-
-  // const [company, setCompany] = useState([]);
-  // const [department, setDepartment] = useState([]);
-  // const [location, setLocation] = useState([]);
+  const [company, setCompany] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [location, setLocation] = useState([]);
   const [account, setAccount] = useState([]);
+
+  const [isCoaSet, setIsCoaSet] = useState(false);
+
   // // FETCH COMPANY API
-  // const fetchCompanyApi = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-  //         },
-  //       }
-  //     );
-  //     setCompany(res.data.result.companies);
-  //   } catch (error) {}
-  // };
+  const fetchCompanyApi = async () => {
+    try {
+      const res = await axios.get(
+        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          },
+        }
+      );
+      setCompany(res.data.result.companies);
+    } catch (error) {}
+  };
 
   // // FETCH DEPT API
-  // const fetchDepartmentApi = async (id) => {
-  //   try {
-  //     const res = await axios.get(
-  //       "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
-  //         id,
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-  //         },
-  //       }
-  //     );
-  //     setDepartment(res.data.result.departments);
-  //   } catch (error) {}
-  // };
+  const fetchDepartmentApi = async (id = "") => {
+    try {
+      const res = await axios.get(
+        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
+          id,
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          },
+        }
+      );
+      setDepartment(res.data.result.departments);
+    } catch (error) {}
+  };
 
   // // FETCH Loc API
-  // const fetchLocationApi = async (id) => {
-  //   try {
-  //     const res = await axios.get(
-  //       "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&company_id=" +
-  //         id,
-  //       {
-  //         headers: {
-  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-  //         },
-  //       }
-  //     );
-  //     setLocation(res.data.result.locations);
-  //   } catch (error) {}
-  // };
+  const fetchLocationApi = async (id = "") => {
+    try {
+      const res = await axios.get(
+        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&department_id=" +
+          id,
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          },
+        }
+      );
+      setLocation(res.data.result.locations);
+    } catch (error) {}
+  };
 
   // FETCH ACcount API
   const fetchAccountApi = async () => {
@@ -272,34 +249,87 @@ export const SaveConfirmation = ({
     } catch (error) {}
   };
 
-  // useEffect(() => {
-  //   fetchCompanyApi();
-  // }, []);
-
   useEffect(() => {
+    fetchCompanyApi();
+    fetchDepartmentApi();
+    fetchLocationApi();
     fetchAccountApi();
+
+    return () => {
+      setCompany([]);
+      setDepartment([]);
+      setLocation([]);
+      setAccount([]);
+      setIsCoaSet(false);
+    };
   }, []);
 
-  // useEffect(() => {
-  //   if (watch("formData.companyCode")) {
-  //     departmentRef.current.value = "";
-  //     locationRef.current.value = "";
-  //     setValue("formData.departmentCode", "");
-  //     setValue("formData.departmentName", "");
-  //     setValue("formData.locationCode", "");
-  //     setValue("formData.locationName", "");
-  //     fetchDepartmentApi();
-  //   }
-  // }, [watch("formData.companyCode")]);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+    setValue,
+    reset,
+    watch,
+  } = useForm({
+    resolver: yupResolver(schema),
+    mode: "onChange",
+    defaultValues: {
+      formData: {
+        companyId: "",
+        departmentId: "",
+        locationId: "",
+        // companyId : company?.find((x) => x.name === customerData?.companyName)
+        // ?.id
+        // departmentId: department?.find(
+        //   (x) => x.name === customerData?.departmentName
+        // )?.id,
+        // locationId: location?.find((x) => x.name === customerData?.locationName)
+        //   ?.id,
+        accountTitles: "",
+        addedBy: currentUser.userName,
+      },
+    },
+  });
 
-  // useEffect(() => {
-  //   if (watch("formData.departmentCode")) {
-  //     locationRef.current.value = "";
-  //     setValue("formData.locationCode", "");
-  //     setValue("formData.locationName", "");
-  //     fetchLocationApi();
-  //   }
-  // }, [watch("formData.departmentCode")]);
+  useEffect(() => {
+    if (!isCoaSet) {
+      if (!watch("formData.companyId")) {
+        setValue(
+          "formData.companyId",
+          company?.find((x) => x.name === customerData?.companyName)?.id
+        );
+      }
+      if (
+        watch("formData.companyId") &&
+        !watch("formData.departmentId") &&
+        !watch("formData.locationId")
+      ) {
+        setValue(
+          "formData.departmentId",
+          department?.find((x) => x.name === customerData?.departmentName)?.id
+        );
+      }
+      if (
+        watch("formData.companyId") &&
+        watch("formData.departmentId") &&
+        !watch("formData.locationId")
+      ) {
+        setValue(
+          "formData.locationId",
+          location?.find((x) => x.name === customerData?.locationName)?.id
+        );
+        setIsCoaSet(true);
+      }
+    }
+  }, [customerData, company, department, location]);
+
+  const closeHandler = () => {
+    reset();
+    setIsLoading(false);
+    setHideButton(false);
+    onClose();
+  };
 
   const saveSubmitHandler = (data) => {
     if (totalQuantity > 0) {
@@ -314,12 +344,16 @@ export const SaveConfirmation = ({
             remarks: remarks,
             details: details,
             transactionDate: transactionDate,
-            companyCode: data.formData.companyCode,
-            companyName: data.formData.companyName,
-            // departmentCode: data.formData.departmentCode,
-            departmentName: data.formData.departmentName,
-            // locationCode: data.formData.locationCode,
-            locationName: data.formData.locationName,
+            companyCode: company?.find((x) => x.id === data.formData.companyId)
+              ?.code,
+            companyName: company?.find((x) => x.id === data.formData.companyId)
+              ?.name,
+            departmentName: department?.find(
+              (x) => x.id === data.formData.departmentId
+            )?.name,
+            locationName: location?.find(
+              (x) => x.id === data.formData.locationId
+            )?.name,
             accountTitles: data.formData.accountTitles,
             addedBy: currentUser.fullName,
           })
@@ -380,13 +414,6 @@ export const SaveConfirmation = ({
     }
   };
 
-  const closeHandler = () => {
-    reset();
-    setIsLoading(false);
-    setHideButton(false);
-    onClose();
-  };
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
@@ -399,151 +426,104 @@ export const SaveConfirmation = ({
               <Stack spacing={2} p={6}>
                 <Box>
                   <FormLabel fontSize="sm">Company</FormLabel>
-                  <Input
-                    readOnly
-                    {...register("formData.companyName")}
-                    bgColor="gray.200"
-                  />
-                  {/* <Select
-                    fontSize="sm"
-                    onChange={(e) => {
-                      setValue(
-                        "formData.companyCode",
-                        company.find(
-                          (item) => item.id?.toString() === e.target.value
-                        )?.code
-                      );
-                      setValue(
-                        "formData.companyName",
-                        company.find(
-                          (item) => item.id?.toString() === e.target.value
-                        )?.name
-                      );
-                      fetchDepartmentApi(e.target.value);
-                    }}
-                    placeholder="Select Company"
-                    // {...register("formData.company")}
-                  >
-                    {company?.map((item) => {
-                      return (
-                        <option key={item.id} value={item.id}>
-                          {item.code} - {item.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+
+                  <HStack w="full">
+                    <Select
+                      {...register("formData.companyId")}
+                      defaultValue={
+                        company?.find(
+                          (x) => x.name === customerData?.companyName
+                        )?.id
+                      }
+                      placeholder="Select Company"
+                      fontSize="sm"
+                      onChange={(e) => {
+                        setValue("formData.departmentId", "");
+                        setValue("formData.locationId", "");
+                        fetchDepartmentApi(e.target.value);
+                      }}
+                    >
+                      {company?.map((item) => {
+                        return (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  </HStack>
+
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.companyName?.message}
-                  </Text> */}
+                    {errors.formData?.companyId?.message}
+                  </Text>
                 </Box>
 
                 <Box>
                   <FormLabel fontSize="sm">Department</FormLabel>
-                  <Input
-                    readOnly
-                    {...register("formData.departmentName")}
-                    bgColor="gray.200"
-                  />
-                  {/* <Select
-                    fontSize="sm"
+                  <Select
+                    {...register("formData.departmentId")}
+                    defaultValue={
+                      department?.find(
+                        (x) => x.name === customerData?.departmentName
+                      )?.id
+                    }
                     placeholder="Select Department"
-                    ref={departmentRef}
-                    disabled={!watch("formData.companyCode")}
+                    fontSize="sm"
                     onChange={(e) => {
-                      setValue(
-                        "formData.departmentCode",
-                        department.find(
-                          (dept) => dept.id?.toString() === e.target.value
-                        )?.id
-                      );
-                      setValue(
-                        "formData.departmentName",
-                        department.find(
-                          (dept) => dept.id?.toString() === e.target.value
-                        )?.name
-                      );
+                      setValue("formData.locationId", "");
                       fetchLocationApi(e.target.value);
                     }}
                   >
                     {department?.map((dept) => {
                       return (
                         <option key={dept.id} value={dept.id}>
-                          {dept.id} - {dept.name}
+                          {dept.name}
                         </option>
                       );
                     })}
                   </Select>
+
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.departmentName?.message}
-                  </Text> */}
+                    {errors.formData?.departmentId?.message}
+                  </Text>
                 </Box>
 
                 <Box>
                   <FormLabel fontSize="sm">Location</FormLabel>
-                  <Input
-                    readOnly
-                    {...register("formData.locationName")}
-                    bgColor="gray.200"
-                  />
-                  {/* <Select
-                    fontSize="sm"
+                  <Select
+                    {...register("formData.locationId")}
+                    defaultValue={
+                      location?.find(
+                        (x) => x.name === customerData?.locationName
+                      )?.id
+                    }
                     placeholder="Select Location"
-                    disabled={!watch("formData.departmentCode")}
-                    ref={locationRef}
-                    onChange={(e) => {
-                      setValue(
-                        "formData.locationCode",
-                        location.find(
-                          (item) => item.id?.toString() === e.target.value
-                        )?.id
-                      );
-                      setValue(
-                        "formData.locationName",
-                        location.find(
-                          (item) => item.id?.toString() === e.target.value
-                        )?.name
-                      );
-                      // fetchLocationApi(e.target.value);
-                    }}
+                    fontSize="sm"
                   >
                     {location?.map((item) => {
                       return (
                         <option key={item.id} value={item.id}>
-                          {item.id} - {item.name}
+                          {item.name}
                         </option>
                       );
                     })}
                   </Select>
+
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.locationName?.message}
-                  </Text> */}
+                    {errors.formData?.locationId?.message}
+                  </Text>
                 </Box>
                 <Box>
                   <FormLabel fontSize="sm">Account Title</FormLabel>
                   <Select
-                    bgColor="#fff8dc"
-                    fontSize="sm"
-                    onChange={(e) => {
-                      // setValue(
-                      //   "formData.accountCode",
-                      //   account.find(
-                      //     (acc) => acc.id?.toString() === e.target.value
-                      //   )?.code
-                      // );
-                      setValue(
-                        "formData.accountTitles",
-                        account.find(
-                          (acc) => acc.id?.toString() === e.target.value
-                        )?.name
-                      );
-                      // fetchAccountApi(e.target.value);
-                    }}
+                    {...register("formData.accountTitles")}
                     placeholder="Select Account"
-                    // {...register("formData.company")}
+                    fontSize="sm"
+                    bgColor="#fff8dc"
                   >
                     {account?.map((item) => {
                       return (
-                        <option key={item.id} value={item.id}>
+                        <option key={item.id} value={item.name}>
                           {item.name}
                         </option>
                       );
@@ -561,7 +541,14 @@ export const SaveConfirmation = ({
                 colorScheme="blue"
                 type="submit"
                 isLoading={isLoading}
-                disabled={isLoading || !watch("formData.accountTitles")}
+                disabled={
+                  isLoading ||
+                  !isValid ||
+                  !watch("formData.accountTitles") ||
+                  !watch("formData.companyId") ||
+                  !watch("formData.departmentId") ||
+                  !watch("formData.locationId")
+                }
               >
                 Yes
               </Button>

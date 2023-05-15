@@ -171,6 +171,7 @@ const TypeOfSwab = () => {
             })
             .then((res) => {
               console.log(res);
+              fetchTypeOfSwab()
               ToastComponent("Success", res?.data, "success", toast);
             })
             .catch((err) => {
@@ -409,7 +410,7 @@ const DrawerComponent = ({
       } else {
         const res = apiClient
           .put(
-            `LabTestMasterlist/UpdateTypeOfSwab/${data.formData.id}`,
+            `LabTestMasterlist/UpdateTypeOfSwab`,
             data.formData
           )
           .then((res) => {

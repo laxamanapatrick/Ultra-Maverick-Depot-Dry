@@ -458,7 +458,7 @@ const DrawerComponent = ({
       } else {
         const res = apiClient
           .put(
-            `LabTestMasterlist/UpdateSampleType/${data.formData.id}`,
+            `LabTestMasterlist/UpdateSampleType`,
             data.formData
           )
           .then((res) => {

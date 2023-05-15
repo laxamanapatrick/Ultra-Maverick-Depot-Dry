@@ -205,7 +205,7 @@ export const SaveConfirmation = ({
   const fetchLocationApi = async (id) => {
     try {
       const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&company_id=" +
+        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&department_id=" +
           id,
         {
           headers: {

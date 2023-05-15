@@ -52,31 +52,27 @@ import Swal from "sweetalert2";
 
 const currentUser = decodeUser();
 
-/* to change */
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
-    sampleTypeName: yup.string().required("UOM is required"),
+    dispositionName: yup.string().required("Disposition is required"),
   }),
 });
 
-/* to change */
-const fetchSampleTypeApi = async (pageNumber, pageSize, status, search) => {
+const fetchDispositionApi = async (pageNumber, pageSize, status, search) => {
   const res = await apiClient.get(
-    `LabTestMasterList/GetAllSampleTypePaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
+    `LabTestMasterList/GetAllDispositionPaginationOrig/${status}?PageNumber=${pageNumber}&PageSize=${pageSize}&search=${search}`
   );
   return res.data;
 };
 
-//to change
 const Disposition = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [status, setStatus] = useState(true);
   const [search, setSearch] = useState("");
   const [codeDisable, setCodeDisable] = useState(false);
 
-  /* to change */
-  const [sampleTypes, setSampleTypes] = useState([]);
+  const [dispositions, setDispositions] = useState([]);
 
   const toast = useToast();
 
@@ -100,7 +96,7 @@ const Disposition = () => {
     defaultValues: {
       formData: {
         id: "",
-        sampleTypeName: "",
+        dispositionName: "",
         modifiedBy: currentUser.fullName,
       },
     },
@@ -124,22 +120,19 @@ const Disposition = () => {
     initialState: { currentPage: 1, pageSize: 5 },
   });
 
-  /* to change */
-  const fetchSampleType = () => {
-    fetchSampleTypeApi(currentPage, pageSize, status, search).then((res) => {
+  const fetchDisposition = () => {
+    fetchDispositionApi(currentPage, pageSize, status, search).then((res) => {
       setIsLoading(false);
-      setSampleTypes(res);
+      setDispositions(res);
       setPageTotal(res.totalCount);
     });
   };
 
   useEffect(() => {
-    /* to change */
-    fetchSampleType();
+    fetchDisposition();
 
     return () => {
-      /* to change */
-      setSampleTypes([]);
+      setDispositions([]);
     };
   }, [status, pageSize, currentPage, search]);
 
@@ -159,9 +152,8 @@ const Disposition = () => {
   const changeStatusHandler = (id, status) => {
     if (id) {
       Swal.fire({
-        /* to change */
-        title: `Change Sample Type status`,
-        text: `Are you sure you want to set this sample type ${
+        title: `Change Disposition status`,
+        text: `Are you sure you want to set this disposition ${
           status ? "inactive" : "active"
         }?`,
         icon: "question",
@@ -172,14 +164,14 @@ const Disposition = () => {
       }).then((res) => {
         if (res.isConfirmed) {
           apiClient
-          /* to change */
-            .put(`LabTestMasterList/UpdateSampleTypeStatus/${id}`, {
+            .put(`LabTestMasterList/UpdateDispositionStatus`, {
               id: id,
               isActive: !status,
               modifiedBy: currentUser.fullName,
             })
             .then((res) => {
               console.log(res);
+              fetchDisposition();
               ToastComponent("Success", res?.data, "success", toast);
             })
             .catch((err) => {
@@ -194,12 +186,11 @@ const Disposition = () => {
     setSearch(inputValue);
   };
 
-  const editHandler = (sampleType) => {
+  const editHandler = (data) => {
     openDrawer();
-    /* to change */
     setValue("formData", {
-      id: sampleType.id,
-      sampleTypeName: sampleType.sampleTypeName,
+      id: data.id,
+      dispositionName: data.dispositionName,
       modifiedBy: currentUser.fullName,
     });
     setCodeDisable(true);
@@ -253,22 +244,20 @@ const Disposition = () => {
             <Thead>
               <Tr bgColor="secondary">
                 <Th color="white">ID</Th>
-                {/* to change */}
-                <Th color="white">Sample Type Name</Th>
-                <Th color="white">Date Added</Th>
+                <Th color="white">Disposition Name</Th>
+                {/* <Th color="white">Date Added</Th> */}
                 <Th color="white">Modified By</Th>
                 <Th color="white">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
-            {/* to change */}
-              {sampleTypes?.sampleTypes
-                ?.map((sampleType) => (
-                  <Tr key={sampleType.id}>
-                    <Td>{sampleType.id}</Td>
-                    <Td>{sampleType.sampleTypeName}</Td>
-                    <Td>{sampleType.modifiedBy}</Td>
-                    <Td>{sampleType.addedBy}</Td>
+              {dispositions?.disposition
+                ?.map((dis) => (
+                  <Tr key={dis.id}>
+                    <Td>{dis.id}</Td>
+                    <Td>{dis.dispositionName}</Td>
+                    {/* <Td>{dis.addedBy}</Td> */}
+                    <Td>{dis.modifiedBy}</Td>
                     <Td>
                       <Flex>
                         <HStack>
@@ -276,8 +265,7 @@ const Disposition = () => {
                             p={0}
                             background="none"
                             color="secondary"
-                            /* to change */
-                            onClick={() => editHandler(sampleType)}
+                            onClick={() => editHandler(dis)}
                           >
                             <RiEditBoxFill />
                           </Button>
@@ -286,11 +274,7 @@ const Disposition = () => {
                             background="none"
                             color="secondary"
                             onClick={() =>
-                              /* to change */
-                              changeStatusHandler(
-                                sampleType.id,
-                                sampleType.isActive
-                              )
+                              changeStatusHandler(dis.id, dis.isActive)
                             }
                           >
                             <GiChoice />
@@ -313,8 +297,7 @@ const Disposition = () => {
           onClick={handleAdd}
           _hover={{ bgColor: "accent" }}
         >
-          {/* to change */}
-          <Text color="white">New Sample Type Here</Text>
+          <Text color="white">New Disposition Here</Text>
         </Button>
 
         {isDrawerOpen && (
@@ -325,8 +308,7 @@ const Disposition = () => {
             errors={errors}
             isValid={isValid}
             handleSubmit={handleSubmit}
-            /* to change */
-            fetchSampleType={fetchSampleType}
+            fetchDisposition={fetchDisposition}
             watch={watch}
             codeDisable={codeDisable}
           />
@@ -383,7 +365,6 @@ const Disposition = () => {
   );
 };
 
-//to change
 export default Disposition;
 
 const DrawerComponent = ({
@@ -393,8 +374,7 @@ const DrawerComponent = ({
   errors,
   isValid,
   handleSubmit,
-  /* to change */
-  fetchSampleType,
+  fetchDisposition,
   watch,
   codeDisable,
 }) => {
@@ -407,19 +387,16 @@ const DrawerComponent = ({
         delete data.formData["id"];
         setisLoading(true);
         const res = apiClient
-        //to change
-          .post("LabTestMasterlist/AddNewSampleType", data.formData)
+          .post("LabTestMasterlist/AddNewDisposition", data.formData)
           .then((res) => {
             ToastComponent(
               "Success",
-              //to change
-              "New sample type created",
+              "New disposition created",
               "success",
               toast
             );
             setisLoading(false);
-            //to change
-            fetchSampleType();
+            fetchDisposition();
             onClose(onClose);
           })
           .catch((err) => {
@@ -429,17 +406,11 @@ const DrawerComponent = ({
           });
       } else {
         const res = apiClient
-          .put(
-            //to change
-            `LabTestMasterlist/UpdateSampleType/${data.formData.id}`,
-            data.formData
-          )
+          .put(`LabTestMasterlist/UpdateDisposition`, data.formData)
           .then((res) => {
-            //to change
-            ToastComponent("Success", "Sample Type Updated", "success", toast);
+            ToastComponent("Success", "Disposition Updated", "success", toast);
             setisLoading(false);
-            //to change
-            fetchSampleType();
+            fetchDisposition();
             onClose(onClose);
           })
           .catch((err) => {
@@ -462,23 +433,20 @@ const DrawerComponent = ({
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader borderBottomWidth="1px">
-              {/* to change */}
               {watch("formData.id")
-                ? "Edit Sample Type Form"
-                : "Add Sample Type Form"}
+                ? "Edit Disposition Form"
+                : "Add Disposition Form"}
             </DrawerHeader>
             <DrawerBody>
               <Stack spacing="7px">
                 <Box>
-                  {/* to change */}
-                  <FormLabel>Sample Type Name:</FormLabel>
+                  <FormLabel>Disposition Name:</FormLabel>
                   <Input
                     placeholder="Please enter Sample Type Name"
-                    {...register("formData.sampleTypeName")}
+                    {...register("formData.dispositionName")}
                   />
                   <Text color="danger" fontSize="xs">
-                    {/* to change */}
-                    {errors.formData?.sampleTypeName?.message}
+                    {errors.formData?.dispositionName?.message}
                   </Text>
                 </Box>
               </Stack>

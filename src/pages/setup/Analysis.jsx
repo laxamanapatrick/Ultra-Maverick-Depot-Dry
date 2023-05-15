@@ -55,7 +55,7 @@ const currentUser = decodeUser();
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
-    analysisName: yup.string().required("UOM is required"),
+    analysisName: yup.string().required("Analysis is required"),
   }),
 });
 
@@ -171,6 +171,7 @@ const Analysis = () => {
             })
             .then((res) => {
               console.log(res);
+              fetchAnalysis()
               ToastComponent("Success", res?.data, "success", toast);
             })
             .catch((err) => {
@@ -254,7 +255,7 @@ const Analysis = () => {
                 ?.map((anal) => (
                   <Tr key={anal.id}>
                     <Td>{anal.id}</Td>
-                    <Td>{anal.sampleTypeName}</Td>
+                    <Td>{anal.analysisName}</Td>
                     {/* <Td>{sampleType.addedBy}</Td> */}
                     <Td>{anal.modifiedBy}</Td>
                     <Td>
@@ -409,7 +410,7 @@ const DrawerComponent = ({
       } else {
         const res = apiClient
           .put(
-            `LabTestMasterlist/UpdateAnalysis/${data.formData.id}`,
+            `LabTestMasterlist/UpdateAnalysis`,
             data.formData
           )
           .then((res) => {

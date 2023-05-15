@@ -55,7 +55,7 @@ const currentUser = decodeUser();
 const schema = yup.object().shape({
   formData: yup.object().shape({
     id: yup.string(),
-    productConditionName: yup.string().required("UOM is required"),
+    productConditionName: yup.string().required("Product Condition is required"),
   }),
 });
 
@@ -178,6 +178,7 @@ const ProductCondition = () => {
             })
             .then((res) => {
               console.log(res);
+              fetchProductCondition()
               ToastComponent("Success", res?.data, "success", toast);
             })
             .catch((err) => {
@@ -257,11 +258,11 @@ const ProductCondition = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {productConditions?.productConditions
+              {productConditions?.productCondition
                 ?.map((pd) => (
                   <Tr key={pd.id}>
                     <Td>{pd.id}</Td>
-                    <Td>{pd.sampleTypeName}</Td>
+                    <Td>{pd.productConditionName}</Td>
                     {/* <Td>{pd.addedBy}</Td> */}
                     <Td>{pd.modifiedBy}</Td>
                     <Td>
@@ -416,7 +417,7 @@ const DrawerComponent = ({
       } else {
         const res = apiClient
           .put(
-            `LabTestMasterlist/UpdateProductCondition/${data.formData.id}`,
+            `LabTestMasterlist/UpdateProductCondition`,
             data.formData
           )
           .then((res) => {
