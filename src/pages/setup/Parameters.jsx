@@ -405,7 +405,7 @@ const DrawerComponent = ({
           })
           .catch((err) => {
             setisLoading(false);
-            ToastComponent("Error", err.data, "error", toast);
+            ToastComponent("Error", err.response.data, "error", toast);
             data.formData.id = ""; // add property id to objects for if condition
           });
       } else {
@@ -423,7 +423,7 @@ const DrawerComponent = ({
           .catch((err) => {
             ToastComponent(
               "Update Failed",
-              err.data,
+              err.response.data,
               "warning",
               toast
             );
