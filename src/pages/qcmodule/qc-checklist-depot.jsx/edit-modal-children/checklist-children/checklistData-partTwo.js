@@ -91,18 +91,18 @@ export const hygienePracticesData = [
 //   { id: 4, details: "Product Specifications (type, SKU, etc." },
 // ];
 
-export const productTypeData = [
-  { id: 1, details: "Ice" },
-  { id: 2, details: "Fruits and Vegetables" },
-  { id: 3, details: "Eggs" },
-  { id: 4, details: "Dry Ingredients" },
-  { id: 5, details: "Liquid Ingredients" },
-  { id: 6, details: "Fish and Seafoods" },
-  { id: 7, details: "Meats and Meat by Products" },
-  { id: 8, details: "Packaging Materials" },
-  { id: 9, details: "Cleaning and Sanitizing Chemicals" },
-  { id: 10, details: "Other Food Contact Materials" },
-];
+// export const productTypeData = [
+//   { id: 1, details: "Ice" },
+//   { id: 2, details: "Fruits and Vegetables" },
+//   { id: 3, details: "Eggs" },
+//   { id: 4, details: "Dry Ingredients" },
+//   { id: 5, details: "Liquid Ingredients" },
+//   { id: 6, details: "Fish and Seafoods" },
+//   { id: 7, details: "Meats and Meat by Products" },
+//   { id: 8, details: "Packaging Materials" },
+//   { id: 9, details: "Cleaning and Sanitizing Chemicals" },
+//   { id: 10, details: "Other Food Contact Materials" },
+// ];
 
 // export const documentDetailsData = [
 //   {

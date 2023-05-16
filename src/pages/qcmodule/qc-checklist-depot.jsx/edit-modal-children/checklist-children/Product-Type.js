@@ -1,11 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, HStack, Input, Select, Text } from "@chakra-ui/react";
-import { productTypeData } from "./checklistData-partTwo";
+// import { productTypeData } from "./checklistData-partTwo";
 import { ReceivingContext } from "../../../../../context/ReceivingContext";
+import apiClient from '../../../../../services/apiClient'
+
+const fetchProductTypeApi = async () => {
+  const res = await apiClient.get(
+    `ProductType/GetAllPaginationByStatus/true?search=&PageNumber=1&PageSize=1999`
+  );
+  return res.data;
+};
 
 const ProductType = () => {
   const { setProductType, submitReceiving, setSubmitReceiving } =
     useContext(ReceivingContext);
+
+  const [produtTypes, setProdutTypes] = useState([]);
+
+  const fetchProductTypes = () => {
+    fetchProductTypeApi().then((res) => {
+      setProdutTypes(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchProductTypes();
+
+    return () => {
+      setProdutTypes([]);
+    };
+  }, []);
 
   return (
     <>
@@ -27,9 +51,9 @@ const ProductType = () => {
             bgColor="#fff8dc"
             onChange={(e) => setProductType(e.target.value)}
           >
-            {productTypeData?.map((item) => (
-              <option key={item.id} value={item.details}>
-                {item.details}
+            {produtTypes?.product?.map((item) => (
+              <option key={item.id} value={item.productTypeName}>
+                {item.productTypeName}
               </option>
             ))}
           </Select>
