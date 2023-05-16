@@ -17,7 +17,7 @@ const OrdersPage = ({ fetchNotification }) => {
 
   const [genusOrders, setGenusOrders] = useState([])
 
-  const [fromDate, setFromDate] = useState(startDate)
+  const [fromDate, setFromDate] = useState(moment(new Date()).format('yyyy-MM-DD'))
   const [toDate, setToDate] = useState(moment(new Date()).format('yyyy-MM-DD'))
 
   const [search, setSearch] = useState('')

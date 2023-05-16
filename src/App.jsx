@@ -76,6 +76,7 @@ import ImportOrderPage from "./pages/import/ImportOrderPage";
 import ImportRawMaterialsPage from "./pages/import/ImportRawMaterialsPage";
 import ImportFormulationCodePage from "./pages/import/ImportFormulationCodePage";
 import ImportSupplier from "./pages/import/ImportSupplier";
+import ImportCustomerManagement from "./pages/import/ImportCustomerManagement";
 
 import UserManagementPage from "./pages/UserManagementPage";
 import UserAccountPage from "./pages/usermanagement/UserAccountPage";
@@ -625,6 +626,10 @@ function App() {
             <Route
               path="import-supplier"
               element={user ? <ImportSupplier /> : <Navigate to="/login" />}
+            />
+             <Route
+              path="import-customer-management"
+              element={user ? <ImportCustomerManagement /> : <Navigate to="/login" />}
             />
           </Route>
 

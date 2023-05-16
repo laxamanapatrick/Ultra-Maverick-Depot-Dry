@@ -478,7 +478,7 @@ const DrawerComponent = ({
   };
 
   // FETCH DEPT API
-  const fetchDepartmentApi = async (id) => {
+  const fetchDepartmentApi = async (id = "") => {
     try {
       const res = await axios.get(
         "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
@@ -494,10 +494,10 @@ const DrawerComponent = ({
   };
 
   // FETCH Loc API
-  const fetchLocationApi = async (id) => {
+  const fetchLocationApi = async (id = "") => {
     try {
       const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&company_id=" +
+        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&department_id=" +
           id,
         {
           headers: {
@@ -707,24 +707,24 @@ const DrawerComponent = ({
                     disabled={!watch("formData.companyCode")}
                     {...register("formData.departmentName")}
                     onChange={(e) => {
-                    //   setValue(
-                    //     "formData.departmentCode",
-                    //     department.find(
-                    //       (dept) => dept.id?.toString() === e.target.value
-                    //     )?.id
-                    //   );
-                    //   setValue(
-                    //     "formData.departmentName",
-                    //     department.find(
-                    //       (dept) => dept.id?.toString() === e.target.value
-                    //     )?.name
-                    //   );
+                      //   setValue(
+                      //     "formData.departmentCode",
+                      //     department.find(
+                      //       (dept) => dept.id?.toString() === e.target.value
+                      //     )?.id
+                      //   );
+                      //   setValue(
+                      //     "formData.departmentName",
+                      //     department.find(
+                      //       (dept) => dept.id?.toString() === e.target.value
+                      //     )?.name
+                      //   );
                       fetchLocationApi(e.target.value);
                     }}
                   >
                     {department?.map((dept) => {
                       return (
-                        <option key={dept.id} value={dept.name}>
+                        <option key={dept.id} value={dept.id}>
                           {dept.id} - {dept.name}
                         </option>
                       );
