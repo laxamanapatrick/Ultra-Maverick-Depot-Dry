@@ -534,9 +534,9 @@ export const RawMatsInfoModal = ({
                   !rawMatsInfo.itemCode ||
                   !rawMatsInfo.supplier ||
                   !rawMatsInfo.uom ||
-                  (!rawMatsInfo.expirationDate && isExpirable === true) ||
-                  (rawMatsInfo.expirationDate !== null &&
-                    isExpirable === false) ||
+                  // (!rawMatsInfo.expirationDate && isExpirable === true) ||
+                  // (rawMatsInfo.expirationDate !== null &&
+                  //   isExpirable === false) ||
                   !rawMatsInfo.quantity ||
                   !details
                 }

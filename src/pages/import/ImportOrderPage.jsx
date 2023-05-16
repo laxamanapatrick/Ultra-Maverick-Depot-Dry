@@ -129,7 +129,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
               dateNeeded: moment(item?.dateNeeded).format("yyyy-MM-DD"),
               timeNeeded: item?.dateNeeded,
               transactionType: item?.transactionType,
-              itemCode: item?.itemCode,
+              itemCode: item?.itemCode.toString(),
               itemDescription: item?.itemDescription,
               uom: item?.uom,
               quantityOrdered: item?.quantityOrdered,

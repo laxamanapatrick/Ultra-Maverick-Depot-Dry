@@ -66,16 +66,15 @@ const schema = yup.object().shape({
     customerCode: yup.string().required("Customer Code is required"),
     customerName: yup.string().required("Customer Name is required"),
     farmTypeId: yup.string().required("Farm Type is required"),
-    companyName: yup.string().required("Company Name is required"),
+    companyId: yup.number().required().typeError("Company Name is required"),
+    departmentId: yup
+      .number()
+      .required()
+      .typeError("Department Category is required"),
+    locationId: yup.number().required().typeError("Location Name is required"),
     mobileNumber: yup.string().required("Required"),
     leadMan: yup.string().required("Leadman is required"),
     address: yup.string().required("Address is required"),
-    companyCode: yup.string().required("Company Name is required"),
-    companyName: yup.string().required("Company Name is required"),
-    // departmentCode: yup.string().required("Department Name is required"),
-    departmentName: yup.string().required("Department Category is required"),
-    // locationCode: yup.string().required("Location Name is required"),
-    locationName: yup.string().required("Location Name is required"),
   }),
 });
 
@@ -95,6 +94,10 @@ const CustomerManagementPage = () => {
   const [codeDisable, setCodeDisable] = useState(false);
 
   const toast = useToast();
+
+  const [company, setCompany] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [location, setLocation] = useState([]);
 
   const [pageTotal, setPageTotal] = useState(undefined);
   const {
@@ -120,15 +123,12 @@ const CustomerManagementPage = () => {
         customerCode: "",
         customerName: "",
         farmTypeId: "",
+        companyId: "",
+        departmentId: "",
+        locationId: "",
         mobileNumber: "",
         leadMan: "",
         address: "",
-        companyCode: "",
-        companyName: "",
-        // departmentCode: "",
-        departmentName: "",
-        // locationCode: "",
-        locationName: "",
         addedBy: currentUser.userName,
       },
     },
@@ -160,9 +160,69 @@ const CustomerManagementPage = () => {
     });
   };
 
+  // // FETCH COMPANY API
+  const fetchCompanyApi = async () => {
+    try {
+      const res = await axios.get(
+        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          },
+        }
+      );
+      setCompany(res.data.result.companies);
+    } catch (error) {}
+  };
+
+  // // FETCH DEPT API
+  const fetchDepartmentApi = async (id = "") => {
+    try {
+      const res = await axios.get(
+        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
+          id,
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          },
+        }
+      );
+      setDepartment(res.data.result.departments);
+    } catch (error) {}
+  };
+
+  // // FETCH Loc API
+  const fetchLocationApi = async (id = "") => {
+    try {
+      const res = await axios.get(
+        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&department_id=" +
+          id,
+        {
+          headers: {
+            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+          },
+        }
+      );
+      setLocation(res.data.result.locations);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     fetchCustomer();
   }, [status, pageSize, currentPage, search]);
+
+  useEffect(() => {
+    fetchCompanyApi();
+    fetchDepartmentApi();
+    fetchLocationApi();
+
+    return () => {
+      setCompany([]);
+      setDepartment([]);
+      setLocation([]);
+      // setIsCoaSet(false);
+    };
+  }, []);
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
@@ -201,22 +261,18 @@ const CustomerManagementPage = () => {
   };
 
   const editHandler = (cus) => {
-    console.log(cus);
     openDrawer();
     setValue("formData", {
       id: cus.id,
       customerCode: cus.customerCode,
       customerName: cus.customerName,
       farmTypeId: cus.farmTypeId,
+      companyId: company?.find((x) => x.name === cus.companyName)?.id,
+      departmentId: department?.find((x) => x.name === cus.departmentName)?.id,
+      locationId: location?.find((x) => x.name === cus.locationName)?.id,
       mobileNumber: cus.mobileNumber,
       leadMan: cus.leadMan,
       address: cus.address,
-      companyCode: cus.companyCode,
-      companyName: cus.companyName,
-      // departmentCode: cus.departmentCode,
-      departmentName: cus.departmentName,
-      // locationCode: cus.locationCode,
-      locationName: cus.locationName,
       modifiedBy: currentUser.userName,
     });
     setCodeDisable(true);
@@ -381,6 +437,11 @@ const CustomerManagementPage = () => {
             fetchCustomer={fetchCustomer}
             control={control}
             codeDisable={codeDisable}
+            company={company}
+            department={department}
+            location={location}
+            fetchDepartmentApi={fetchDepartmentApi}
+            fetchLocationApi={fetchLocationApi}
           />
         )}
 
@@ -449,106 +510,15 @@ const DrawerComponent = ({
   fetchCustomer,
   control,
   codeDisable,
+  company,
+  department,
+  location,
+  fetchDepartmentApi,
+  fetchLocationApi,
 }) => {
   const [farms, setFarms] = useState([]);
   const [isLoading, setisLoading] = useState(false);
-  // const [company, setCompany] = useState([
-  //   {
-  //     companyName: "RDF",
-  //   },
-  // ]);
   const toast = useToast();
-
-  const [company, setCompany] = useState([]);
-  const [department, setDepartment] = useState([]);
-  const [location, setLocation] = useState([]);
-  // FETCH COMPANY API
-  const fetchCompanyApi = async () => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/company?api_for=vladimir&status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setCompany(res.data.result.companies);
-    } catch (error) {}
-  };
-
-  // FETCH DEPT API
-  const fetchDepartmentApi = async (id = "") => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/department?status=1&paginate=0&company_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setDepartment(res.data.result.departments);
-    } catch (error) {}
-  };
-
-  // FETCH Loc API
-  const fetchLocationApi = async (id = "") => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/location?status=1&paginate=0&department_id=" +
-          id,
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setLocation(res.data.result.locations);
-    } catch (error) {}
-  };
-
-  // FETCH ACcount API
-  const fetchAccountApi = async () => {
-    try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
-      );
-      setAccount(res.data.result.account_titles);
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    fetchCompanyApi();
-  }, []);
-
-  useEffect(() => {
-    fetchAccountApi();
-  }, []);
-
-  // useEffect(() => {
-  //   if (watch("formData.companyCode")) {
-  //     // setValue("formData.departmentCode", "");
-  //     setValue("formData.departmentName", "");
-  //     // setValue("formData.locationCode", "");
-  //     setValue("formData.locationName", "");
-  //     fetchDepartmentApi();
-  //   }
-  // }, [watch("formData.companyCode")]);
-
-  // useEffect(() => {
-  //   if (watch("formData.departmentName")) {
-  //     // setValue("formData.locationCode", "");
-  //     setValue("formData.locationName", "");
-  //     fetchLocationApi();
-  //   }
-  // }, [watch("formData.departmentName")]);
 
   const submitHandler = (data) => {
     try {
@@ -556,7 +526,25 @@ const DrawerComponent = ({
         delete data.formData["id"];
         setisLoading(true);
         const res = apiClient
-          .post("Customer/AddNewCustomer", data.formData)
+          .post("Customer/AddNewCustomer", {
+            customerCode: data.formData.customerCode,
+            customerName: data.formData.customerName,
+            farmTypeId: data.formData.farmTypeId,
+            companyCode: company?.find((x) => x.id === data.formData.companyId)
+              ?.name,
+            companyName: company?.find((x) => x.id === data.formData.companyId)
+              ?.name,
+            departmentName: department?.find(
+              (x) => x.id === data.formData.departmentId
+            )?.name,
+            locationName: location?.find(
+              (x) => x.id === data.formData.locationId
+            )?.name,
+            mobileNumber: data.formData.mobileNumber,
+            leadMan: data.formData.leadMan,
+            address: data.formData.address,
+            addedBy: currentUser?.fullName,
+          })
           .then((res) => {
             ToastComponent("Success", "New customer created", "success", toast);
             setisLoading(false);
@@ -570,7 +558,26 @@ const DrawerComponent = ({
           });
       } else {
         const res = apiClient
-          .put(`Customer/UpdateCustomer/${data.formData.id}`, data.formData)
+          .put(`Customer/UpdateCustomer/${data.formData.id}`, {
+            id: data.formData.id,
+            customerCode: data.formData.customerCode,
+            customerName: data.formData.customerName,
+            farmTypeId: data.formData.farmTypeId,
+            companyCode: company?.find((x) => x.id === data.formData.companyId)
+              ?.name,
+            companyName: company?.find((x) => x.id === data.formData.companyId)
+              ?.name,
+            departmentName: department?.find(
+              (x) => x.id === data.formData.departmentId
+            )?.name,
+            locationName: location?.find(
+              (x) => x.id === data.formData.locationId
+            )?.name,
+            mobileNumber: data.formData.mobileNumber,
+            leadMan: data.formData.leadMan,
+            address: data.formData.address,
+            addedBy: currentUser?.fullName,
+          })
           .then((res) => {
             ToastComponent("Success", "Customer Updated", "success", toast);
             setisLoading(false);
@@ -666,119 +673,78 @@ const DrawerComponent = ({
 
                 <Box>
                   <FormLabel fontSize="sm">Company</FormLabel>
-                  <Select
-                    fontSize="sm"
-                    onChange={(e) => {
-                      setValue(
-                        "formData.companyCode",
-                        company.find(
-                          (item) => item.id?.toString() === e.target.value
-                        )?.code
-                      );
-                      setValue(
-                        "formData.companyName",
-                        company.find(
-                          (item) => item.id?.toString() === e.target.value
-                        )?.name
-                      );
-                      fetchDepartmentApi(e.target.value);
-                    }}
-                    placeholder="Select Company"
-                    // {...register("formData.companyName")}
-                  >
-                    {company?.map((item) => {
-                      return (
-                        <option key={item.id} value={item.id}>
-                          {item.code} - {item.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+
+                  <HStack w="full">
+                    <Select
+                      {...register("formData.companyId")}
+                      placeholder="Select Company"
+                      fontSize="sm"
+                      onChange={(e) => {
+                        setValue("formData.departmentId", "");
+                        setValue("formData.locationId", "");
+                        fetchDepartmentApi(e.target.value);
+                      }}
+                    >
+                      {company?.map((item) => {
+                        return (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        );
+                      })}
+                    </Select>
+                  </HStack>
+
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.companyName?.message}
+                    {errors.formData?.companyId?.message}
                   </Text>
                 </Box>
 
                 <Box>
                   <FormLabel fontSize="sm">Department</FormLabel>
                   <Select
-                    fontSize="sm"
+                    {...register("formData.departmentId")}
                     placeholder="Select Department"
-                    disabled={!watch("formData.companyCode")}
-                    {...register("formData.departmentName")}
+                    fontSize="sm"
                     onChange={(e) => {
-                      //   setValue(
-                      //     "formData.departmentCode",
-                      //     department.find(
-                      //       (dept) => dept.id?.toString() === e.target.value
-                      //     )?.id
-                      //   );
-                      //   setValue(
-                      //     "formData.departmentName",
-                      //     department.find(
-                      //       (dept) => dept.id?.toString() === e.target.value
-                      //     )?.name
-                      //   );
+                      setValue("formData.locationId", "");
                       fetchLocationApi(e.target.value);
                     }}
                   >
                     {department?.map((dept) => {
                       return (
                         <option key={dept.id} value={dept.id}>
-                          {dept.id} - {dept.name}
+                          {dept.name}
                         </option>
                       );
                     })}
                   </Select>
+
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.departmentName?.message}
+                    {errors.formData?.departmentId?.message}
                   </Text>
                 </Box>
 
                 <Box>
                   <FormLabel fontSize="sm">Location</FormLabel>
                   <Select
-                    fontSize="sm"
+                    {...register("formData.locationId")}
                     placeholder="Select Location"
-                    disabled={!watch("formData.departmentName")}
-                    {...register("formData.locationName")}
-                    // onChange={(e) => {
-                    //   setValue(
-                    //     "formData.locationCode",
-                    //     location.find(
-                    //       (item) => item.id?.toString() === e.target.value
-                    //     )?.id
-                    //   );
-                    //   setValue(
-                    //     "formData.locationName",
-                    //     location.find(
-                    //       (item) => item.id?.toString() === e.target.value
-                    //     )?.name
-                    //   );
-                    //   // fetchLocationApi(e.target.value);
-                    // }}
+                    fontSize="sm"
                   >
                     {location?.map((item) => {
                       return (
-                        <option key={item.id} value={item.name}>
-                          {item.id} - {item.name}
+                        <option key={item.id} value={item.id}>
+                          {item.name}
                         </option>
                       );
                     })}
                   </Select>
+
                   <Text color="red" fontSize="xs">
-                    {errors.formData?.locationName?.message}
+                    {errors.formData?.locationId?.message}
                   </Text>
                 </Box>
-
-                {/* <Box>
-                  <FormLabel>Company Name:</FormLabel>
-                  <Input
-                    placeholder='Please enter Company Name'
-                    {...register("formData.companyName")}
-                  />
-                  <Text color="danger" fontSize="xs">{errors.formData?.companyName?.message}</Text>
-                </Box> */}
 
                 <Box>
                   <FormLabel>Mobile Number:</FormLabel>
@@ -826,10 +792,7 @@ const DrawerComponent = ({
                 color="white"
                 _hover={{ bgColor: "accent" }}
                 disabled={
-                  !isValid ||
-                  !watch("formData.companyCode") ||
-                  !watch("formData.departmentName") ||
-                  !watch("formData.locationName")
+                  !isValid
                 }
                 isLoading={isLoading}
               >

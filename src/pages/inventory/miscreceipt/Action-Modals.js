@@ -301,7 +301,7 @@ export const SaveConfirmation = ({
                   itemDescription: item.itemDescription,
                   uom: item.uom,
                   supplier: item.supplier,
-                  expiration: item.expirationDate,
+                  expiration: item.expirationDate ? item.expirationDate : null,
                   actualGood: item.quantity,
                   details: item.description,
                   remarks: item.remarks,
