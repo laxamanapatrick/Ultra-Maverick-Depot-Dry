@@ -20,6 +20,8 @@ import {
   Thead,
   Tr,
   Td,
+  Stack,
+  Skeleton,
 } from "@chakra-ui/react";
 import { ToastComponent } from "../../../components/Toast";
 import moment from "moment";

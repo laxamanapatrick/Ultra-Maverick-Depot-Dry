@@ -171,6 +171,7 @@ export const PrintModal = ({
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    // pageStyle: "@page { size: 8.5in 6.5in }",
   });
 
   const printAndUpdate = () => {
@@ -209,7 +210,13 @@ export const PrintModal = ({
         <ModalBody>
           {/* Printed  */}
           {/* <Box display="none"> */}
-          <VStack spacing={20} w="93%" ml={3} ref={componentRef}>
+          <VStack
+            spacing={20}
+            w="93%"
+            ml={3}
+            ref={componentRef}
+            // className="print-container"
+          >
             {/* MO SLIP Print*/}
             <Flex w="full" flexDirection="column">
               <Flex
@@ -251,8 +258,12 @@ export const PrintModal = ({
 
               <Flex flexDirection="column">
                 <PageScrollReusable minHeight="70px" maxHeight="210px">
-                  <Table size="xs" fontSize="xs">
-                    <Thead bgColor="secondary">
+                  <Table
+                    size="xs"
+                    fontSize="xs"
+                    // className="print-table-container"
+                  >
+                    <Thead position="sticky" top={0} bg="#2f394a">
                       <Tr>
                         <Th color="white">ITEM CODE</Th>
                         <Th color="white">ITEM DESCRIPTION</Th>
@@ -311,7 +322,7 @@ export const PrintModal = ({
                 {/* <Flex justifyContent="start">
                   <Text>Total Quantity: {totalQuantity && totalQuantity}</Text>
                 </Flex> */}
-                <Flex justifyContent="space-between" fontSize="xs" mt={4}>
+                <Flex justifyContent="space-between" fontSize="xs" mt={6}>
                   <HStack>
                     <Text>Delivery Status:</Text>
                     <Text textDecoration="underline">
@@ -403,6 +414,16 @@ export const PrintModal = ({
             </Button>
           </ButtonGroup>
         </ModalFooter>
+
+        {/* Print styles */}
+        <style>
+          {`
+  @media print {
+    @page {
+      size: 8.5in 6.5in;
+    }
+  `}
+        </style>
       </ModalContent>
     </Modal>
   );
