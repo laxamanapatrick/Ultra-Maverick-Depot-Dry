@@ -385,6 +385,7 @@ const MoveOrderPage = ({
             setFarmName={setFarmName}
             setOrderListData={setOrderListData}
             moveData={moveData}
+            fetchMoveOrder={fetchMoveOrder}
           />
         ) : (
           itemCode &&

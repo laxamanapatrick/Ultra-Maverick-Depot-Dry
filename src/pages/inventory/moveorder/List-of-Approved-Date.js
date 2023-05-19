@@ -67,7 +67,7 @@ export const ListofApprovedDate = ({
   preparedLength,
   pageDisable,
   orderListData,
-  preparedData
+  preparedData,
 }) => {
   const toast = useToast();
 
@@ -140,6 +140,15 @@ export const ListofApprovedDate = ({
     onClose: closeCancel,
   } = useDisclosure();
   const cancelHandler = (id) => {
+    if (preparedLength > 0) {
+      ToastComponent(
+        "Warning",
+        "This order currently has prepared items, please cancel all preapred items first.",
+        "warning",
+        toast
+      );
+      return;
+    }
     if (id) {
       setOrderId(id);
       openCancel();
@@ -260,7 +269,7 @@ export const ListofApprovedDate = ({
         </Flex>
       </Flex>
 
-      {buttonChanger && preparedData?.length !== 0  ? (
+      {buttonChanger && preparedData?.length !== 0 ? (
         <VStack spacing={1}>
           <HStack w="full" justifyContent="start">
             <Badge bgColor="secondary" color="white" px={3}>
@@ -370,7 +379,7 @@ export const ListofApprovedDate = ({
                       size="xs"
                       colorScheme="red"
                       onClick={() => cancelHandler(order.id)}
-                      disabled={preparedLength > 0}
+                      // disabled={preparedLength > 0}
                       title={
                         preparedLength > 0
                           ? "Please cancel all prepared items first"
@@ -394,6 +403,7 @@ export const ListofApprovedDate = ({
           id={orderId}
           setOrderId={setOrderId}
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
+          fetchMoveOrder={fetchMoveOrder}
         />
       )}
     </Flex>

@@ -44,7 +44,7 @@ export const EnablePreparation = ({moveData}) => {
       </Flex>
       <Flex color="white" mb="80px" fontSize="xl">
         {
-        moveData[0]?.length === 0 ? `The aren't any orders available for preparation` : 'This order is ready for preparation.'
+        moveData?.length === 0 ? `The aren't any orders available for preparation` : 'This order is ready for preparation.'
         }
       </Flex>
     </Flex>

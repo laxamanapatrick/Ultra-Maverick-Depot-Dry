@@ -222,7 +222,7 @@ const ReasonPage = () => {
                       key={reas.id}
                     >
                       <Td>{reas.id}</Td>
-                      <Td>{reas.menu}</Td>
+                      <Td textTransform='uppercase'>{reas.menu}</Td>
                       <Td>{reas.reasonName}</Td>
                       <Td>{reas.dateAdded}</Td>
                       <Td>{reas.addedBy}</Td>
@@ -412,7 +412,7 @@ const DrawerComponent = ({ isOpen, onClose, register, errors, isValid, handleSub
                         {...register("formData.menuId")}
                         placeholder='Select Menu'>
                         {menus.map(men => (
-                          <option key={men.id} value={men.id}>{men.moduleName}</option>
+                          <option style={{textTransform: 'uppercase'}} key={men.id} value={men.id}>{men.moduleName}</option>
                           
                         ))}
 

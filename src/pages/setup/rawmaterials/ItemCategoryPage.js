@@ -103,7 +103,7 @@ const ItemCategoryPage = () => {
       formData: {
         id: "",
         itemCategoryName: "",
-        addedBy: currentUser.addedBy
+        addedBy: currentUser.fullName
       }
     }
   })

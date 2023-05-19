@@ -49,7 +49,7 @@ const SidebarFooter = () => {
       <Image
         src="/images/logo.svg"
         w="120px"
-        onClick={currentUser?.role === 1 ? () => navigate("/sandbox") : null}
+        // onClick={currentUser?.role === 1 ? () => navigate("/sandbox") : null}
       ></Image>
       <Text color="white" fontSize="xs" textAlign="center">{`© ${moment(
         new Date()

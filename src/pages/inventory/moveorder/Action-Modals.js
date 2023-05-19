@@ -230,6 +230,7 @@ export const CancelApprovedDate = ({
   id,
   setOrderId,
   fetchApprovedMoveOrders,
+  fetchMoveOrder
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -248,6 +249,7 @@ export const CancelApprovedDate = ({
           );
           setOrderId("");
           fetchApprovedMoveOrders();
+          fetchMoveOrder()
           setIsLoading(false);
           onClose();
         })
@@ -330,6 +332,7 @@ export const SaveButton = ({
   setFarmName,
   setOrderListData,
   moveData,
+  fetchMoveOrder
 }) => {
   const {
     isOpen: isPlateNumber,
@@ -381,6 +384,7 @@ export const SaveButton = ({
           setFarmName={setFarmName}
           setOrderListData={setOrderListData}
           moveData={moveData}
+          fetchMoveOrder={fetchMoveOrder}
         />
       }
     </Flex>
@@ -423,6 +427,7 @@ export const DeliveryStatusConfirmation = ({
   setFarmName,
   setOrderListData,
   moveData,
+  fetchMoveOrder
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -582,6 +587,7 @@ export const DeliveryStatusConfirmation = ({
               setIsLoading(false);
               unsetRequest(unsetOrderId, userId);
               fetchApprovedMoveOrders();
+              fetchMoveOrder()
               fetchOrderList();
               onClose();
             })
