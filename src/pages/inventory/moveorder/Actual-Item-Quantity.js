@@ -10,10 +10,12 @@ import apiClient from '../../../services/apiClient';
 import PageScroll from '../../../components/PageScroll'
 
 const fetchAvailableBarcodePerItemCodeApi = async (itemCode) => {
-    const res = await apiClient.get(`Warehouse/GetAllListOfWarehouseReceivingId?search=${itemCode}`)
+    const res = await apiClient.get(`Warehouse/GetAllListOfWarehouseReceivingId`, {
+        params: {
+          search: itemCode,
+        },})
     return res.data
 }
-
 
 export const ActualItemQuantity = ({ warehouseId, setWarehouseId, barcodeData, orderId, highlighterId, setHighlighterId,
     itemCode, fetchOrderList, fetchPreparedItems, qtyOrdered, preparedQty, nearlyExpireBarcode, setItemCode

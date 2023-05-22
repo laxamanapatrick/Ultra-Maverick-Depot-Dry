@@ -416,14 +416,14 @@ export const PrintModal = ({
         </ModalFooter>
 
         {/* Print styles */}
-        <style>
+        {/* <style>
           {`
             @media print {
               @page {
                 size: 8.5in 6.5in;
               }
           `}
-        </style>
+        </style> */}
       </ModalContent>
     </Modal>
   );

@@ -41,7 +41,10 @@ const fetchMoveOrderApi = async (pageNumber) => {
 
 const fetchApprovedMoveOrdersApi = async (farmName) => {
   const res = await apiClient.get(
-    `Ordering/GetAllListOfApprovedPreparedForMoveOrder?farm=${farmName}`
+    `Ordering/GetAllListOfApprovedPreparedForMoveOrder`, {
+      params: {
+        farm:farmName
+      },}
   );
   return res.data;
 };
@@ -59,7 +62,11 @@ const fetchOrderListApi = async (orderId) => {
 
 const fetchBarcodeDetailsApi = async (warehouseId, itemCode) => {
   const res = await apiClient.get(
-    `Ordering/GetAvailableStockFromWarehouse?id=${warehouseId}&itemcode=${itemCode}`
+    `Ordering/GetAvailableStockFromWarehouse`, {
+      params: {
+        id:warehouseId,
+        itemcode: itemCode,
+      },}
   );
   return res.data;
 };

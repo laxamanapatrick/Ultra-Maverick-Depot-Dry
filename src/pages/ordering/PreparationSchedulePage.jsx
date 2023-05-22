@@ -46,7 +46,10 @@ const PreparationSchedulePage = ({ fetchNotification }) => {
   }, [currentPage])
 
   const fetchOrdersApi = async () => {
-    const res = await apiClient.get(`Ordering/GetAllListofOrders?farms=${farmName}`)
+    const res = await apiClient.get(`Ordering/GetAllListofOrders`, {
+      params: {
+        farms: farmName,
+      },})
     return res.data
   }
 
