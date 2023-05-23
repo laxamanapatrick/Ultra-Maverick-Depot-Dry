@@ -76,7 +76,7 @@ export const ViewModal = ({ isOpen, onClose, viewData }) => {
                       <Td>{item.itemCode}</Td>
                       <Td>{item.itemDescription}</Td>
                       <Td>{item.quantity}</Td>
-                      <Td>{moment(item.expiration).format("MM/DD/yyyy")}</Td>
+                      <Td>{item.expiration ? moment(item.expiration).format("MM/DD/yyyy") : 'Not Expirable'}</Td>
                     </Tr>
                   ))}
                 </Tbody>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -6,7 +6,6 @@ import {
   Flex,
   FormLabel,
   HStack,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -17,7 +16,6 @@ import {
   Select,
   Stack,
   Text,
-  toast,
   useDisclosure,
   useToast,
   VStack,
@@ -26,14 +24,10 @@ import { RiQuestionnaireLine } from "react-icons/ri";
 import apiClient from "../../../services/apiClient";
 import { ToastComponent } from "../../../components/Toast";
 import { decodeUser } from "../../../services/decode-user";
-// import COA from "../../coa-modal/COA";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
-import { VscEdit } from "react-icons/vsc";
-import { GrRevert } from "react-icons/gr";
-import Swal from "sweetalert2";
 
 const currentUser = decodeUser();
 
@@ -230,7 +224,7 @@ export const CancelApprovedDate = ({
   id,
   setOrderId,
   fetchApprovedMoveOrders,
-  fetchMoveOrder
+  fetchMoveOrder,
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -249,7 +243,7 @@ export const CancelApprovedDate = ({
           );
           setOrderId("");
           fetchApprovedMoveOrders();
-          fetchMoveOrder()
+          fetchMoveOrder();
           setIsLoading(false);
           onClose();
         })
@@ -332,7 +326,7 @@ export const SaveButton = ({
   setFarmName,
   setOrderListData,
   moveData,
-  fetchMoveOrder
+  fetchMoveOrder,
 }) => {
   const {
     isOpen: isPlateNumber,
@@ -393,12 +387,18 @@ export const SaveButton = ({
 
 const schema = yup.object().shape({
   formData: yup.object().shape({
-    companyId: yup.number().required().typeError("Company Name is required"),
+    companyId: yup
+      .number()
+      .required("Company Name is required")
+      .typeError("Company Name is required"),
     departmentId: yup
       .number()
-      .required()
+      .required("Department Category is required")
       .typeError("Department Category is required"),
-    locationId: yup.number().required().typeError("Location Name is required"),
+    locationId: yup
+      .number()
+      .required("Location Name is required")
+      .typeError("Location Name is required"),
     accountTitles: yup.string().required("Account Name is required"),
   }),
 });
@@ -427,7 +427,7 @@ export const DeliveryStatusConfirmation = ({
   setFarmName,
   setOrderListData,
   moveData,
-  fetchMoveOrder
+  fetchMoveOrder,
 }) => {
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
@@ -436,6 +436,8 @@ export const DeliveryStatusConfirmation = ({
   const [department, setDepartment] = useState([]);
   const [location, setLocation] = useState([]);
   const [account, setAccount] = useState([]);
+
+  const [isCoaSet, setIsCoaSet] = useState(false);
 
   // // FETCH COMPANY API
   const fetchCompanyApi = async () => {
@@ -506,11 +508,11 @@ export const DeliveryStatusConfirmation = ({
     fetchAccountApi();
 
     return () => {
-      setCompany([])
-      setDepartment([])
-      setLocation([])
-      setAccount([])
-    }
+      setCompany([]);
+      setDepartment([]);
+      setLocation([]);
+      setAccount([]);
+    };
   }, []);
 
   const {
@@ -520,11 +522,67 @@ export const DeliveryStatusConfirmation = ({
     setValue,
     reset,
     watch,
+    control,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
       formData: {
+        companyId: "",
+        departmentId: "",
+        locationId: "",
+        // companyId: company?.find((x) => x.name === moveData[0]?.companyName)
+        //   ?.id,
+        // departmentId: department?.find(
+        //   (x) => x.name === moveData[0]?.departmentName
+        // )?.id,
+        // locationId: location?.find((x) => x.name === moveData[0]?.locationName)
+        //   ?.id,
+        accountTitles: "",
+        addedBy: currentUser.userName,
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (!isCoaSet) {
+      if (!watch("formData.companyId")) {
+        setValue(
+          "formData.companyId",
+          company?.find((x) => x.name === moveData[0]?.companyName)?.id
+        );
+      }
+      if (
+        watch("formData.companyId") &&
+        !watch("formData.departmentId") &&
+        !watch("formData.locationId")
+      ) {
+        setValue(
+          "formData.departmentId",
+          department?.find((x) => x.name === moveData[0]?.departmentName)?.id
+        );
+      }
+      if (
+        watch("formData.companyId") &&
+        watch("formData.departmentId") &&
+        !watch("formData.locationId")
+      ) {
+        setValue(
+          "formData.locationId",
+          location?.find((x) => x.name === moveData[0]?.locationName)?.id
+        );
+        setIsCoaSet(true);
+      }
+    }
+  }, [moveData, company, department, location]);
+
+  const handleClose = () => {
+    // reset();
+    // setValue("formData.accountTitles", "");
+    onClose();
+    setValue(
+      "formData",
+      {
         companyId: company?.find((x) => x.name === moveData[0]?.companyName)
           ?.id,
         departmentId: department?.find(
@@ -535,12 +593,8 @@ export const DeliveryStatusConfirmation = ({
         accountTitles: "",
         addedBy: currentUser.userName,
       },
-    },
-  });
-
-  const handleClose = () => {
-    reset();
-    onClose();
+      { shouldValidate: true }
+    );
   };
 
   const submitHandler = (data) => {
@@ -562,40 +616,40 @@ export const DeliveryStatusConfirmation = ({
       };
     });
     console.log(submitArrayBody);
-        setIsLoading(true);
-        try {
-          const res = apiClient
-            .put(`Ordering/AddDeliveryStatus`, submitArrayBody)
-            .then((res) => {
-              ToastComponent(
-                "Success",
-                "Items prepared successfully.",
-                "success",
-                toast
-              );
-              fetchNotification();
-              setOrderId("");
-              setHighlighterId("");
-              setItemCode("");
-              setFarmName("");
-              setDeliveryStatus("");
-              setOrderListData([]);
-              setCurrentPage(currentPage);
-              setPageDisable(false);
-              setButtonChanger(false);
-              setPreparingStatus(false);
-              setIsLoading(false);
-              unsetRequest(unsetOrderId, userId);
-              fetchApprovedMoveOrders();
-              fetchMoveOrder()
-              fetchOrderList();
-              onClose();
-            })
-            .catch((err) => {
-              ToastComponent("Error", "Save failed.", "error", toast);
-              setIsLoading(false);
-            });
-        } catch (error) {}
+    setIsLoading(true);
+    try {
+      const res = apiClient
+        .put(`Ordering/AddDeliveryStatus`, submitArrayBody)
+        .then((res) => {
+          ToastComponent(
+            "Success",
+            "Items prepared successfully.",
+            "success",
+            toast
+          );
+          fetchNotification();
+          setOrderId("");
+          setHighlighterId("");
+          setItemCode("");
+          setFarmName("");
+          setDeliveryStatus("");
+          setOrderListData([]);
+          setCurrentPage(currentPage);
+          setPageDisable(false);
+          setButtonChanger(false);
+          setPreparingStatus(false);
+          setIsLoading(false);
+          unsetRequest(unsetOrderId, userId);
+          fetchApprovedMoveOrders();
+          fetchMoveOrder();
+          fetchOrderList();
+          onClose();
+        })
+        .catch((err) => {
+          ToastComponent("Error", "Save failed.", "error", toast);
+          setIsLoading(false);
+        });
+    } catch (error) {}
   };
 
   return (
@@ -612,29 +666,35 @@ export const DeliveryStatusConfirmation = ({
                   <FormLabel fontSize="sm">Company</FormLabel>
 
                   <HStack w="full">
-                    <Select
-                      {...register("formData.companyId")}
+                    <Controller
+                      control={control}
+                      name="formData.companyId"
                       defaultValue={
                         company?.find(
                           (x) => x.name === moveData[0]?.companyName
                         )?.id
                       }
-                      placeholder="Select Company"
-                      fontSize="sm"
-                      onChange={(e) => {
-                        setValue("formData.departmentId", "");
-                        setValue("formData.locationId", "");
-                        fetchDepartmentApi(e.target.value);
-                      }}
-                    >
-                      {company?.map((item) => {
-                        return (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        );
-                      })}
-                    </Select>
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={field.value || ""}
+                          placeholder="Select Company"
+                          fontSize="sm"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setValue("formData.departmentId", "");
+                            setValue("formData.locationId", "");
+                            fetchDepartmentApi(e.target.value);
+                          }}
+                        >
+                          {company?.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </Select>
+                      )}
+                    />
                   </HStack>
 
                   <Text color="red" fontSize="xs">
@@ -644,28 +704,34 @@ export const DeliveryStatusConfirmation = ({
 
                 <Box>
                   <FormLabel fontSize="sm">Department</FormLabel>
-                  <Select
-                    {...register("formData.departmentId")}
+                  <Controller
+                    control={control}
+                    name="formData.departmentId"
                     defaultValue={
                       department?.find(
                         (x) => x.name === moveData[0]?.departmentName
                       )?.id
                     }
-                    placeholder="Select Department"
-                    fontSize="sm"
-                    onChange={(e) => {
-                      setValue("formData.locationId", "");
-                      fetchLocationApi(e.target.value);
-                    }}
-                  >
-                    {department?.map((dept) => {
-                      return (
-                        <option key={dept.id} value={dept.id}>
-                          {dept.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Department"
+                        fontSize="sm"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setValue("formData.locationId", "");
+                          fetchLocationApi(e.target.value);
+                        }}
+                      >
+                        {department?.map((dept) => (
+                          <option key={dept.id} value={dept.id}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
 
                   <Text color="red" fontSize="xs">
                     {errors.formData?.departmentId?.message}
@@ -674,24 +740,29 @@ export const DeliveryStatusConfirmation = ({
 
                 <Box>
                   <FormLabel fontSize="sm">Location</FormLabel>
-                  <Select
-                    {...register("formData.locationId")}
+                  <Controller
+                    control={control}
+                    name="formData.locationId"
                     defaultValue={
                       location?.find(
                         (x) => x.name === moveData[0]?.locationName
                       )?.id
                     }
-                    placeholder="Select Location"
-                    fontSize="sm"
-                  >
-                    {location?.map((item) => {
-                      return (
-                        <option key={item.id} value={item.id}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Location"
+                        fontSize="sm"
+                      >
+                        {location?.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
 
                   <Text color="red" fontSize="xs">
                     {errors.formData?.locationId?.message}
@@ -699,20 +770,27 @@ export const DeliveryStatusConfirmation = ({
                 </Box>
                 <Box>
                   <FormLabel fontSize="sm">Account Title</FormLabel>
-                  <Select
-                    {...register("formData.accountTitles")}
-                    placeholder="Select Account"
-                    fontSize="sm"
-                    bgColor="#fff8dc"
-                  >
-                    {account?.map((item) => {
-                      return (
-                        <option key={item.id} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="formData.accountTitles"
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Account"
+                        fontSize="sm"
+                        bgColor="#fff8dc"
+                        isSearchable
+                      >
+                        {account?.map((item) => (
+                          <option key={item.id} value={item.name}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.accountTitles?.message}
                   </Text>
@@ -752,3 +830,118 @@ export const DeliveryStatusConfirmation = ({
     </>
   );
 };
+
+// old Modal Body
+{
+  /* <Stack spacing={2} p={6}>
+<Box>
+  <FormLabel fontSize="sm">Company</FormLabel>
+
+  <HStack w="full">
+    <Select
+      {...register("formData.companyId")}
+      defaultValue={
+        company?.find(
+          (x) => x.name === moveData[0]?.companyName
+        )?.id
+      }
+      placeholder="Select Company"
+      fontSize="sm"
+      onChange={(e) => {
+        setValue("formData.departmentId", "");
+        setValue("formData.locationId", "");
+        fetchDepartmentApi(e.target.value);
+      }}
+    >
+      {company?.map((item) => {
+        return (
+          <option key={item.id} value={item.id}>
+            {item.name}
+          </option>
+        );
+      })}
+    </Select>
+  </HStack>
+
+  <Text color="red" fontSize="xs">
+    {errors.formData?.companyId?.message}
+  </Text>
+</Box>
+
+<Box>
+  <FormLabel fontSize="sm">Department</FormLabel>
+  <Select
+    {...register("formData.departmentId")}
+    defaultValue={
+      department?.find(
+        (x) => x.name === moveData[0]?.departmentName
+      )?.id
+    }
+    placeholder="Select Department"
+    fontSize="sm"
+    onChange={(e) => {
+      setValue("formData.locationId", "");
+      fetchLocationApi(e.target.value);
+    }}
+  >
+    {department?.map((dept) => {
+      return (
+        <option key={dept.id} value={dept.id}>
+          {dept.name}
+        </option>
+      );
+    })}
+  </Select>
+
+  <Text color="red" fontSize="xs">
+    {errors.formData?.departmentId?.message}
+  </Text>
+</Box>
+
+<Box>
+  <FormLabel fontSize="sm">Location</FormLabel>
+  <Select
+    {...register("formData.locationId")}
+    defaultValue={
+      location?.find(
+        (x) => x.name === moveData[0]?.locationName
+      )?.id
+    }
+    placeholder="Select Location"
+    fontSize="sm"
+  >
+    {location?.map((item) => {
+      return (
+        <option key={item.id} value={item.id}>
+          {item.name}
+        </option>
+      );
+    })}
+  </Select>
+
+  <Text color="red" fontSize="xs">
+    {errors.formData?.locationId?.message}
+  </Text>
+</Box>
+<Box>
+  <FormLabel fontSize="sm">Account Title</FormLabel>
+  <Select
+    {...register("formData.accountTitles")}
+    placeholder="Select Account"
+    fontSize="sm"
+    bgColor="#fff8dc"
+  >
+    {account?.map((item) => {
+      return (
+        <option key={item.id} value={item.name}>
+          {item.name}
+        </option>
+      );
+    })}
+  </Select>
+  <Text color="red" fontSize="xs">
+    {errors.formData?.accountTitles?.message}
+  </Text>
+</Box>
+</Stack> */
+}

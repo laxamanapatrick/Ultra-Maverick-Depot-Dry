@@ -27,7 +27,7 @@ import apiClient from "../../../services/apiClient";
 import { ToastComponent } from "../../../components/Toast";
 import { decodeUser } from "../../../services/decode-user";
 // import COA from "../../coa-modal/COA";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
@@ -271,6 +271,7 @@ export const SaveConfirmation = ({
     setValue,
     reset,
     watch,
+    control,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -325,10 +326,26 @@ export const SaveConfirmation = ({
   }, [customerData, company, department, location]);
 
   const closeHandler = () => {
-    reset();
+    // reset();
+    // setValue("formData.accountTitles", "")
     setIsLoading(false);
     setHideButton(false);
     onClose();
+    setValue(
+      "formData",
+      {
+        companyId: company?.find((x) => x.name === customerData?.companyName)
+          ?.id,
+        departmentId: department?.find(
+          (x) => x.name === customerData?.departmentName
+        )?.id,
+        locationId: location?.find((x) => x.name === customerData?.locationName)
+          ?.id,
+        accountTitles: "",
+        addedBy: currentUser.userName,
+      },
+      { shouldValidate: true }
+    );
   };
 
   const saveSubmitHandler = (data) => {
@@ -423,34 +440,40 @@ export const SaveConfirmation = ({
             <ModalHeader textAlign="center">Charge Of Accounts</ModalHeader>
             <ModalCloseButton onClick={closeHandler} />
             <ModalBody>
-              <Stack spacing={2} p={6}>
+            <Stack spacing={2} p={6}>
                 <Box>
                   <FormLabel fontSize="sm">Company</FormLabel>
 
                   <HStack w="full">
-                    <Select
-                      {...register("formData.companyId")}
+                    <Controller
+                      control={control}
+                      name="formData.companyId"
                       defaultValue={
                         company?.find(
                           (x) => x.name === customerData?.companyName
                         )?.id
                       }
-                      placeholder="Select Company"
-                      fontSize="sm"
-                      onChange={(e) => {
-                        setValue("formData.departmentId", "");
-                        setValue("formData.locationId", "");
-                        fetchDepartmentApi(e.target.value);
-                      }}
-                    >
-                      {company?.map((item) => {
-                        return (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        );
-                      })}
-                    </Select>
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          value={field.value || ""}
+                          placeholder="Select Company"
+                          fontSize="sm"
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setValue("formData.departmentId", "");
+                            setValue("formData.locationId", "");
+                            fetchDepartmentApi(e.target.value);
+                          }}
+                        >
+                          {company?.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </Select>
+                      )}
+                    />
                   </HStack>
 
                   <Text color="red" fontSize="xs">
@@ -460,28 +483,34 @@ export const SaveConfirmation = ({
 
                 <Box>
                   <FormLabel fontSize="sm">Department</FormLabel>
-                  <Select
-                    {...register("formData.departmentId")}
+                  <Controller
+                    control={control}
+                    name="formData.departmentId"
                     defaultValue={
                       department?.find(
                         (x) => x.name === customerData?.departmentName
                       )?.id
                     }
-                    placeholder="Select Department"
-                    fontSize="sm"
-                    onChange={(e) => {
-                      setValue("formData.locationId", "");
-                      fetchLocationApi(e.target.value);
-                    }}
-                  >
-                    {department?.map((dept) => {
-                      return (
-                        <option key={dept.id} value={dept.id}>
-                          {dept.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Department"
+                        fontSize="sm"
+                        onChange={(e) => {
+                          field.onChange(e);
+                          setValue("formData.locationId", "");
+                          fetchLocationApi(e.target.value);
+                        }}
+                      >
+                        {department?.map((dept) => (
+                          <option key={dept.id} value={dept.id}>
+                            {dept.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
 
                   <Text color="red" fontSize="xs">
                     {errors.formData?.departmentId?.message}
@@ -490,24 +519,29 @@ export const SaveConfirmation = ({
 
                 <Box>
                   <FormLabel fontSize="sm">Location</FormLabel>
-                  <Select
-                    {...register("formData.locationId")}
+                  <Controller
+                    control={control}
+                    name="formData.locationId"
                     defaultValue={
                       location?.find(
                         (x) => x.name === customerData?.locationName
                       )?.id
                     }
-                    placeholder="Select Location"
-                    fontSize="sm"
-                  >
-                    {location?.map((item) => {
-                      return (
-                        <option key={item.id} value={item.id}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Location"
+                        fontSize="sm"
+                      >
+                        {location?.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
 
                   <Text color="red" fontSize="xs">
                     {errors.formData?.locationId?.message}
@@ -515,20 +549,27 @@ export const SaveConfirmation = ({
                 </Box>
                 <Box>
                   <FormLabel fontSize="sm">Account Title</FormLabel>
-                  <Select
-                    {...register("formData.accountTitles")}
-                    placeholder="Select Account"
-                    fontSize="sm"
-                    bgColor="#fff8dc"
-                  >
-                    {account?.map((item) => {
-                      return (
-                        <option key={item.id} value={item.name}>
-                          {item.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
+                  <Controller
+                    control={control}
+                    name="formData.accountTitles"
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Account"
+                        fontSize="sm"
+                        bgColor="#fff8dc"
+                        isSearchable
+                      >
+                        {account?.map((item) => (
+                          <option key={item.id} value={item.name}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
                   <Text color="red" fontSize="xs">
                     {errors.formData?.accountTitles?.message}
                   </Text>
