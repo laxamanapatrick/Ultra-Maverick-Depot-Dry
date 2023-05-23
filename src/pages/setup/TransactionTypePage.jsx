@@ -101,7 +101,7 @@ const TransactionTypePage = () => {
       formData: {
         id: "",
         transactionName: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       }
     }
   })

@@ -91,7 +91,7 @@ const LotManagementPage = () => {
         id: "",
         lotCategoryId: "",
         sectionName: "",
-        addedBy: currentUser.userName
+        addedBy: currentUser.fullName
       }
     }
   })
@@ -162,7 +162,7 @@ const LotManagementPage = () => {
       id: lot.id,
       lotCategoryId: lot.lotCategoryId,
       sectionName: lot.sectionName,
-      modifiedBy: currentUser.userName
+      modifiedBy: currentUser.fullName
     })
   }
 

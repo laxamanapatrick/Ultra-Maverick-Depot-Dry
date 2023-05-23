@@ -89,7 +89,7 @@ const ReasonPage = () => {
         id: "",
         menuId: "",
         reasonName: "",
-        addedBy: currentUser.userName
+        addedBy: currentUser.fullName
       }
     }
   })

@@ -120,7 +120,7 @@ const TransformationManagementPage = () => {
         itemDescription: "",
         uom: "",
         quantity: null,
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       }
     }
   })
@@ -191,7 +191,7 @@ const TransformationManagementPage = () => {
       itemDescription: formula.itemDescription,
       uom: formula.uom,
       quantity: formula.quantity,
-      modifiedBy: currentUser.userName
+      modifiedBy: currentUser.fullName
     })
   }
 

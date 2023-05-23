@@ -129,7 +129,7 @@ const CustomerManagementPage = () => {
         mobileNumber: "",
         leadMan: "",
         address: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       },
     },
   });
@@ -273,7 +273,7 @@ const CustomerManagementPage = () => {
       mobileNumber: cus.mobileNumber,
       leadMan: cus.leadMan,
       address: cus.address,
-      modifiedBy: currentUser.userName,
+      modifiedBy: currentUser.fullName,
     });
     setCodeDisable(true);
   };

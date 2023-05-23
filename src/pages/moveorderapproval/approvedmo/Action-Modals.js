@@ -31,6 +31,7 @@ import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 import moment from "moment";
+import './print-styles.css'
 
 const currentUser = decodeUser();
 
@@ -171,7 +172,17 @@ export const PrintModal = ({
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    // pageStyle: "@page { size: 8.5in 6.5in }",
+    // onBeforeGetContent: () => {
+    //   setIsLoading(true);
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve();
+    //     }, 500); // Delay to ensure the content is loaded before printing
+    //   });
+    // },
+    // onAfterPrint: () => {
+    //   setIsLoading(false);
+    // },
   });
 
   const printAndUpdate = () => {
@@ -211,11 +222,7 @@ export const PrintModal = ({
           {/* Printed  */}
           {/* <Box display="none"> */}
           <VStack
-            spacing={20}
-            w="93%"
-            ml={3}
             ref={componentRef}
-            // className="print-container"
           >
             {/* MO SLIP Print*/}
             <Flex w="full" flexDirection="column">
@@ -223,8 +230,6 @@ export const PrintModal = ({
                 w="full"
                 justifyContent="center"
                 flexDirection="column"
-                mt={2}
-                ml={2}
               >
                 <Image src="/images/RDF Logo.png" w="13%" />
                 <Text fontSize="6px">
@@ -232,27 +237,20 @@ export const PrintModal = ({
                   Philippines
                 </Text>
               </Flex>
-              {/* <Text fontSize="sm" fontWeight="semibold">
-                  Move Order Slip
-                </Text>
-                <Text fontSize="xs" fontWeight="semibold">
-                  (duplicate copy)
-                </Text> */}
 
-              <Flex justifyContent="space-between" my={1}>
+              <Flex justifyContent="space-between">
                 <Flex flexDirection="column">
                   <Barcode width={3} height={35} value={Number(orderId)} />
                   <Text fontSize="xs">
                     Date: {moment(dateToday).format("MM/DD/yyyy")}
                   </Text>
                 </Flex>
-                <Flex flexDirection="column" fontSize="xs">
+                <Flex flexDirection="column" fontSize="sm">
                   <Text>&nbsp;</Text>
                   <Text>Order ID: {orderId && orderId}</Text>
                   <Text>Warehouse: {`Dry and Liquid`}</Text>
                   <Text>Customer: {printData[0]?.farmName}</Text>
                   <Text>Address: {printData[0]?.farmName}</Text>
-                  {/* <Text>Batch Number: {printData[0]?.batchNo}</Text> */}
                 </Flex>
               </Flex>
 
@@ -261,7 +259,6 @@ export const PrintModal = ({
                   <Table
                     size="xs"
                     fontSize="xs"
-                    // className="print-table-container"
                   >
                     <Thead position="sticky" top={0} bg="#2f394a">
                       <Tr>
@@ -319,10 +316,13 @@ export const PrintModal = ({
                     </Tbody>
                   </Table>
                 </PageScrollReusable>
-                {/* <Flex justifyContent="start">
-                  <Text>Total Quantity: {totalQuantity && totalQuantity}</Text>
-                </Flex> */}
-                <Flex justifyContent="space-between" fontSize="xs" mt={6}>
+              </Flex>
+              <Flex
+                flexDirection="column"
+                justifyContent="space-between"
+                mt={6}
+              >
+                <Flex justifyContent="space-between" fontSize="xs">
                   <HStack>
                     <Text>Delivery Status:</Text>
                     <Text textDecoration="underline">
@@ -420,8 +420,13 @@ export const PrintModal = ({
           {`
             @media print {
               @page {
-                size: 8.5in 6.5in;
+                size: 8in 5.5in;
+                margin: 0;
               }
+              body {
+                width: 100%;
+              }
+            }
           `}
         </style> */}
       </ModalContent>

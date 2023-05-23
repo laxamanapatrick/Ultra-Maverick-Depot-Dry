@@ -94,7 +94,7 @@ const SupplierPage = () => {
         supplierCode: "",
         supplierName: "",
         supplierAddress: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       }
     }
   })

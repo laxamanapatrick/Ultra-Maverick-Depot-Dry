@@ -93,7 +93,7 @@ const UomManagementPage = () => {
         id: "",
         uoM_Code: "",
         uoM_Description: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       }
     }
   })
@@ -160,7 +160,7 @@ const UomManagementPage = () => {
       id: uom.id,
       uoM_Code: uom.uoM_Code,
       uoM_Description: uom.uoM_Description,
-      modifiedBy: currentUser.userName,
+      modifiedBy: currentUser.fullName,
     })
     setCodeDisable(true)
   }

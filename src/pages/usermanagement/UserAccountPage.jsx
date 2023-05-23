@@ -90,7 +90,7 @@ const UserAccountPage = () => {
         password: "",
         userRoleId: "",
         departmentId: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
         modifiedBy: ""
       }
     }
@@ -164,7 +164,7 @@ const UserAccountPage = () => {
       password: user.password,
       userRoleId: user.userRoleId,
       departmentId: user.departmentId,
-      modifiedBy: currentUser.userName
+      modifiedBy: currentUser.fullName
     }, { shouldValidate: true })
   }
 

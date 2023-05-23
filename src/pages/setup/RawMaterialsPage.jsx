@@ -132,7 +132,7 @@ const RawMaterialsPage = () => {
         uomId: "",
         bufferLevel: "",
         isExpirable: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       },
     },
   });
@@ -213,7 +213,7 @@ const RawMaterialsPage = () => {
       uomId: raw.uomId,
       bufferLevel: raw.bufferLevel,
       isExpirable: raw.isExpirable,
-      modifiedBy: currentUser.userName,
+      modifiedBy: currentUser.fullName,
     });
     setCodeDisable(true);
   };

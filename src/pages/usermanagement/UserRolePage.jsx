@@ -100,7 +100,7 @@ const UserRolePage = () => {
       formData: {
         id: "",
         roleName: "",
-        addedBy: currentUser.userName,
+        addedBy: currentUser.fullName,
       }
     }
   })
@@ -166,7 +166,7 @@ const UserRolePage = () => {
     setValue("formData", {
       id: role.id,
       roleName: role.roleName,
-      modifiedBy: currentUser.userName,
+      modifiedBy: currentUser.fullName,
     })
   }
 

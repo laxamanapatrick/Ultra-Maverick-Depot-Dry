@@ -141,7 +141,7 @@ export const ListofOrders = ({ setCurrentPage, currentPage, pagesCount,
         <Flex w='full' p={7} flexDirection='column'>
             <Flex w='full' justifyContent='space-between'>
                 <HStack w='auto'>
-                    <Badge bgColor='secondary' color='white' px={3}>Farm: </Badge>
+                    <Badge bgColor='secondary' color='white' px={3}>Customer: </Badge>
                     <Text fontSize='sm'>{farmName && farmName}</Text>
                 </HStack>
 
