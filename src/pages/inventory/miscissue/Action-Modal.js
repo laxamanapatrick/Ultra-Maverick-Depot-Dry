@@ -591,7 +591,7 @@ export const SaveConfirmation = ({
                   !watch("formData.locationId")
                 }
               >
-                Yes
+                Submit
               </Button>
               <Button
                 size="sm"
@@ -600,7 +600,7 @@ export const SaveConfirmation = ({
                 isLoading={isLoading}
                 disabled={isLoading}
               >
-                No
+                Close
               </Button>
             </ModalFooter>
           </ModalContent>

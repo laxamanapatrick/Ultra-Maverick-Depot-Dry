@@ -66,8 +66,10 @@ export const NewSidebar = ({
   sideBarHandler,
 }) => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [tagModules, setTagModules] = useState([]);
-  const { setSelectedMenu } = useContext(Context);
+  // const { setSelectedMenu } = useContext(Context);
+  const [currentPath, setCurrentPath] = useState("");
   const [subData, setSubData] = useState([]);
 
   const fetchTagged = () => {
@@ -107,7 +109,7 @@ export const NewSidebar = ({
   }, []);
 
   const mainHandler = (children, title) => {
-    fetchNotification()
+    fetchNotification();
     setSubData(children);
     // setSelectedModule(title)
   };
@@ -179,6 +181,12 @@ export const NewSidebar = ({
     },
   ];
 
+  useEffect(() => {
+    if (!subData?.some((x) => x.path === pathname) && pathname !== '/') {
+      navigate('/access-denied');
+    }
+  }, [pathname]);
+
   return (
     <>
       <Flex
@@ -190,97 +198,103 @@ export const NewSidebar = ({
       >
         <VStack>
           <SidebarHeader />
-          <Accordion allowToggle w="full">
-            {tagModules?.map((sidebarMenu) => (
-              <AccordionItem
-                key={sidebarMenu.path}
-                border="none"
-                boxShadow={
-                  pathname.includes(sidebarMenu.path)
-                    ? "0px 3px 10px 0px rgba(40,40,43,1)"
-                    : "none"
-                }
-                bgColor={pathname.includes(sidebarMenu.path) ? "accent" : ""}
-                fontWeight="semibold"
-              >
-                <AccordionButton
-                  onClick={() =>
-                    mainHandler(sidebarMenu.subMenu, sidebarMenu.title)
-                  }
-                  w="full"
-                  justifyContent="space-between"
-                >
-                  <Text fontWeight="semibold" textAlign="start" color="white">
-                    {sidebarMenu.mainMenu}
-                  </Text>
-                  <AccordionIcon
-                    color={
-                      pathname.includes(sidebarMenu.path)
-                        ? "#28282B"
-                        : "#e5e5e5"
-                    }
-                  />
-                </AccordionButton>
-                <AccordionPanel
+          <PageScrollReusable minHeight="auto" maxHeight="600px">
+            <Accordion allowToggle w="full">
+              {tagModules?.map((sidebarMenu) => (
+                <AccordionItem
+                  key={sidebarMenu.path}
+                  border="none"
                   boxShadow={
                     pathname.includes(sidebarMenu.path)
                       ? "0px 3px 10px 0px rgba(40,40,43,1)"
                       : "none"
                   }
-                  bgColor="secondary"
-                  p={4}
+                  bgColor={pathname.includes(sidebarMenu.path) ? "accent" : ""}
+                  fontWeight="semibold"
                 >
-                  <PageScrollReusable minHeight='auto' maxHeight='200px'>
-                    {subData?.map((sub, i) => (
-                      <Link to={sub.path} key={sub.path}>
-                        <HStack
-                          justifyContent="space-between"
-                          w="97%"
-                          cursor="pointer"
-                          // onClick={sideBarHandler}
-                          p={1}
-                          m={1}
-                          fontSize="sm"
-                          textAlign="center"
-                          color={
-                            pathname.includes(sub.path) ? "black" : "white"
-                          }
-                          bgColor={
-                            pathname.includes(sub.path) ? "accent" : "none"
-                          }
-                          // border="1px"
-                          // borderStyle={
-                          //   pathname.includes(sub.path) ? "groove" : "dashed"
-                          // }
-                          _hover={{
-                            borderStyle: "groove",
-                            boxShadow: "0px 3px 10px 0px rgba(40,40,43,1)",
-                            bgColor: "accent",
-                            color: "myBlack",
-                          }}
+                  <AccordionButton
+                    onClick={() =>
+                      mainHandler(sidebarMenu.subMenu, sidebarMenu.title)
+                    }
+                    w="full"
+                    justifyContent="space-between"
+                  >
+                    <Text fontWeight="semibold" textAlign="start" color="white">
+                      {sidebarMenu.mainMenu}
+                    </Text>
+                    <AccordionIcon
+                      color={
+                        pathname.includes(sidebarMenu.path)
+                          ? "#28282B"
+                          : "#e5e5e5"
+                      }
+                    />
+                  </AccordionButton>
+                  <AccordionPanel
+                    boxShadow={
+                      pathname.includes(sidebarMenu.path)
+                        ? "0px 3px 10px 0px rgba(40,40,43,1)"
+                        : "none"
+                    }
+                    bgColor="secondary"
+                    p={4}
+                  >
+                    <PageScrollReusable minHeight="auto" maxHeight="200px">
+                      {subData?.map((sub, i) => (
+                        <Link
+                          to={sub.path}
+                          key={sub.path}
+                          onClick={() => setCurrentPath(sub.path)}
                         >
-                          <Text>{sub.title}</Text>
-                          {navBars.map((nav, i) =>
-                            !pathname.includes(sub.path)
-                              ? sub.title === nav.title && (
-                                  <Badge key={i} bgColor="danger">
-                                    <Text color="white">
-                                      {nav.notifcation === 0
-                                        ? ""
-                                        : nav.notifcation}
-                                    </Text>
-                                  </Badge>
-                                )
-                              : ""
-                          )}
-                        </HStack>
-                      </Link>
-                    ))}
-                  </PageScrollReusable>
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                          <HStack
+                            justifyContent="space-between"
+                            w="97%"
+                            cursor="pointer"
+                            // onClick={sideBarHandler}
+                            p={1}
+                            m={1}
+                            fontSize="sm"
+                            textAlign="center"
+                            color={
+                              pathname.includes(sub.path) ? "black" : "white"
+                            }
+                            bgColor={
+                              pathname.includes(sub.path) ? "accent" : "none"
+                            }
+                            // border="1px"
+                            // borderStyle={
+                            //   pathname.includes(sub.path) ? "groove" : "dashed"
+                            // }
+                            _hover={{
+                              borderStyle: "groove",
+                              boxShadow: "0px 3px 10px 0px rgba(40,40,43,1)",
+                              bgColor: "accent",
+                              color: "myBlack",
+                            }}
+                          >
+                            <Text>{sub.title}</Text>
+                            {navBars.map((nav, i) =>
+                              !pathname.includes(sub.path)
+                                ? sub.title === nav.title && (
+                                    <Badge key={i} bgColor="danger">
+                                      <Text color="white">
+                                        {nav.notifcation === 0
+                                          ? ""
+                                          : nav.notifcation}
+                                      </Text>
+                                    </Badge>
+                                  )
+                                : ""
+                            )}
+                          </HStack>
+                        </Link>
+                      ))}
+                    </PageScrollReusable>
+                  </AccordionPanel>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </PageScrollReusable>
         </VStack>
         <SidebarFooter />
       </Flex>

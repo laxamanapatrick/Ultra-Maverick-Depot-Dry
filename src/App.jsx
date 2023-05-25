@@ -116,6 +116,8 @@ import Sandbox from "./sandbox/Sandbox";
 import LaboratoryTesting from "./pages/LaboratoryTesting";
 import ForTesting from "./pages/laboratorytesting/For-Testing";
 
+import AccessDenied from "./components/Access-Denied";
+
 const fetchNotificationApi = async () => {
   const res = await apiClient.get(`Receiving/GetNotification`);
   return res.data;
@@ -627,9 +629,11 @@ function App() {
               path="import-supplier"
               element={user ? <ImportSupplier /> : <Navigate to="/login" />}
             />
-             <Route
+            <Route
               path="import-customer-management"
-              element={user ? <ImportCustomerManagement /> : <Navigate to="/login" />}
+              element={
+                user ? <ImportCustomerManagement /> : <Navigate to="/login" />
+              }
             />
           </Route>
 
@@ -715,47 +719,33 @@ function App() {
                 user ? <TransactionTypePage /> : <Navigate to="/login" />
               }
             />
-              <Route
+            <Route
               path="commodity-type"
-              element={
-                user ? <CommodityType /> : <Navigate to="/login" />
-              }
+              element={user ? <CommodityType /> : <Navigate to="/login" />}
             />
             <Route
               path="sample-type"
-              element={
-                user ? <SampleType /> : <Navigate to="/login" />
-              }
+              element={user ? <SampleType /> : <Navigate to="/login" />}
             />
             <Route
               path="type-of-swab"
-              element={
-                user ? <TypeOfSwab /> : <Navigate to="/login" />
-              }
+              element={user ? <TypeOfSwab /> : <Navigate to="/login" />}
             />
             <Route
               path="analysis"
-              element={
-                user ? <Analysis /> : <Navigate to="/login" />
-              }
+              element={user ? <Analysis /> : <Navigate to="/login" />}
             />
             <Route
               path="parameters"
-              element={
-                user ? <Parameters /> : <Navigate to="/login" />
-              }
+              element={user ? <Parameters /> : <Navigate to="/login" />}
             />
             <Route
               path="product-condition"
-              element={
-                user ? <ProductCondition /> : <Navigate to="/login" />
-              }
+              element={user ? <ProductCondition /> : <Navigate to="/login" />}
             />
             <Route
               path="disposition"
-              element={
-                user ? <Dispotion /> : <Navigate to="/login" />
-              }
+              element={user ? <Dispotion /> : <Navigate to="/login" />}
             />
           </Route>
 
@@ -841,6 +831,7 @@ function App() {
           )}
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/access-denied" element={<AccessDenied />} />
       </Routes>
 
       {isArrayCancel && (
@@ -865,7 +856,6 @@ function Layout({
   moveOrderIdOnApp,
   userFullname,
 }) {
-
   return (
     <Flex bgColor="white" h="100vh">
       {!isSidebarVisible && (
