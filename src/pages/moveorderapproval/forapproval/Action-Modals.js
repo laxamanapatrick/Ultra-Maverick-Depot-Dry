@@ -248,6 +248,7 @@ export const ApproveModal = ({
     const submitOrderNos = orderNos?.map((o) => {
       return {
         orderNo: o,
+        checkedBy: currentUser?.fullName
       };
     });
     try {
