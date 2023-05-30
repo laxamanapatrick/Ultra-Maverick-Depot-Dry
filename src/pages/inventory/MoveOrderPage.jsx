@@ -87,6 +87,7 @@ const MoveOrderPage = ({
   setMoveOrderIdOnApp,
 }) => {
   const [farmName, setFarmName] = useState("");
+  const [customerId, setCustomerId] = useState("")
 
   const [deliveryStatus, setDeliveryStatus] = useState("");
   // const [batchNumber, setBatchNumber] = useState('')
@@ -136,6 +137,7 @@ const MoveOrderPage = ({
   const fetchMoveOrder = () => {
     fetchMoveOrderApi(currentPage).then((res) => {
       setFarmName(res?.orders[0]?.farm);
+      setCustomerId(res?.orders[0]?.customerId)
       setPageTotal(res.totalCount);
       // setPaginationData(res);
     });
@@ -355,7 +357,7 @@ const MoveOrderPage = ({
           <ListofOrders
             orderListData={orderListData}
             setItemCode={setItemCode}
-            highlighterId={highlighterId}
+            highlighterId={highlighterId} customerId={customerId}
             setHighlighterId={setHighlighterId}
             setQtyOrdered={setQtyOrdered}
             setPreparedQty={setPreparedQty}

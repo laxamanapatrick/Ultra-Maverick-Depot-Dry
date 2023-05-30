@@ -143,7 +143,7 @@ export const ListofApprovedDate = ({
     if (preparedLength > 0) {
       ToastComponent(
         "Warning",
-        "This order currently has prepared items, please cancel all preapred items first.",
+        "This customer's order currently has prepared items, please cancel all preapred items first.",
         "warning",
         toast
       );

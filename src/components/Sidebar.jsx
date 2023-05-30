@@ -181,11 +181,11 @@ export const NewSidebar = ({
     },
   ];
 
-  useEffect(() => {
-    if (!subData?.some((x) => x.path === pathname) && pathname !== '/') {
-      navigate('/access-denied');
-    }
-  }, [pathname]);
+  // useEffect(() => {
+  //   if (!subData?.some((x) => x.path === pathname) && pathname !== "/") {
+  //     navigate("/access-denied");
+  //   }
+  // }, [pathname]);
 
   return (
     <>

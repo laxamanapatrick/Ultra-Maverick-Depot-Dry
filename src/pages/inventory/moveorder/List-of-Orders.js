@@ -20,19 +20,23 @@ import {
   Thead,
   Tr,
   useDisclosure,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { MdOutlinePendingActions } from "react-icons/md";
+import { MdDeleteForever, MdOutlinePendingActions } from "react-icons/md";
 import { GoArrowSmallRight } from "react-icons/go";
 import { BsCheck2Circle } from "react-icons/bs";
 import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import moment from "moment";
 import { RiQuestionnaireLine } from "react-icons/ri";
+import { ToastComponent } from "../../../components/Toast";
+import Swal from "sweetalert2";
 
 export const ListofOrders = ({
   orderListData,
   setItemCode,
   highlighterId,
+  customerId,
   setHighlighterId,
   setQtyOrdered,
   setPreparedQty,
@@ -41,8 +45,10 @@ export const ListofOrders = ({
   setPageDisable,
   preparedData,
   preparingStatus,
-  setButtonChanger
+  setButtonChanger,
 }) => {
+  const toast = useToast();
+
   const TableHead = [
     "Line",
     "Order Date",
@@ -56,6 +62,7 @@ export const ListofOrders = ({
     "Quantity Order",
     "Prepared Qty",
     "Status",
+    "Void",
   ];
 
   const orderCategories = orderListData?.map((item) => {
@@ -93,6 +100,45 @@ export const ListofOrders = ({
   };
 
   //   orderListData, ...orderListData?.map(item => item.quantityOrder), ...orderListData?.map(item => item.preparedQuantity)
+
+  const handleDelete = (preparedQty) => {
+    if (Number(preparedQty) > 0) {
+      ToastComponent(
+        "Warning",
+        "You already have prepared items for this order, please cancel them first.",
+        "warning",
+        toast
+      );
+    } else {
+      Swal.fire({
+        title: `VOID`,
+        text: `Are you sure you want to delete this order?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      }).then((res) => {
+        if (res.isConfirmed) {
+          alert(highlighterId, customerId);
+          // apiClient
+          //   .put(`LabTestMasterList/UpdateAnalysisStatus`, {
+          //     id: id,
+          //     isActive: !status,
+          //     modifiedBy: currentUser.fullName,
+          //   })
+          //   .then((res) => {
+          //     console.log(res);
+          //     fetchAnalysis();
+          //     ToastComponent("Success", res?.data, "success", toast);
+          //   })
+          //   .catch((err) => {
+          //     console.log(err);
+          //   });
+        }
+      });
+    }
+  };
 
   return (
     <VStack w="full" spacing={0} justifyContent="center" mt={10}>
@@ -172,6 +218,14 @@ export const ListofOrders = ({
                         title="Pending"
                       />
                     )}
+                  </Td>
+                  <Td>
+                    <MdDeleteForever
+                      color="red"
+                      fontSize="20px"
+                      title="Delete this order?"
+                      onClick={() => handleDelete(list.preparedQuantity)}
+                    />
                   </Td>
                 </Tr>
               ))}
