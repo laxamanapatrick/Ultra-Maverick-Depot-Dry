@@ -172,6 +172,9 @@ export const PrintModal = ({
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    // documentTitle: 'Print Document',
+    // suppressAfterPrint: true,
+    // copyStyles: true
     // onBeforeGetContent: () => {
     //   setIsLoading(true);
     //   return new Promise((resolve) => {
@@ -184,6 +187,12 @@ export const PrintModal = ({
     //   setIsLoading(false);
     // },
   });
+
+  // useEffect(() => {
+  //   handlePrint({
+  //     copies: 4,
+  //   });
+  // }, []);
 
   const printAndUpdate = () => {
     setIsLoading(true);

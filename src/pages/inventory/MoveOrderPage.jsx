@@ -366,6 +366,7 @@ const MoveOrderPage = ({
             preparedData={preparedData}
             preparingStatus={preparingStatus}
             setButtonChanger={setButtonChanger}
+            fetchOrderList={fetchOrderList}
           />
         ) : (
           ""

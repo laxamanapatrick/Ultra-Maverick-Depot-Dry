@@ -313,15 +313,27 @@ export const ForApprovalMoveOrder = ({
         <ViewModal
           isOpen={isView}
           onClose={closeView}
-          id={orderId}
           viewData={viewData}
+          orderNo={orderId}
+          fetchForApprovalMO={fetchForApprovalMO}
+          fetchNotification={fetchNotification}
+          totalQuantity={totalQuantity}
+          orderNos={orderId}
+          setOrderNos={setOrderNos}
+          openApprove={openApprove}
+          isApprove={isApprove}
+          closeApprove={closeApprove}
+          openReject={openReject}
+          isReject={isReject}
+          closeReject={closeReject}
         />
       )}
       {isApprove && (
         <ApproveModal
           isOpen={isApprove}
           onClose={closeApprove}
-          orderNo={orderId}
+          closeView={closeView}
+          // orderNo={orderId}
           fetchForApprovalMO={fetchForApprovalMO}
           printData={viewData}
           fetchNotification={fetchNotification}
@@ -334,6 +346,7 @@ export const ForApprovalMoveOrder = ({
         <RejectModal
           isOpen={isReject}
           onClose={closeReject}
+          closeView={closeView}
           id={orderId}
           fetchForApprovalMO={fetchForApprovalMO}
           fetchNotification={fetchNotification}

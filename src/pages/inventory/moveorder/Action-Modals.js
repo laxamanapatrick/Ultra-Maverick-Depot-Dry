@@ -28,6 +28,7 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
+import moment from "moment";
 
 const currentUser = decodeUser();
 
@@ -826,6 +827,115 @@ export const DeliveryStatusConfirmation = ({
             </ModalFooter>
           </ModalContent>
         </form>
+      </Modal>
+    </>
+  );
+};
+
+export const VoidConfirmation = ({ isOpen, onClose, customerId, orderId, fetchOrderList }) => {
+  const toast = useToast();
+  const [reasons, setReasons] = useState([]);
+  const [reasonSubmit, setReasonSubmit] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchReasonsApi = async () => {
+    const res = await apiClient.get(`Reason/GetAllActiveReason`);
+    return res.data;
+  };
+
+  const fetchReasons = () => {
+    fetchReasonsApi().then((res) => {
+      setReasons(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchReasons();
+
+    return () => {
+      setReasons([]);
+    };
+  }, []);
+
+  const submitHandler = () => {
+    try {
+      setIsLoading(true);
+      const res = apiClient
+        .post(`CancelledOrders/CancelOrder`, {
+          cancellationDate: moment(new Date()).format("yyyy-MM-DD"),
+          reason: reasonSubmit,
+          orderId: orderId,
+          customerId: customerId,
+        })
+        .then((res) => {
+          setIsLoading(false);
+          ToastComponent("Success", "Order has been voided", "success", toast);
+          fetchOrderList()
+          onClose()
+        })
+        .catch((err) => {
+          setIsLoading(false);
+          ToastComponent("Error", "Cancel failed", "error", toast);
+        });
+    } catch (error) {}
+  };
+
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
+        <ModalContent>
+          <ModalHeader>
+            <Flex justifyContent="center">
+              <RiQuestionnaireLine fontSize="35px" />
+            </Flex>
+          </ModalHeader>
+          <ModalCloseButton onClick={onClose} />
+
+          <ModalBody>
+            <VStack justifyContent="center">
+              <Text>Are you sure you want to void this item?</Text>
+              {reasons?.length > 0 ? (
+                <Select
+                  onChange={(e) => setReasonSubmit(e.target.value)}
+                  w="70%"
+                  bgColor="#fff8dc"
+                  placeholder="Please select a reason"
+                >
+                  {reasons?.map((reason, i) => (
+                    <option key={i} value={reason.reasonName}>
+                      {reason.reasonName}
+                    </option>
+                  ))}
+                </Select>
+              ) : (
+                "loading"
+              )}
+            </VStack>
+          </ModalBody>
+
+          <ModalFooter>
+            <ButtonGroup size="sm" mt={3}>
+              <Button
+                onClick={submitHandler}
+                isLoading={isLoading}
+                disabled={isLoading || !reasonSubmit}
+                colorScheme="blue"
+                px={4}
+              >
+                Yes
+              </Button>
+              <Button
+                onClick={onClose}
+                isLoading={isLoading}
+                disabled={isLoading}
+                colorScheme="red"
+                px={4}
+              >
+                No
+              </Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </ModalContent>
       </Modal>
     </>
   );

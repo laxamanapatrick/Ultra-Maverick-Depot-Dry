@@ -10,3 +10,5 @@ export const hubURL =
 //Live
 // 'http://10.10.2.6:8002/moveOrder'
 
+//Azure Version
+// 'https://ultramaverickdry.azurewebsites.net/moveOrder'

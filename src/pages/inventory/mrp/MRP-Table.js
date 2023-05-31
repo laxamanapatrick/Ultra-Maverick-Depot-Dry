@@ -232,7 +232,7 @@ export const MRPTable = ({
                     {/* <Th color='white'>Last Used</Th>
                                         <Th color='white'>Movement Status</Th>
                                         <Th color='white'>Classification ABC</Th> */}
-                    <Th color="white">Suggested PO</Th>
+                    <Th color="white">Waiting for Receiving</Th>
                     <Th color="white">Average Issuance</Th>
                     <Th color="white">Days Level</Th>
                   </>

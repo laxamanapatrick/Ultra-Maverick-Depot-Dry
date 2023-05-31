@@ -34,8 +34,8 @@ export const EditModal = ({
   isOpen,
   onClose,
   editData,
-  setCurrentPage,
-  currentPage,
+  // setCurrentPage,
+  // currentPage,
   fetchOrders,
 }) => {
   const [quantitySubmit, setQuantitySubmit] = useState("");
@@ -62,7 +62,7 @@ export const EditModal = ({
           ToastComponent("Success", "Order has been edited!", "success", toast);
           onClose();
           fetchOrders();
-          setCurrentPage(currentPage);
+          // setCurrentPage(currentPage);
         })
         .catch((err) => {
           ToastComponent("Error", err.response.data, "error", toast);
@@ -173,8 +173,8 @@ export const CancelModalConfirmation = ({
   isOpen,
   onClose,
   cancelId,
-  setCurrentPage,
-  currentPage,
+  // setCurrentPage,
+  // currentPage,
   fetchOrders,
   orders,
   fetchNotification,
@@ -222,7 +222,7 @@ export const CancelModalConfirmation = ({
           isCancelBy: currentUser.fullName,
         })
         .then((res) => {
-          setCurrentPage(currentPage);
+          // setCurrentPage(currentPage);
           ToastComponent(
             "Success",
             "Order has been cancelled!",
@@ -304,8 +304,8 @@ export const ScheduleConfirmation = ({
   setCheckedItems,
   farmName,
   fetchOrders,
-  setCurrentPage,
-  currentPage,
+  // setCurrentPage,
+  // currentPage,
   fetchNotification,
 }) => {
   const [preparationDate, setPreparationDate] = useState(new Date());
@@ -395,8 +395,8 @@ export const ScheduleConfirmation = ({
           checkedItems={checkedItems}
           setCheckedItems={setCheckedItems}
           fetchOrders={fetchOrders}
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
+          // setCurrentPage={setCurrentPage}
+          // currentPage={currentPage}
           fetchNotification={fetchNotification}
         />
       )}
@@ -412,8 +412,8 @@ const ScheduleValidation = ({
   checkedItems,
   setCheckedItems,
   fetchOrders,
-  setCurrentPage,
-  currentPage,
+  // setCurrentPage,
+  // currentPage,
   fetchNotification,
 }) => {
   const toast = useToast();
@@ -441,7 +441,7 @@ const ScheduleValidation = ({
           fetchNotification();
           onClose();
           closeSchedule();
-          setCurrentPage(currentPage);
+          // setCurrentPage(currentPage);
           setCheckedItems([]);
           fetchOrders();
           setIsLoading(false);

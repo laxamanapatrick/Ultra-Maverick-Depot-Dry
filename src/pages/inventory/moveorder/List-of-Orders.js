@@ -31,6 +31,7 @@ import moment from "moment";
 import { RiQuestionnaireLine } from "react-icons/ri";
 import { ToastComponent } from "../../../components/Toast";
 import Swal from "sweetalert2";
+import { VoidConfirmation } from "./Action-Modals";
 
 export const ListofOrders = ({
   orderListData,
@@ -40,12 +41,12 @@ export const ListofOrders = ({
   setHighlighterId,
   setQtyOrdered,
   setPreparedQty,
-  orderId,
   setWarehouseId,
   setPageDisable,
   preparedData,
   preparingStatus,
   setButtonChanger,
+  fetchOrderList
 }) => {
   const toast = useToast();
 
@@ -101,42 +102,49 @@ export const ListofOrders = ({
 
   //   orderListData, ...orderListData?.map(item => item.quantityOrder), ...orderListData?.map(item => item.preparedQuantity)
 
+  const {
+    isOpen: isVoid,
+    onClose: closeVoid,
+    onOpen: openVoid,
+  } = useDisclosure();
+
   const handleDelete = (preparedQty) => {
     if (Number(preparedQty) > 0) {
       ToastComponent(
         "Warning",
-        "You already have prepared items for this order, please cancel them first.",
+        "You already have prepared items for this item code, please cancel them first.",
         "warning",
         toast
       );
     } else {
-      Swal.fire({
-        title: `VOID`,
-        text: `Are you sure you want to delete this order?`,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes",
-      }).then((res) => {
-        if (res.isConfirmed) {
-          alert(highlighterId, customerId);
-          // apiClient
-          //   .put(`LabTestMasterList/UpdateAnalysisStatus`, {
-          //     id: id,
-          //     isActive: !status,
-          //     modifiedBy: currentUser.fullName,
-          //   })
-          //   .then((res) => {
-          //     console.log(res);
-          //     fetchAnalysis();
-          //     ToastComponent("Success", res?.data, "success", toast);
-          //   })
-          //   .catch((err) => {
-          //     console.log(err);
-          //   });
-        }
-      });
+      openVoid();
+      // Swal.fire({
+      //   title: `VOID`,
+      //   text: `Are you sure you want to delete this order?`,
+      //   icon: "question",
+      //   showCancelButton: true,
+      //   confirmButtonColor: "#3085d6",
+      //   cancelButtonColor: "#d33",
+      //   confirmButtonText: "Yes",
+      // }).then((res) => {
+      //   if (res.isConfirmed) {
+      //     alert(highlighterId, customerId);
+      // apiClient
+      //   .put(`LabTestMasterList/UpdateAnalysisStatus`, {
+      //     id: id,
+      //     isActive: !status,
+      //     modifiedBy: currentUser.fullName,
+      //   })
+      //   .then((res) => {
+      //     console.log(res);
+      //     fetchAnalysis();
+      //     ToastComponent("Success", res?.data, "success", toast);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      //   }
+      // });
     }
   };
 
@@ -232,6 +240,15 @@ export const ListofOrders = ({
           </Tbody>
         </Table>
       </PageScrollReusable>
+      {isVoid && (
+        <VoidConfirmation
+          isOpen={isVoid}
+          onClose={closeVoid}
+          customerId={customerId}
+          orderId={highlighterId}
+          fetchOrderList={fetchOrderList}
+        />
+      )}
     </VStack>
   );
 };

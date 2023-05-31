@@ -120,7 +120,7 @@ export const RawMaterialsInformation = ({
 
   const newDate = new Date();
   const maxDate = moment(newDate).format("yyyy-MM-DD");
-  const minDate = moment(newDate.setDate(newDate.getDate() - 7)).format(
+  const minDate = moment(newDate.setDate(newDate.getDate() - 31)).format(
     "yyyy-MM-DD"
   );
 

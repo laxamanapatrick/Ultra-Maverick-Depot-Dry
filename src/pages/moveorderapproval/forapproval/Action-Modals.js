@@ -35,7 +35,23 @@ import Barcode from "react-barcode";
 
 const currentUser = decodeUser();
 
-export const ViewModal = ({ isOpen, onClose, viewData }) => {
+export const ViewModal = ({
+  isOpen,
+  onClose,
+  viewData,
+  fetchForApprovalMO,
+  fetchNotification,
+  totalQuantity,
+  orderNo,
+  orderNos,
+  setOrderNos,
+  openApprove,
+  isApprove,
+  closeApprove,
+  openReject,
+  isReject,
+  closeReject,
+}) => {
   const TableHeads = [
     "Line",
     "Barcode",
@@ -44,6 +60,15 @@ export const ViewModal = ({ isOpen, onClose, viewData }) => {
     "Quantity",
     "Expiration Date",
   ];
+
+  const handleApprove = () => {
+    openApprove()
+    setOrderNos([orderNo])
+  }
+
+  const handleReject = () => {
+    openReject()
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={() => {}} isCentered size="4xl">
@@ -76,7 +101,11 @@ export const ViewModal = ({ isOpen, onClose, viewData }) => {
                       <Td>{item.itemCode}</Td>
                       <Td>{item.itemDescription}</Td>
                       <Td>{item.quantity}</Td>
-                      <Td>{item.expiration ? moment(item.expiration).format("MM/DD/yyyy") : 'Not Expirable'}</Td>
+                      <Td>
+                        {item.expiration
+                          ? moment(item.expiration).format("MM/DD/yyyy")
+                          : "Not Expirable"}
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
@@ -87,12 +116,38 @@ export const ViewModal = ({ isOpen, onClose, viewData }) => {
 
         <ModalFooter>
           <ButtonGroup size="sm" mt={7}>
-            <Button colorScheme="gray" onClick={onClose}>
-              Close
+            <Button colorScheme="blue" onClick={handleApprove}>
+              Approve
+            </Button>
+            <Button colorScheme="red" onClick={handleReject}>
+              Reject
             </Button>
           </ButtonGroup>
         </ModalFooter>
       </ModalContent>
+
+      {isApprove && (
+        <ApproveModal
+          isOpen={isApprove}
+          onClose={closeApprove}
+          // orderNo={orderId}
+          fetchForApprovalMO={fetchForApprovalMO}
+          printData={viewData}
+          fetchNotification={fetchNotification}
+          totalQuantity={totalQuantity}
+          orderNos={orderNos}
+          setOrderNos={setOrderNos}
+        />
+      )}
+      {isReject && (
+        <RejectModal
+          isOpen={isReject}
+          onClose={closeReject}
+          id={orderNo}
+          fetchForApprovalMO={fetchForApprovalMO}
+          fetchNotification={fetchNotification}
+        />
+      )}
     </Modal>
   );
 };
@@ -103,6 +158,7 @@ export const RejectModal = ({
   id,
   fetchForApprovalMO,
   fetchNotification,
+  closeView
 }) => {
   const [reasonSubmit, setReasonSubmit] = useState("");
 
@@ -150,6 +206,7 @@ export const RejectModal = ({
           fetchForApprovalMO();
           setIsLoading(false);
           onClose();
+          closeView()
         })
         .catch((err) => {
           ToastComponent(
@@ -222,13 +279,14 @@ export const RejectModal = ({
 export const ApproveModal = ({
   isOpen,
   onClose,
-  orderNo,
+  // orderNo,
   fetchForApprovalMO,
   printData,
   fetchNotification,
   totalQuantity,
   orderNos,
   setOrderNos,
+  closeView
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -248,7 +306,7 @@ export const ApproveModal = ({
     const submitOrderNos = orderNos?.map((o) => {
       return {
         orderNo: o,
-        checkedBy: currentUser?.fullName
+        checkedBy: currentUser?.fullName,
       };
     });
     try {
@@ -266,6 +324,7 @@ export const ApproveModal = ({
           fetchForApprovalMO();
           setIsLoading(false);
           onClose();
+          closeView()
           // try {
           //   const res = apiClient
           //     .put(`Ordering/UpdatePrintStatus`, { orderNo: orderNo })

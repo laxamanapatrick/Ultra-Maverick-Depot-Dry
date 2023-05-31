@@ -27,8 +27,6 @@ import { ConfirmFiltteredModal } from './Confirm-Filttered-Modal'
 
 export const ErrorModal = ({ isOpen, onClose, errorData, isLoading, fetchNotification }) => {
 
-    console.log(errorData)
-
     const { isOpen: isConfirm, onClose: closeConfirm, onOpen: openConfirm } = useDisclosure()
 
     const duplicateList = errorData?.duplicateList?.map(list => {

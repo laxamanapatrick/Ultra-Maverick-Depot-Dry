@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -84,6 +84,23 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
     }
   };
 
+  const [customers, setCustomers] = useState([]);
+
+  const fetchActiveCustomersApi = async () => {
+    try {
+      const res = await apiClient.get(`Customer/GetAllActiveCustomer`);
+      setCustomers(res.data);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    fetchActiveCustomersApi();
+
+    return () => {
+      setCustomers([]);
+    };
+  }, []);
+
   const resultArray = excelData.map((item) => {
     let newOrderDate = DateConverter(item.order_date);
     let newDateNeeded = DateConverter(item.date_needed);
@@ -92,6 +109,8 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
       transactId: item?.transaction_id,
       customerName: item?.customer_name,
       customerPosition: item?.customer_position,
+      customerId: customers?.find((x) => x.customerCode === item?.customerName)
+        ?.id,
       farmType: item?.farm_type,
       farmCode: item?.farm_code,
       farmName: item?.farm_name,
@@ -114,7 +133,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
       try {
         setIsLoading(true);
         const res = apiClient
-          .post(  
+          .post(
             `Ordering/AddNewOrders`,
             resultArray.map((item) => ({
               transactId: item?.transactId,
@@ -138,7 +157,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
           )
           .then((res) => {
             ToastComponent("Success", "Orders Imported!", "success", toast);
-            fetchNotification()
+            fetchNotification();
             setIsLoading(false);
             fileClear.current.value = "";
             setExcelData([]);

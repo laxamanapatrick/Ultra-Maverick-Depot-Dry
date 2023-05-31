@@ -35,3 +35,13 @@ export default axios.create({
 //         "Authorization": 'Bearer '+user?.token
 //     }
 // })
+
+// Azure Version
+
+// export default axios.create({
+//     baseURL: "https://ultramaverickdry.azurewebsites.net/api/",
+//     headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": 'Bearer '+user?.token
+//     }
+// })
