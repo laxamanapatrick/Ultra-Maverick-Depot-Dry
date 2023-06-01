@@ -134,7 +134,7 @@ const ImportRawMaterialsPage = () => {
         itemCategoryId: functionItemCategory(item.itemCategory),
         bufferLevel: Number(item.bufferLevel),
         isExpirable: item.isExpirable === 'Yes' ? true : false,
-        addedBy: currentUser.fullName
+        addedBy: currentUser?.fullName
       }))
       try {
         const res = apiClient.post('Import/AddNewRawMaterialManual',

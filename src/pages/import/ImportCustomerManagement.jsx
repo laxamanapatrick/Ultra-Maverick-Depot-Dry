@@ -107,7 +107,7 @@ const ImportCustomerManagement = () => {
       customerName: item.customer_name,
       farmTypeId: item.customer_type,
       companyCode: item.company_code,
-      companyName: item.company__name,
+      companyName: item.company_name,
       departmentName: item.department_name,
       locationName: item.location_name,
       mobileNumber: item.mobile_number,
@@ -115,6 +115,8 @@ const ImportCustomerManagement = () => {
       address: item.address,
     };
   });
+
+  console.log(excelData)
 
   const functionCustomerType = (farmName) => {
     const customerTypeId = customerTypeData?.find(
@@ -137,7 +139,7 @@ const ImportCustomerManagement = () => {
         mobileNumber: item.mobileNumber.toString(),
         leadMan: item.leadMan,
         address: item.address,
-        addedBy: currentUser.fullName,
+        addedBy: currentUser?.fullName,
       }));
       console.log(submitData)
       try {
@@ -211,7 +213,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -221,7 +223,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -231,7 +233,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materias . is uploaded.
+                          customers . is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -241,7 +243,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -251,7 +253,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -261,7 +263,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -271,7 +273,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -281,7 +283,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -291,7 +293,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>
@@ -301,7 +303,7 @@ const ImportCustomerManagement = () => {
                       ) : (
                         <Text fontWeight="semibold" color="danger">
                           Data missing. Please make sure correct excel file for
-                          raw materials is uploaded.
+                          customers is uploaded.
                         </Text>
                       )}
                     </Td>

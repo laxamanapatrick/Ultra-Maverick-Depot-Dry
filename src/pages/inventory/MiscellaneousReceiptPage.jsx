@@ -55,6 +55,7 @@ const MiscellaneousReceiptPage = () => {
   });
   const [details, setDetails] = useState("");
   const [remarks, setRemarks] = useState("");
+  const [reason, setReason] = useState("");
   const [transactionDate, setTransactionDate] = useState("");
 
   const [listDataTempo, setListDataTempo] = useState([]);
@@ -209,6 +210,8 @@ const MiscellaneousReceiptPage = () => {
               setIsExpirable={setIsExpirable}
               transactionDate={transactionDate}
               setTransactionDate={setTransactionDate}
+              reason={reason}
+              setReason={setReason}
             />
             {listDataTempo.length > 0 ? (
               <>
@@ -237,6 +240,9 @@ const MiscellaneousReceiptPage = () => {
                   setRemarks={setRemarks}
                   remarksRef={remarksRef}
                   transactionDate={transactionDate}
+                  setTransactionDate={setTransactionDate}
+                  reason={reason}
+                  setReason={setReason}
                 />
               </>
             ) : (

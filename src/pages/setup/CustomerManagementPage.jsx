@@ -341,7 +341,7 @@ const CustomerManagementPage = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {customers.customer?.map((cus) => (
+              {customers.customer?.sort((a, b) => b.id - a.id)?.map((cus) => (
                 <Tr key={cus.id}>
                   <Td>{cus.id}</Td>
                   <Td>{cus.customerCode}</Td>

@@ -217,7 +217,7 @@ const ReasonPage = () => {
               </Thead>
               <Tbody>
                 {
-                  reasons.reason?.map(reas =>
+                  reasons.reason?.sort((a, b) => b.id - a.id)?.map(reas =>
                     <Tr
                       key={reas.id}
                     >

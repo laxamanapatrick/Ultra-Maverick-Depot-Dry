@@ -219,7 +219,7 @@ const ItemCategoryPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {categories?.category?.map(cat =>
+                {categories?.category?.sort((a, b) => b.id - a.id)?.map(cat =>
                   <Tr key={cat.id}>
                     <Td>{cat.id}</Td>
                     <Td>{cat.itemCategoryName}</Td>

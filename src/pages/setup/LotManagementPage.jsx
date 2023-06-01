@@ -224,7 +224,7 @@ const LotManagementPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {lots.lotname?.map(lot =>
+                {lots.lotname?.sort((a, b) => b.id - a.id)?.map(lot =>
                   <Tr
                     key={lot.id}
                   >

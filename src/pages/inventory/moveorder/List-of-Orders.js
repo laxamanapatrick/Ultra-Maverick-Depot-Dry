@@ -63,7 +63,7 @@ export const ListofOrders = ({
     "Quantity Order",
     "Prepared Qty",
     "Status",
-    "Void",
+    // "Void",
   ];
 
   const orderCategories = orderListData?.map((item) => {
@@ -227,14 +227,14 @@ export const ListofOrders = ({
                       />
                     )}
                   </Td>
-                  <Td>
+                  {/* <Td>
                     <MdDeleteForever
                       color="red"
                       fontSize="20px"
                       title="Delete this order?"
                       onClick={() => handleDelete(list.preparedQuantity)}
                     />
-                  </Td>
+                  </Td> */}
                 </Tr>
               ))}
           </Tbody>

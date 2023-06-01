@@ -223,7 +223,7 @@ const UomManagementPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {uom.uom?.map(uom =>
+                {uom.uom?.sort((a, b) => b.id - a.id)?.map(uom =>
                   <Tr key={uom.id}>
                     <Td>{uom.id}</Td>
                     <Td>{uom.uoM_Code}</Td>
@@ -263,7 +263,7 @@ const UomManagementPage = () => {
                       </Flex>
                     </Td>
                   </Tr>
-                ).reverse()
+                )
                 }
               </Tbody>
             </Table>

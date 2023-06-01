@@ -172,6 +172,8 @@ const SupplierPage = () => {
     reset()
   }
 
+  // const sortedSuppliers = suppliers.supplier?.sort((a, b) => b.id - a.id)
+
   return (
     <Flex p={5} w='full' flexDirection='column'>
       <Flex mb={2} justifyContent='space-between'>
@@ -225,7 +227,8 @@ const SupplierPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {suppliers.supplier?.map(sup =>
+                {/* {sortedSuppliers?.map(sup =>  */}
+                {suppliers.supplier?.sort((a, b) => b.id - a.id)?.map(sup =>
                   <Tr
                     key={sup.id}
                   >

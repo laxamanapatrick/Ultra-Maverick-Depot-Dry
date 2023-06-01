@@ -306,7 +306,7 @@ const RawMaterialsPage = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {raws.rawmaterial?.map((raw) => (
+              {raws.rawmaterial?.sort((a, b) => b.id - a.id)?.map((raw) => (
                 <Tr key={raw.id}>
                   <Td>{raw.id}</Td>
                   <Td>{raw.itemCode}</Td>

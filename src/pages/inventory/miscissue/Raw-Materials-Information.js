@@ -14,6 +14,7 @@ import {
   Select,
   Spinner,
   Text,
+  Textarea,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
@@ -43,7 +44,9 @@ export const RawMaterialsInformation = ({
   isExpirable,
   setIsExpirable,
   setTransactionDate,
-  transactionDate
+  transactionDate,
+  reason,
+  setReason,
 }) => {
   const {
     isOpen: isModal,
@@ -202,6 +205,30 @@ export const RawMaterialsInformation = ({
                 "loading"
               )}
             </HStack>
+
+            {/* Reason */}
+            <HStack w="full">
+              <Text
+                minW="50%"
+                w="auto"
+                bgColor="secondary"
+                color="white"
+                pl={2}
+                pr={10}
+                py={2.5}
+                fontSize="xs"
+              >
+                Reason:{" "}
+              </Text>
+              <Textarea
+                resize="vertical"
+                minHeight="40px"
+                borderRadius="none"
+                bgColor="#fff8dc"
+                borderColor="#fff8dc"
+                onChange={(e) => setReason(e.target.value)}
+              />
+            </HStack>
           </VStack>
 
           <VStack alignItems="start" w="40%" mx={5}>
@@ -275,7 +302,9 @@ export const RawMaterialsInformation = ({
         <Flex w="full" justifyContent="end" mt={4}>
           <Button
             onClick={() => openModal()}
-            disabled={!rawMatsInfo.customer || !details || !remarks || !transactionDate}
+            disabled={
+              !rawMatsInfo.customer || !details || !remarks || !transactionDate
+            }
             size="xs"
             colorScheme="blue"
           >

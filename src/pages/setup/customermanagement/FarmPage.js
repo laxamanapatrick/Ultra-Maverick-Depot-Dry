@@ -222,7 +222,7 @@ const FarmPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {farms?.farms?.map(farm =>
+                {farms?.farms?.sort((a, b) => b.id - a.id)?.map(farm =>
                   <Tr key={farm.id}>
                     <Td>{farm.id}</Td>
                     <Td>{farm.farmCode}</Td>

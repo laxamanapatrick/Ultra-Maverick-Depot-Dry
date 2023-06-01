@@ -7,6 +7,9 @@ import { ToastComponent } from '../../components/Toast'
 import DateConverter from '../../components/DateConverter'
 import moment from 'moment';
 import { isDisabled } from '@testing-library/user-event/dist/utils';
+import { decodeUser } from '../../services/decode-user';
+
+const currentUser = decodeUser()
 
 const ImportSupplier = () => {
 
@@ -66,7 +69,8 @@ const ImportSupplier = () => {
     return {
       supplierCode: item.supplier_code,
       supplierName: item.supplier_name,
-      supplierAddress: item.supplier_address
+      supplierAddress: item.supplier_address,
+      addedBy: currentUser?.fullName
     }
 
   })

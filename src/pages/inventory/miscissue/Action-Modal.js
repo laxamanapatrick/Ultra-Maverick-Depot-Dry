@@ -177,6 +177,9 @@ export const SaveConfirmation = ({
   setRemarks,
   remarksRef,
   transactionDate,
+  setTransactionDate,
+  reason,
+  setReason,
 }) => {
   const toast = useToast();
 
@@ -359,6 +362,7 @@ export const SaveConfirmation = ({
             totalQuantity: totalQuantity,
             preparedBy: currentUser.fullName,
             remarks: remarks,
+            // reason: reason,
             details: details,
             transactionDate: transactionDate,
             companyCode: company?.find((x) => x.id === data.formData.companyId)
@@ -401,6 +405,7 @@ export const SaveConfirmation = ({
                     customerRef.current.value = "";
                     remarksRef.current.value = "";
                     setDetails("");
+                    setReason("");
                     setRawMatsInfo({
                       itemCode: "",
                       itemDescription: "",
@@ -409,6 +414,7 @@ export const SaveConfirmation = ({
                       expirationDate: "",
                       quantity: "",
                     });
+                    setTransactionDate("");
                     setIsLoading(false);
                     setHideButton(false);
                   });
@@ -440,7 +446,7 @@ export const SaveConfirmation = ({
             <ModalHeader textAlign="center">Charge Of Accounts</ModalHeader>
             <ModalCloseButton onClick={closeHandler} />
             <ModalBody>
-            <Stack spacing={2} p={6}>
+              <Stack spacing={2} p={6}>
                 <Box>
                   <FormLabel fontSize="sm">Company</FormLabel>
 

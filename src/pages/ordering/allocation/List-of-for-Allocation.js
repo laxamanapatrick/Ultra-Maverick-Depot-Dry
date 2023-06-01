@@ -44,9 +44,11 @@ export const ListofforAllocation = ({
   fetchNotification,
 }) => {
   const toast = useToast();
+  const [quantity, setQuantity] = useState('')
 
   const handlePageChange = (nextPage) => {
     setCurrentPage(nextPage);
+    setQuantity('')
   };
 
   const {
@@ -58,16 +60,18 @@ export const ListofforAllocation = ({
   const [allocatedData, setAllocatedData] = useState([]);
 
   const allocateHandler = async () => {
-    const submitArray = orderData?.map((item) => {
+    const allocations = orderData?.map((item) => {
       return {
         itemCode: itemCode,
         customerName: item.farm,
         orderNo: item.id.toString(),
       };
-    });
+    })
+    const soh = quantity ? quantity : orderData[0]?.stockOnHand
+    const submitData = {allocations, soh}
     try {
       const res = await apiClient
-        .put(`Ordering/Allocate`, submitArray)
+        .put(`Ordering/Allocate`, submitData)
         .then((res) => {
           ToastComponent(
             "Success",
@@ -99,6 +103,13 @@ export const ListofforAllocation = ({
             </Badge>
             {/* <Input borderColor='black' readOnly color={orderData[0]?.stockOnHand === 0 ? 'red' : ''} value={orderData[0]?.stockOnHand}/> */}
             <Text borderBottom='1px' borderColor='black' color={orderData[0]?.stockOnHand === 0 ? 'red' : ''}>{orderData[0]?.stockOnHand}</Text>
+          </HStack>
+          <HStack>
+            <Badge bgColor="secondary" color="white" px={3}>
+              Quantity to Allocate:{" "}
+            </Badge>
+            {/* <Input borderColor='black' readOnly color={orderData[0]?.stockOnHand === 0 ? 'red' : ''} value={orderData[0]?.stockOnHand}/> */}
+            <Input height='20px' w='20%' borderBottom='1px' borderColor='black' defaultValue={orderData[0]?.stockOnHand} onChange={(e) => setQuantity(Number(e.target.value))} />
           </HStack>
         </VStack>
 

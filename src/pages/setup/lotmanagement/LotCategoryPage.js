@@ -215,7 +215,7 @@ const LotCategoryPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {lots?.category?.map(lot =>
+                {lots?.category?.sort((a, b) => b.id - a.id)?.map(lot =>
                   <Tr key={lot.id}>
                     <Td>{lot.id}</Td>
                     <Td>{lot.categoryName}</Td>
