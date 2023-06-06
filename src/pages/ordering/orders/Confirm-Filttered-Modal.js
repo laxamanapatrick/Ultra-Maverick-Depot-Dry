@@ -159,7 +159,7 @@ export const ConfirmFiltteredModal = ({
       transactId: item?.transactId,
       customerName: item?.customerName,
       customerPosition: item?.customerPosition,
-      customerId: customers?.find((x) => x.customerCode === item?.customerName)
+      customerId: customers?.find((x) => x.customerName === item?.farmName)
         ?.id,
       farmCode: item?.farmCode,
       farmName: item?.farmName,
@@ -175,6 +175,7 @@ export const ConfirmFiltteredModal = ({
   });
 
   const syncHandler = () => {
+    // console.log(submitData)
     try {
       setIsLoading(true)
       const res = apiClient

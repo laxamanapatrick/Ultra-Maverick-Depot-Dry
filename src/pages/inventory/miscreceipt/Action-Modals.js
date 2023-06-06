@@ -276,7 +276,7 @@ export const SaveConfirmation = ({
       totalQuantity: totalQuantity,
       details: listDataTempo[0]?.description,
       remarks: listDataTempo[0]?.remarks,
-      // reason: reason,
+      reason: reason,
       transactionDate: transactionDate,
       preparedBy: currentUser?.fullName,
       companyCode: data.formData.companyCode,

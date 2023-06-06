@@ -3,9 +3,17 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Drawer,
+  DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
   Flex,
   FormLabel,
   HStack,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -14,7 +22,11 @@ import {
   ModalHeader,
   ModalOverlay,
   Select,
+  Skeleton,
   Stack,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
   Text,
   useDisclosure,
   useToast,
@@ -29,6 +41,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import moment from "moment";
+import PageScrollReusable from "../../../components/PageScroll-Reusable";
+import { MdAddCircleOutline } from "react-icons/md";
 
 const currentUser = decodeUser();
 
@@ -832,7 +846,13 @@ export const DeliveryStatusConfirmation = ({
   );
 };
 
-export const VoidConfirmation = ({ isOpen, onClose, customerId, orderId, fetchOrderList }) => {
+export const VoidConfirmation = ({
+  isOpen,
+  onClose,
+  customerId,
+  orderId,
+  fetchOrderList,
+}) => {
   const toast = useToast();
   const [reasons, setReasons] = useState([]);
   const [reasonSubmit, setReasonSubmit] = useState("");
@@ -870,8 +890,8 @@ export const VoidConfirmation = ({ isOpen, onClose, customerId, orderId, fetchOr
         .then((res) => {
           setIsLoading(false);
           ToastComponent("Success", "Order has been voided", "success", toast);
-          fetchOrderList()
-          onClose()
+          fetchOrderList();
+          onClose();
         })
         .catch((err) => {
           setIsLoading(false);
@@ -937,6 +957,109 @@ export const VoidConfirmation = ({ isOpen, onClose, customerId, orderId, fetchOr
           </ModalFooter>
         </ModalContent>
       </Modal>
+    </>
+  );
+};
+
+const fetchMoveOrderForCustomerApi = async () => {
+  const res = await apiClient.get(
+    `Ordering/GetAllListForMoveOrderPagination?pageSize=${2000}&pageNumber=${1}`
+  );
+  return res.data;
+};
+
+export const SearchCustomer = ({
+  isOpen,
+  onClose,
+  setFarmName,
+  setCurrentPage,
+  fetchMoveOrder,
+}) => {
+  const [customers, setCustomers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchMoveOrderForCustomer = () => {
+    fetchMoveOrderForCustomerApi().then((res) => {
+      setIsLoading(false);
+      setCustomers(res);
+    });
+  };
+
+  useEffect(() => {
+    fetchMoveOrderForCustomer();
+
+    return () => {
+      setFarmName("");
+    };
+  }, []);
+
+  return (
+    <>
+      <Flex>
+        <Drawer
+          isOpen={isOpen}
+          placement="center"
+          onClose={() => {
+            onClose();
+            fetchMoveOrder();
+          }}
+        >
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerCloseButton
+              onClick={() => {
+                onClose();
+                fetchMoveOrder();
+              }}
+            />
+            <DrawerHeader borderBottomWidth="1px">Customer Lookup</DrawerHeader>
+            <DrawerBody>
+              {isLoading ? (
+                <Stack width="full">
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                  <Skeleton height="20px" />
+                </Stack>
+              ) : (
+                <Stack>
+                  <PageScrollReusable>
+                    {customers?.orders?.map((item, i) => (
+                      <Tag
+                        my={2}
+                        cursor="pointer"
+                        variant="subtle"
+                        colorScheme="cyan"
+                        onClick={() => {
+                          setFarmName(item.farm);
+                          setCurrentPage(i + 1);
+                          onClose();
+                        }}
+                      >
+                        <TagLeftIcon boxSize="12px" as={MdAddCircleOutline} />
+                        <TagLabel>{item.farm}</TagLabel>
+                      </Tag>
+                    ))}
+                  </PageScrollReusable>
+                </Stack>
+              )}
+            </DrawerBody>
+
+            <DrawerFooter borderTopWidth="1px">
+              <Button
+                onClick={() => {
+                  onClose();
+                  fetchMoveOrder();
+                }}
+              >
+                Close
+              </Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </Flex>
     </>
   );
 };

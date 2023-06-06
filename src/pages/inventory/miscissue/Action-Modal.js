@@ -362,7 +362,7 @@ export const SaveConfirmation = ({
             totalQuantity: totalQuantity,
             preparedBy: currentUser.fullName,
             remarks: remarks,
-            // reason: reason,
+            reason: reason,
             details: details,
             transactionDate: transactionDate,
             companyCode: company?.find((x) => x.id === data.formData.companyId)

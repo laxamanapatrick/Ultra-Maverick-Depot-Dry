@@ -109,7 +109,7 @@ export const ListofforAllocation = ({
               Quantity to Allocate:{" "}
             </Badge>
             {/* <Input borderColor='black' readOnly color={orderData[0]?.stockOnHand === 0 ? 'red' : ''} value={orderData[0]?.stockOnHand}/> */}
-            <Input height='20px' w='20%' borderBottom='1px' borderColor='black' defaultValue={orderData[0]?.stockOnHand} onChange={(e) => setQuantity(Number(e.target.value))} />
+            <Input height='20px' w='22%' borderBottom='1px' borderColor='black' defaultValue={orderData[0]?.stockOnHand} onChange={(e) => setQuantity(Number(e.target.value))} />
           </HStack>
         </VStack>
 

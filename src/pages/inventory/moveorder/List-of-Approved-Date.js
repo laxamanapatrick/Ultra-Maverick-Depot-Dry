@@ -30,7 +30,7 @@ import { VscCircleLargeFilled } from "react-icons/vsc";
 import { GoArrowSmallRight } from "react-icons/go";
 import { FaSort } from "react-icons/fa";
 import moment from "moment";
-import { CancelApprovedDate } from "./Action-Modals";
+import { CancelApprovedDate, SearchCustomer } from "./Action-Modals";
 import { DisablePreparation } from "./Preparation-User-Control";
 import { ToastComponent } from "../../../components/Toast";
 import Swal from "sweetalert2";
@@ -48,6 +48,7 @@ export const ListofApprovedDate = ({
   startSetConnection,
   connectionTwo,
   farmName,
+  setFarmName,
   moveData,
   pagesCount,
   currentPage,
@@ -198,15 +199,21 @@ export const ListofApprovedDate = ({
     unsetRequest(MoveOrderId, userFullname);
   };
 
+  const {
+    isOpen: isSearch,
+    onClose: closeSearch,
+    onOpen: openSearch,
+  } = useDisclosure();
+
   return (
     <Flex w="full" flexDirection="column">
       <Flex w="full" justifyContent="space-between">
-        <HStack>
+        <Button cursor='pointer' onClick={() => {farmName ? openSearch() : () => {}}}>
           <Badge bgColor="secondary" color="white" px={3}>
             Customer:{" "}
           </Badge>
           <Text fontSize="sm">{farmName && farmName}</Text>
-        </HStack>
+        </Button>
 
         {!preparingStatus ? (
           <Button
@@ -404,6 +411,17 @@ export const ListofApprovedDate = ({
           setOrderId={setOrderId}
           fetchApprovedMoveOrders={fetchApprovedMoveOrders}
           fetchMoveOrder={fetchMoveOrder}
+        />
+      )}
+
+
+      {isSearch && (
+        <SearchCustomer 
+        isOpen={isSearch}
+        onClose={closeSearch}
+        setFarmName={setFarmName}
+        setCurrentPage={setCurrentPage}
+        fetchMoveOrder={fetchMoveOrder}
         />
       )}
     </Flex>

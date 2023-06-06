@@ -100,7 +100,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
       setCustomers([]);
     };
   }, []);
-
+  
   const resultArray = excelData.map((item) => {
     let newOrderDate = DateConverter(item.order_date);
     let newDateNeeded = DateConverter(item.date_needed);
@@ -109,7 +109,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
       transactId: item?.transaction_id,
       customerName: item?.customer_name,
       customerPosition: item?.customer_position,
-      customerId: customers?.find((x) => x.customerCode === item?.customerName)
+      customerId: customers?.find((x) => x.customerName === item?.farm_name)
         ?.id,
       farmType: item?.farm_type,
       farmCode: item?.farm_code,
@@ -142,6 +142,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
               farmType: item?.farmType,
               farmCode: item?.farmCode.toString(),
               farmName: item?.farmName,
+              customerId: item?.customerId,
               orderNo: item?.orderNo,
               batchNo: item?.batchNo,
               orderDate: moment(item?.orderDate).format("yyyy-MM-DD"),

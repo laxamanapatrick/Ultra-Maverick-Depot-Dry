@@ -331,7 +331,7 @@ const MoveOrderPage = ({
           connectionTwo={connectionTwo}
           MoveOrderId={moveData[0]?.id}
           userFullname={currentUser?.fullName}
-          farmName={farmName}
+          farmName={farmName} setFarmName={setFarmName}
           moveData={moveData}
           setCurrentPage={setCurrentPage}
           currentPage={currentPage}

@@ -122,6 +122,9 @@ export const ViewModal = ({
             <Button colorScheme="red" onClick={handleReject}>
               Reject
             </Button>
+            <Button colorScheme="gray" onClick={onClose}>
+              Close
+            </Button>
           </ButtonGroup>
         </ModalFooter>
       </ModalContent>

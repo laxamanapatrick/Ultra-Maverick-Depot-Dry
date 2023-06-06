@@ -46,7 +46,7 @@ export const ListofOrders = ({
   preparedData,
   preparingStatus,
   setButtonChanger,
-  fetchOrderList
+  fetchOrderList,
 }) => {
   const toast = useToast();
 
@@ -63,7 +63,7 @@ export const ListofOrders = ({
     "Quantity Order",
     "Prepared Qty",
     "Status",
-    // "Void",
+    "Void",
   ];
 
   const orderCategories = orderListData?.map((item) => {
@@ -147,7 +147,7 @@ export const ListofOrders = ({
       // });
     }
   };
-
+  
   return (
     <VStack w="full" spacing={0} justifyContent="center" mt={10}>
       <HStack w="full" justifyContent="start" mb={1}>
@@ -227,14 +227,14 @@ export const ListofOrders = ({
                       />
                     )}
                   </Td>
-                  {/* <Td>
+                  <Td>
                     <MdDeleteForever
                       color="red"
                       fontSize="20px"
                       title="Delete this order?"
                       onClick={() => handleDelete(list.preparedQuantity)}
                     />
-                  </Td> */}
+                  </Td>
                 </Tr>
               ))}
           </Tbody>

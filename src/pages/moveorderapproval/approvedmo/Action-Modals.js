@@ -174,18 +174,18 @@ export const PrintModal = ({
     content: () => componentRef.current,
     // documentTitle: 'Print Document',
     // suppressAfterPrint: true,
-    // copyStyles: true
-    // onBeforeGetContent: () => {
-    //   setIsLoading(true);
-    //   return new Promise((resolve) => {
-    //     setTimeout(() => {
-    //       resolve();
-    //     }, 500); // Delay to ensure the content is loaded before printing
-    //   });
-    // },
-    // onAfterPrint: () => {
-    //   setIsLoading(false);
-    // },
+    // copyStyles: true,
+    onBeforeGetContent: () => {
+      setIsLoading(true);
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve();
+        }, 500); // Delay to ensure the content is loaded before printing
+      });
+    },
+    onAfterPrint: () => {
+      setIsLoading(false);
+    },
   });
 
   // useEffect(() => {
