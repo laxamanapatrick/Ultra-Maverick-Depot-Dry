@@ -72,37 +72,37 @@ const SubmitConfirmation = ({
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Documentation Requirements",
-      values: submitDocumentationChecklist,
+      value: submitDocumentationChecklist,
       remarks: remarksParent.documentationRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Color",
-      values: foodHandlingDetails[1]["Color"]?.map((item) => item),
+      value: foodHandlingDetails[1]["Color"]?.map((item) => item),
       remarks: remarksParent.foodHandlingRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Odor",
-      values: foodHandlingDetails[2]["Odor"]?.map((item) => item),
+      value: foodHandlingDetails[2]["Odor"]?.map((item) => item),
       remarks: remarksParent.foodHandlingRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Appearance",
-      values: foodHandlingDetails[3]["Appearance"]?.map((item) => item),
+      value: foodHandlingDetails[3]["Appearance"]?.map((item) => item),
       remarks: remarksParent.foodHandlingRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Texture",
-      values: foodHandlingDetails[4]["Texture"]?.map((item) => item),
+      value: foodHandlingDetails[4]["Texture"]?.map((item) => item),
       remarks: remarksParent.foodHandlingRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Absence Of Contaminants",
-      values: foodHandlingDetails[5]["Absence Of Contaminants"]?.map(
+      value: foodHandlingDetails[5]["Absence Of Contaminants"]?.map(
         (item) => item
       ),
       remarks: remarksParent.foodHandlingRemarks
@@ -110,19 +110,19 @@ const SubmitConfirmation = ({
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Product Condition",
-      values: foodHandlingDetails[6]["Product Condition"]?.map((item) => item),
+      value: foodHandlingDetails[6]["Product Condition"]?.map((item) => item),
       remarks: remarksParent.foodHandlingRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Other Conformance Details",
-      values: submitOtherConformanceDetails,
+      value: submitOtherConformanceDetails,
       remarks: remarksParent.otherConformanceRemarks
     },
     {
       pO_ReceivingId: editData.id,
       checlist_Type: "Hygiene Details",
-      values: submitHygieneDetails,
+      value: submitHygieneDetails,
       remarks: remarksParent.hygieneRemarks
     },
   ];
