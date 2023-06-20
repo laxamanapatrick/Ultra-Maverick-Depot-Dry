@@ -31,7 +31,7 @@ import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 import moment from "moment";
-import './print-styles.css'
+import "./print-styles.css";
 
 const currentUser = decodeUser();
 
@@ -230,16 +230,10 @@ export const PrintModal = ({
         <ModalBody>
           {/* Printed  */}
           {/* <Box display="none"> */}
-          <VStack
-            ref={componentRef}
-          >
+          <VStack ref={componentRef}>
             {/* MO SLIP Print*/}
             <Flex w="full" flexDirection="column">
-              <Flex
-                w="full"
-                justifyContent="center"
-                flexDirection="column"
-              >
+              <Flex w="full" justifyContent="center" flexDirection="column">
                 <Image src="/images/RDF Logo.png" w="13%" />
                 <Text fontSize="6px">
                   Purok 6, Brgy. Lara, City of San Fernando, Pampanga,
@@ -265,10 +259,7 @@ export const PrintModal = ({
 
               <Flex flexDirection="column">
                 <PageScrollReusable minHeight="70px" maxHeight="210px">
-                  <Table
-                    size="xs"
-                    fontSize="xs"
-                  >
+                  <Table size="xs" fontSize="xs">
                     <Thead position="sticky" top={0} bg="#2f394a">
                       <Tr>
                         <Th color="white">ITEM CODE</Th>
@@ -276,6 +267,7 @@ export const PrintModal = ({
                         <Th color="white">UOM</Th>
                         <Th color="white">QUANTITY</Th>
                         <Th color="white">ACTUAL QTY RECEIVED</Th>
+                        <Th color="white">Unit Price</Th>
                         <Th color="white">EXPIRATION DATE</Th>
                       </Tr>
                     </Thead>
@@ -291,6 +283,7 @@ export const PrintModal = ({
                                 <Td>{item.itemDescription}</Td>
                                 <Td>{item.uom}</Td>
                                 <Td>{item.quantity}</Td>
+                                <Td>{item.unitPrice}</Td>
                                 <Td></Td>
                                 <Td>
                                   {!item.expiration
@@ -310,6 +303,7 @@ export const PrintModal = ({
                               <Td>{item.itemDescription}</Td>
                               <Td>{item.uom}</Td>
                               <Td>{item.quantity}</Td>
+                              <Td>{item.unitPrice}</Td>
                               <Td></Td>
                               <Td>
                                 {!item.expiration
@@ -367,8 +361,7 @@ export const PrintModal = ({
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         {printData[0]?.preparedBy}
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;
                       </Text>
                     </HStack>
                   </VStack>

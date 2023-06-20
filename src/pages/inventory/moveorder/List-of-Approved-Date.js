@@ -208,30 +208,45 @@ export const ListofApprovedDate = ({
   return (
     <Flex w="full" flexDirection="column">
       <Flex w="full" justifyContent="space-between">
-        <Button cursor='pointer' onClick={() => {farmName ? openSearch() : () => {}}}>
+        <Button
+          disabled={preparingStatus}
+          gap={1}
+          cursor="pointer"
+          onClick={() => {
+            farmName ? openSearch() : () => {};
+          }}
+        >
           <Badge bgColor="secondary" color="white" px={3}>
             Customer:{" "}
           </Badge>
           <Text fontSize="sm">{farmName && farmName}</Text>
         </Button>
 
-        {!preparingStatus ? (
-          <Button
-            onClick={startPreparationHandler}
-            size="sm"
-            colorScheme="green"
-            disabled={isBeingPrepared || preparingUser}
-            title={
-              isBeingPrepared ? "Someone is already preaparing this order" : ""
-            }
-          >
-            Start Preparing
-          </Button>
-        ) : (
-          <Button onClick={stopPreparationHandler} size="sm" colorScheme="red">
-            Stop Preparing
-          </Button>
-        )}
+        <Flex w="17%">
+          {!preparingStatus ? (
+            <Button
+              onClick={startPreparationHandler}
+              size="sm"
+              colorScheme="green"
+              disabled={isBeingPrepared || preparingUser}
+              title={
+                isBeingPrepared
+                  ? "Someone is already preaparing this order"
+                  : ""
+              }
+            >
+              Start Preparing
+            </Button>
+          ) : (
+            <Button
+              onClick={stopPreparationHandler}
+              size="sm"
+              colorScheme="red"
+            >
+              Stop Preparing
+            </Button>
+          )}
+        </Flex>
 
         <Flex>
           <Pagination
@@ -414,14 +429,14 @@ export const ListofApprovedDate = ({
         />
       )}
 
-
       {isSearch && (
-        <SearchCustomer 
-        isOpen={isSearch}
-        onClose={closeSearch}
-        setFarmName={setFarmName}
-        setCurrentPage={setCurrentPage}
-        fetchMoveOrder={fetchMoveOrder}
+        <SearchCustomer
+          isOpen={isSearch}
+          onClose={closeSearch}
+          setFarmName={setFarmName}
+          farmName={farmName}
+          setCurrentPage={setCurrentPage}
+          fetchMoveOrder={fetchMoveOrder}
         />
       )}
     </Flex>

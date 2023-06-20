@@ -209,20 +209,11 @@ export const MRPTable = ({
                 <Th color="white">Line</Th>
                 <Th color="white">Item Code</Th>
                 <Th color="white">Item Description</Th>
+                <Th color="white">Item Category</Th>
+                <Th color="white">UOM</Th>
+                <Th color="white">Price</Th>
+                <Th color="white">Total Price</Th>
                 {!buttonChanger ? (
-                  <>
-                    <Th color="white">Item Category</Th>
-                    <Th color="white">UOM</Th>
-                    <Th color="white">Price</Th>
-                    <Th color="white">Total Price</Th>
-                    <Th color="white">SOH</Th>
-                    <Th color="white">Reserve</Th>
-                    <Th color="white">Reserve Usage</Th>
-                    <Th color="white">Buffer Level</Th>
-                    <Th color="white">Transform From</Th>
-                    <Th color="white">Transform To</Th>
-                  </>
-                ) : (
                   <>
                     <Th color="white">{`Receive (IN)`}</Th>
                     <Th color="white">{`Receipt (IN)`}</Th>
@@ -233,6 +224,15 @@ export const MRPTable = ({
                                         <Th color='white'>Movement Status</Th>
                                         <Th color='white'>Classification ABC</Th> */}
                     <Th color="white">Waiting for Receiving</Th>
+                    {/* <Th color="white">Transform From</Th>
+                    <Th color="white">Transform To</Th> */}
+                  </>
+                ) : (
+                  <>
+                    <Th color="white">SOH</Th>
+                    <Th color="white">Reserve</Th>
+                    <Th color="white">Reserve Usage</Th>
+                    <Th color="white">Buffer Level</Th>
                     <Th color="white">Average Issuance</Th>
                     <Th color="white">Days Level</Th>
                   </>
@@ -270,60 +270,21 @@ export const MRPTable = ({
                   <Td>{i + 1}</Td>
                   <Td>{item.itemCode}</Td>
                   <Td>{item.itemDescription}</Td>
+                  <Td>{item.itemCategory}</Td>
+                  <Td>{item.uom}</Td>
+                  <Td>
+                    {item.price?.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2,
+                    })}
+                  </Td>
+                  <Td>
+                    {item.totalPrice?.toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                      minimumFractionDigits: 2,
+                    })}
+                  </Td>
                   {!buttonChanger ? (
-                    <>
-                      <Td>{item.itemCategory}</Td>
-                      <Td>{item.uom}</Td>
-                      <Td>
-                        {item.price?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.totalPrice?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.soh?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.reserve?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.reserveUsage?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.bufferLevel?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.transformFrom?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                      <Td>
-                        {item.transformTo?.toLocaleString(undefined, {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2,
-                        })}
-                      </Td>
-                    </>
-                  ) : (
                     <>
                       <Td>
                         {item.receiveIn?.toLocaleString(undefined, {
@@ -360,6 +321,45 @@ export const MRPTable = ({
                                                 <Td>{`Classification ABC`}</Td> */}
                       <Td>
                         {item.suggestedPo?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      {/* <Td>
+                        {item.transformFrom?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td>
+                        {item.transformTo?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td> */}
+                    </>
+                  ) : (
+                    <>
+                      <Td>
+                        {item.soh?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td>
+                        {item.reserve?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td>
+                        {item.reserveUsage?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      <Td>
+                        {item.bufferLevel?.toLocaleString(undefined, {
                           maximumFractionDigits: 2,
                           minimumFractionDigits: 2,
                         })}

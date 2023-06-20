@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -14,6 +14,8 @@ import {
   FormLabel,
   HStack,
   Input,
+  InputGroup,
+  InputRightElement,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -24,10 +26,16 @@ import {
   Select,
   Skeleton,
   Stack,
+  Table,
   Tag,
   TagLabel,
   TagLeftIcon,
+  Tbody,
+  Td,
   Text,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
   useToast,
   VStack,
@@ -43,6 +51,7 @@ import axios from "axios";
 import moment from "moment";
 import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import { MdAddCircleOutline } from "react-icons/md";
+import { AiOutlineClose } from "react-icons/ai";
 
 const currentUser = decodeUser();
 
@@ -404,17 +413,18 @@ const schema = yup.object().shape({
   formData: yup.object().shape({
     companyId: yup
       .number()
-      .required("Company Name is required")
+      // .required("Company Name is required")
       .typeError("Company Name is required"),
     departmentId: yup
       .number()
-      .required("Department Category is required")
+      // .required("Department Category is required")
       .typeError("Department Category is required"),
     locationId: yup
       .number()
-      .required("Location Name is required")
+      // .required("Location Name is required")
       .typeError("Location Name is required"),
-    accountTitles: yup.string().required("Account Name is required"),
+    accountTitles: yup.string(),
+    //    .required("Account Name is required"),
   }),
 });
 
@@ -817,15 +827,15 @@ export const DeliveryStatusConfirmation = ({
                 size="sm"
                 colorScheme="blue"
                 type="submit"
-                isLoading={isLoading}
-                disabled={
-                  isLoading ||
-                  !isValid ||
-                  !watch("formData.companyId") ||
-                  !watch("formData.departmentId") ||
-                  !watch("formData.locationId") ||
-                  !watch("formData.accountTitles")
-                }
+                // isLoading={isLoading}
+                // disabled={
+                //   isLoading ||
+                //   !isValid ||
+                //   !watch("formData.companyId") ||
+                //   !watch("formData.departmentId") ||
+                //   !watch("formData.locationId") ||
+                //   !watch("formData.accountTitles")
+                // }
               >
                 Save
               </Button>
@@ -972,11 +982,15 @@ export const SearchCustomer = ({
   isOpen,
   onClose,
   setFarmName,
+  farmName,
   setCurrentPage,
   fetchMoveOrder,
 }) => {
   const [customers, setCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const toast = useToast();
+  const [keyword, setKeyword] = useState(farmName);
+  const inputRef = useRef("");
 
   const fetchMoveOrderForCustomer = () => {
     fetchMoveOrderForCustomerApi().then((res) => {
@@ -993,10 +1007,30 @@ export const SearchCustomer = ({
     };
   }, []);
 
+  const handleClick = (farm, indexPlusOne) => {
+    if (farmName !== farm) {
+      setFarmName(farm);
+      setCurrentPage(indexPlusOne);
+      onClose();
+    } else {
+      ToastComponent(
+        "Warning",
+        "You are currently on this customer's order page.",
+        "warning",
+        toast
+      );
+    }
+  };
+
+  const escapeRegExp = (string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  };
+
   return (
     <>
       <Flex>
         <Drawer
+          size="xl"
           isOpen={isOpen}
           placement="center"
           onClose={() => {
@@ -1006,13 +1040,40 @@ export const SearchCustomer = ({
         >
           <DrawerOverlay />
           <DrawerContent>
-            <DrawerCloseButton
+            {/* <DrawerCloseButton
               onClick={() => {
                 onClose();
                 fetchMoveOrder();
               }}
-            />
-            <DrawerHeader borderBottomWidth="1px">Customer Lookup</DrawerHeader>
+            /> */}
+            <DrawerHeader borderBottomWidth="1px">
+              <Flex gap={2} flexDirection="row" alignItems="center">
+                <Text>Customer Lookup</Text>
+                <InputGroup w="80%">
+                  <Input
+                    ref={inputRef}
+                    placeholder="You can also type the keyword of what you're looking for here."
+                    defaultValue={keyword}
+                    // onChange={(e) => {
+                    //   const inputValue = e.target.value;
+                    //   setKeyword(inputValue !== "" ? inputValue : "");
+                    // }}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    // value={keyword}
+                  />
+                  {keyword && (
+                    <InputRightElement
+                      cursor="pointer"
+                      onClick={() => {
+                        setKeyword("");
+                        inputRef.current.value = "";
+                      }}
+                      children={<AiOutlineClose color="gray.300" />}
+                    />
+                  )}
+                </InputGroup>
+              </Flex>
+            </DrawerHeader>
             <DrawerBody>
               {isLoading ? (
                 <Stack width="full">
@@ -1024,9 +1085,9 @@ export const SearchCustomer = ({
                   <Skeleton height="20px" />
                 </Stack>
               ) : (
-                <Stack>
-                  <PageScrollReusable>
-                    {customers?.orders?.map((item, i) => (
+                <PageScrollReusable width="99%">
+                  <Flex flexDirection="column">
+                    {/* {customers?.orders?.map((item, i) => (
                       <Tag
                         my={2}
                         cursor="pointer"
@@ -1041,9 +1102,88 @@ export const SearchCustomer = ({
                         <TagLeftIcon boxSize="12px" as={MdAddCircleOutline} />
                         <TagLabel>{item.farm}</TagLabel>
                       </Tag>
-                    ))}
-                  </PageScrollReusable>
-                </Stack>
+                    ))} */}
+                    {/* {customers?.orders
+                      ?.map((item, i) => ({
+                        farm: item.farm,
+                        farmType: item.farmType,
+                        companyName: item.companyName,
+                        departmentName: item.departmentName,
+                        index: i + 1,
+                      }))
+                      .sort((a, b) => a.farm.localeCompare(b.farm))
+                      .map((item) => (
+                        <Tag
+                          key={item.index}
+                          my={2}
+                          cursor="pointer"
+                          variant="subtle"
+                          colorScheme="cyan"
+                          onClick={() => handleClick(item.farm, item.index)}
+                        >
+                          <TagLeftIcon boxSize="12px" as={MdAddCircleOutline} />
+                          <TagLabel>{`${item.farm} | ${item.farmType} | ${item.companyName} | ${item.departmentName}`}</TagLabel>
+                        </Tag>
+                      ))} */}
+                    <Table size="sm">
+                      <Thead bgColor="secondary">
+                        <Tr>
+                          <Th></Th>
+                          <Th color="white">Customer Name</Th>
+                          <Th color="white">Customer Type</Th>
+                          <Th color="white">Company</Th>
+                          <Th color="white">Department</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {customers?.orders
+                          ?.map((item, i) => ({
+                            farm: item.farm,
+                            farmType: item.farmType,
+                            companyName: item.companyName,
+                            departmentName: item.departmentName,
+                            index: i + 1,
+                          }))
+                          .sort((a, b) => a.farm.localeCompare(b.farm))
+                          ?.filter((val) => {
+                            const escapedKeyword = escapeRegExp(
+                              keyword.toLowerCase()
+                            );
+                            const newKeyword = new RegExp(escapedKeyword);
+                            return (
+                              val.farm?.toLowerCase().match(newKeyword, "*") ||
+                              val.farmType
+                                ?.toLowerCase()
+                                .match(newKeyword, "*") ||
+                              val.companyName
+                                ?.toLowerCase()
+                                .match(newKeyword, "*") ||
+                              val.departmentName
+                                ?.toLowerCase()
+                                .match(newKeyword, "*")
+                            );
+                          })
+                          .map((item) => (
+                            <Tr
+                              key={item.index}
+                              cursor="pointer"
+                              onClick={() => handleClick(item.farm, item.index)}
+                            >
+                              <Td>
+                                <Button bg="none">
+                                  <MdAddCircleOutline />
+                                </Button>
+                              </Td>
+                              <Td>{item.farm}</Td>
+                              <Td>{item.farmType}</Td>
+                              <Td>{item.companyName}</Td>
+                              <Td>{item.departmentName}</Td>
+                            </Tr>
+                          ))}
+                      </Tbody>
+                    </Table>
+                  </Flex>
+                </PageScrollReusable>
               )}
             </DrawerBody>
 

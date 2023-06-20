@@ -55,7 +55,11 @@ const SidebarFooter = () => {
         new Date()
       ).format(
         "YYYY"
-      )}, Ultra Maverick Dry Powered by Process Automation (MIS)`}</Text>
+      )}, Ultra Maverick Dry Powered by System Developer Unit (MIS)`}</Text>
+      {/* <Text color="white" fontSize="xs" textAlign="center">
+        © {moment(new Date()).format("YYYY")} Ultra Maverick Dry Powered <br />{" "}
+        by System and Application Development (MIS)
+      </Text> */}
     </Flex>
   );
 };
