@@ -6,13 +6,13 @@ const user = decodeUser()
 
 // Local Backend
 
-// export default axios.create({
-//     baseURL: "https://localhost:44342/api/",
-//     headers: {
-//         "Content-Type": "application/json",
-//         "Authorization": 'Bearer '+user?.token
-//     },
-// })
+export default axios.create({
+    baseURL: "https://localhost:44342/api/",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": 'Bearer '+user?.token
+    },
+})
 
 
 // Backend Local
@@ -38,10 +38,10 @@ const user = decodeUser()
 
 // Azure Version
 
-export default axios.create({
-    baseURL: "https://ultramaverickdry.azurewebsites.net/api/",
-    headers: {
-        "Content-Type": "application/json",
-        "Authorization": 'Bearer '+user?.token
-    }
-})
+// export default axios.create({
+//     baseURL: "https://ultramaverickdry.azurewebsites.net/api/",
+//     headers: {
+//         "Content-Type": "application/json",
+//         "Authorization": 'Bearer '+user?.token
+//     }
+// })

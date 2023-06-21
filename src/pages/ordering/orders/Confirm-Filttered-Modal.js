@@ -125,6 +125,7 @@ import { BsFillQuestionOctagonFill } from "react-icons/bs";
 import apiClient from "../../../services/apiClient";
 import { ToastComponent } from "../../../components/Toast";
 import moment from "moment";
+import { LoadingDefault } from "../../../assets/Lottie-Animations";
 
 export const ConfirmFiltteredModal = ({
   isOpen,
@@ -136,7 +137,7 @@ export const ConfirmFiltteredModal = ({
   fetchNotification,
 }) => {
   const toast = useToast();
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const [customers, setCustomers] = useState([]);
 
   const fetchActiveCustomersApi = async () => {
@@ -159,8 +160,7 @@ export const ConfirmFiltteredModal = ({
       transactId: item?.transactId,
       customerName: item?.customerName,
       customerPosition: item?.customerPosition,
-      customerId: customers?.find((x) => x.customerName === item?.farmName)
-        ?.id,
+      customerId: customers?.find((x) => x.customerName === item?.farmName)?.id,
       farmCode: item?.farmCode,
       farmName: item?.farmName,
       orderNo: item?.orderNo,
@@ -174,55 +174,59 @@ export const ConfirmFiltteredModal = ({
     };
   });
 
-  const syncHandler = () => {
-    // console.log(submitData)
+  const syncHandler = async () => {
     try {
-      setIsLoading(true)
-      const res = apiClient
-        .post(`Ordering/AddNewOrders`, submitData)
-        .then((res) => {
-          ToastComponent("Success", "Orders Synced!", "success", toast);
-          setIsLoading(false)
-          onClose();
-          closeErrorModal();
-        })
-        .catch((err) => {
-          setIsLoading(false)
-          onClose();
-          closeErrorModal();
-        });
-    } catch (error) {}
+      setIsLoading(true);
+      const res = await apiClient.post(`Ordering/AddNewOrder`, submitData);
+      ToastComponent("Success", "Orders Synced!", "success", toast);
+      setIsLoading(false);
+      onClose();
+      closeErrorModal();
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err)
+      onClose();
+      closeErrorModal();
+    }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
-      <ModalContent>
-        <ModalHeader>
-          <Flex justifyContent="center">
-            <BsFillQuestionOctagonFill fontSize="50px" />
-          </Flex>
-        </ModalHeader>
-        <ModalCloseButton onClick={onClose} disabled={isLoading} />
+    <>
+      <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
+        <ModalContent>
+          <ModalHeader>
+            <Flex justifyContent="center">
+              <BsFillQuestionOctagonFill fontSize="50px" />
+            </Flex>
+          </ModalHeader>
+          <ModalCloseButton onClick={onClose} disabled={isLoading} />
 
-        <ModalBody>
-          <VStack justifyContent="center">
-            <Text>Are you sure you want sync these orders?</Text>
-          </VStack>
-        </ModalBody>
+          <ModalBody>
+            <VStack justifyContent="center">
+              <Text>Are you sure you want sync these orders?</Text>
+            </VStack>
+          </ModalBody>
 
-        <ModalFooter>
-          <Button
-            isLoading={isLoading}
-            onClick={() => syncHandler()}
-            colorScheme="blue"
-          >
-            Yes
-          </Button>
-          <Button isLoading={isLoading} ml={2} colorScheme="red" onClick={onClose}>
-            No
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          <ModalFooter>
+            <Button
+              isLoading={isLoading}
+              onClick={() => syncHandler()}
+              colorScheme="blue"
+            >
+              Yes
+            </Button>
+            <Button
+              isLoading={isLoading}
+              ml={2}
+              colorScheme="red"
+              onClick={onClose}
+            >
+              No
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {isLoading && <LoadingDefault text="Syncing Orders" />}
+    </>
   );
 };

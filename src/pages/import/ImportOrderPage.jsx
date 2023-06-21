@@ -134,7 +134,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
         setIsLoading(true);
         const res = apiClient
           .post(
-            `Ordering/AddNewOrders`,
+            `Ordering/ValidateNewOrders`,
             resultArray.map((item) => ({
               transactId: item?.transactId,
               customerName: item?.customerName,

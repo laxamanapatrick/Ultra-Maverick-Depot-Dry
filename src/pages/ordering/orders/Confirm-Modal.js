@@ -133,6 +133,7 @@ import { BsFillQuestionOctagonFill } from "react-icons/bs";
 import apiClient from "../../../services/apiClient";
 import { ToastComponent } from "../../../components/Toast";
 import moment from "moment";
+import { LoadingSearchFilesPopup } from "../../../assets/Lottie-Animations";
 
 export const ConfirmModal = ({
   isOpen,
@@ -167,7 +168,8 @@ export const ConfirmModal = ({
       transactId: item?.transactId,
       customerName: item?.customerName,
       customerPosition: item?.customerPosition,
-      customerId: customers?.find(x => x.customerCode === item?.customerName)?.id,
+      customerId: customers?.find((x) => x.customerCode === item?.customerName)
+        ?.id,
       farmCode: item?.farmCode,
       farmName: item?.farmName,
       orderNo: item?.orderNo,
@@ -178,67 +180,69 @@ export const ConfirmModal = ({
       uom: item?.uom,
       quantityOrdered: item?.quantityOrdered,
       category: item?.category,
-    }
+    };
   });
 
-  const syncHandler = () => {
-    console.log(submitData)
+  const syncHandler = async () => {
+    console.log(submitData);
     try {
       setIsLoading(true);
-      const res = apiClient
-        .post(`Ordering/AddNewOrders`, submitData)
-        .then((res) => {
-          ToastComponent("Success", "Orders Synced!", "success", toast);
-          fetchNotification();
-          onClose();
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          ToastComponent("Error", "Orders were not Synced!", "error", toast);
-          setErrorData(err.response.data);
-          if (err.response.data) {
-            onClose();
-            openError();
-          }
-        });
-    } catch (error) {}
+
+      const res = await apiClient.post(`Ordering/ValidateNewOrders`, submitData);
+
+      ToastComponent("Success", "Orders Synced!", "success", toast);
+      fetchNotification();
+      onClose();
+    } catch (err) {
+      ToastComponent("Error", "Orders were not Synced!", "error", toast);
+      setErrorData(err.response.data);
+
+      if (err.response.data) {
+        onClose();
+        openError();
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
-      <ModalContent>
-        <ModalHeader>
-          <Flex justifyContent="center">
-            <BsFillQuestionOctagonFill fontSize="50px" />
-          </Flex>
-        </ModalHeader>
-        <ModalCloseButton onClick={onClose} disabled={isLoading} />
+    <>
+      <Modal isOpen={isOpen} onClose={() => {}} size="xl" isCentered>
+        <ModalContent>
+          <ModalHeader>
+            <Flex justifyContent="center">
+              <BsFillQuestionOctagonFill fontSize="50px" />
+            </Flex>
+          </ModalHeader>
+          <ModalCloseButton onClick={onClose} disabled={isLoading} />
 
-        <ModalBody>
-          <VStack justifyContent="center">
-            <Text>Are you sure you want sync these orders?</Text>
-          </VStack>
-        </ModalBody>
+          <ModalBody>
+            <VStack justifyContent="center">
+              <Text>Are you sure you want sync these orders?</Text>
+            </VStack>
+          </ModalBody>
 
-        <ModalFooter>
-          <Button
-            isLoading={isLoading}
-            onClick={() => syncHandler()}
-            colorScheme="blue"
-          >
-            Yes
-          </Button>
-          <Button
-            ml={2}
-            colorScheme="red"
-            onClick={onClose}
-            isLoading={isLoading}
-          >
-            No
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+          <ModalFooter>
+            <Button
+              isLoading={isLoading}
+              onClick={() => syncHandler()}
+              colorScheme="blue"
+            >
+              Yes
+            </Button>
+            <Button
+              ml={2}
+              colorScheme="red"
+              onClick={onClose}
+              isLoading={isLoading}
+            >
+              No
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {isLoading && <LoadingSearchFilesPopup text='Syncing and Validating Orders' />}
+    </>
   );
 };

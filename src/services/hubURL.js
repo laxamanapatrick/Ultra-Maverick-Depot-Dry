@@ -1,7 +1,7 @@
 export const hubURL = 
 
 //Local
-// 'https://localhost:44342/moveOrder'
+'https://localhost:44342/moveOrder'
 
 //Boss Aldryn Local
 
@@ -11,4 +11,4 @@ export const hubURL =
 // 'http://10.10.2.6:8002/moveOrder'
 
 //Azure Version
-'https://ultramaverickdry.azurewebsites.net/moveOrder'
+// 'https://ultramaverickdry.azurewebsites.net/moveOrder'
