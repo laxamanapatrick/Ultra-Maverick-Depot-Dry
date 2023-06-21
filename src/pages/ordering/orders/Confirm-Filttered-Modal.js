@@ -160,7 +160,15 @@ export const ConfirmFiltteredModal = ({
       transactId: item?.transactId,
       customerName: item?.customerName,
       customerPosition: item?.customerPosition,
-      customerId: customers?.find((x) => x.customerName === item?.farmName)?.id,
+      customerId: (
+        customers?.find(
+          (x) =>
+            x.customerName?.toLowerCase() ===
+            item?.customerPosition?.toLowerCase()
+        ) || {
+          id: null,
+        }
+      )?.id,
       farmCode: item?.farmCode,
       farmName: item?.farmName,
       orderNo: item?.orderNo,
@@ -175,16 +183,19 @@ export const ConfirmFiltteredModal = ({
   });
 
   const syncHandler = async () => {
+    console.log(submitData);
     try {
       setIsLoading(true);
       const res = await apiClient.post(`Ordering/AddNewOrder`, submitData);
       ToastComponent("Success", "Orders Synced!", "success", toast);
-      setIsLoading(false);
-      onClose();
-      closeErrorModal();
+      window.setTimeout(() => {
+        onClose();
+        closeErrorModal();
+        setIsLoading(false);
+      }, 500);
     } catch (err) {
       setIsLoading(false);
-      console.log(err)
+      console.log(err);
       onClose();
       closeErrorModal();
     }

@@ -24,6 +24,7 @@ import DateConverter from "../../components/DateConverter";
 import moment from "moment";
 import { isDisabled } from "@testing-library/user-event/dist/utils";
 import { ErrorModal } from "../ordering/orders/Error-Modal";
+import { LoadingSearchFilesPopup } from "../../assets/Lottie-Animations";
 
 const ImportOrderPage = ({ notification, fetchNotification }) => {
   const [workbook, setWorkbook] = useState([]);
@@ -100,7 +101,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
       setCustomers([]);
     };
   }, []);
-  
+
   const resultArray = excelData.map((item) => {
     let newOrderDate = DateConverter(item.order_date);
     let newDateNeeded = DateConverter(item.date_needed);
@@ -109,8 +110,14 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
       transactId: item?.transaction_id,
       customerName: item?.customer_name,
       customerPosition: item?.customer_position,
-      customerId: customers?.find((x) => x.customerName === item?.farm_name)
-        ?.id,
+      customerId: (
+        customers?.find(
+          (x) =>
+            x.customerName?.toLowerCase() === item?.farm_name?.toLowerCase()
+        ) || {
+          id: null,
+        }
+      )?.id,
       farmType: item?.farm_type,
       farmCode: item?.farm_code,
       farmName: item?.farm_name,
@@ -279,6 +286,7 @@ const ImportOrderPage = ({ notification, fetchNotification }) => {
           errorData={errorData}
         />
       )}
+      {isLoading && <LoadingSearchFilesPopup text="Validating Orders" />}
     </Flex>
   );
 };

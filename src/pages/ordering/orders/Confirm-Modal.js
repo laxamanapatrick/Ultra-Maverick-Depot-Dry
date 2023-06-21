@@ -168,8 +168,15 @@ export const ConfirmModal = ({
       transactId: item?.transactId,
       customerName: item?.customerName,
       customerPosition: item?.customerPosition,
-      customerId: customers?.find((x) => x.customerCode === item?.customerName)
-        ?.id,
+      customerId: (
+        customers?.find(
+          (x) =>
+            x.customerName?.toLowerCase() ===
+            item?.customerPosition?.toLowerCase()
+        ) || {
+          id: null,
+        }
+      )?.id,
       farmCode: item?.farmCode,
       farmName: item?.farmName,
       orderNo: item?.orderNo,
@@ -188,7 +195,10 @@ export const ConfirmModal = ({
     try {
       setIsLoading(true);
 
-      const res = await apiClient.post(`Ordering/ValidateNewOrders`, submitData);
+      const res = await apiClient.post(
+        `Ordering/ValidateNewOrders`,
+        submitData
+      );
 
       ToastComponent("Success", "Orders Synced!", "success", toast);
       fetchNotification();
@@ -242,7 +252,7 @@ export const ConfirmModal = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      {isLoading && <LoadingSearchFilesPopup text='Syncing and Validating Orders' />}
+      {isLoading && <LoadingSearchFilesPopup text="Validating Orders" />}
     </>
   );
 };
