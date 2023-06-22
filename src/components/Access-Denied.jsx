@@ -1,18 +1,19 @@
-import { Button } from "@chakra-ui/react";
 import React from "react";
+import { Button, Flex } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { PageNotFound } from "../assets/Lottie-Animations";
 
 const AccessDenied = () => {
   const navigate = useNavigate();
 
   return (
     <>
-      <div style={{flexDirection: 'column', justifyContent:'center'}}>
-        <h1>
-          Access Denied, you do not have permission to access this module.
-        </h1>
-        <Button onClick={() => navigate("/")}>Return to homepage</Button>
-      </div>
+      <Flex flexDirection="column" alignItems="center">
+        <PageNotFound />
+        <Button w="auto" mt={5} zIndex={9999} onClick={() => navigate("/")}>
+          Return to homepage
+        </Button>
+      </Flex>
     </>
   );
 };

@@ -69,55 +69,6 @@ export const NewSidebar = ({
   fetchNotification,
   sideBarHandler,
 }) => {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const [tagModules, setTagModules] = useState([]);
-  // const { setSelectedMenu } = useContext(Context);
-  const [currentPath, setCurrentPath] = useState("");
-  const [subData, setSubData] = useState([]);
-
-  const fetchTagged = () => {
-    fetchTagModuleApi(tagModules).then((res) => {
-      const unique = [];
-      const map = new Map();
-      for (const item of res) {
-        if (!map.has(item.mainMenuId)) {
-          map.set(item.mainMenuId, true);
-          const submenu = res.filter(
-            (s) =>
-              s.mainMenuId === item.mainMenuId && s.subMenu !== item.mainMenu
-          );
-          unique.push({
-            mainMenuId: item.mainMenuId,
-            mainMenu: item.mainMenu,
-            path: item.menuPath,
-            subMenu: submenu.map((sub) => {
-              return {
-                title: sub.subMenu,
-                path: sub.moduleName,
-              };
-            }),
-          });
-        }
-      }
-      setTagModules(unique);
-    });
-  };
-
-  useEffect(() => {
-    fetchTagged();
-
-    return () => {
-      setTagModules([]);
-    };
-  }, []);
-
-  const mainHandler = (children, title) => {
-    fetchNotification();
-    setSubData(children);
-    // setSelectedModule(title)
-  };
-
   const navBars = [
     {
       title: "QC Receiving",
@@ -185,11 +136,74 @@ export const NewSidebar = ({
     },
   ];
 
-  // useEffect(() => {
-  //   if (!subData?.some((x) => x.path === pathname) && pathname !== "/") {
-  //     navigate("/access-denied");
-  //   }
-  // }, [pathname]);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  // const [tagModules, setTagModules] = useState([]);
+  // const { setSelectedMenu } = useContext(Context);
+  // const [subData, setSubData] = useState([]);
+
+  const fetchTagged = () => {
+    fetchTagModuleApi().then((res) => {
+      const unique = [];
+      const map = new Map();
+      for (const item of res) {
+        if (!map.has(item.mainMenuId)) {
+          map.set(item.mainMenuId, true);
+          const submenu = res.filter(
+            (s) =>
+              s.mainMenuId === item.mainMenuId && s.subMenu !== item.mainMenu
+          );
+          unique.push({
+            mainMenuId: item.mainMenuId,
+            mainMenu: item.mainMenu,
+            path: item.menuPath,
+            subMenu: submenu.map((sub) => {
+              return {
+                title: sub.subMenu,
+                path: sub.moduleName,
+              };
+            }),
+          });
+        }
+      }
+      // setTagModules(unique);
+      localStorage.setItem("Tagged Modules", JSON.stringify(unique));
+    });
+  };
+
+  useEffect(() => {
+    fetchTagged();
+
+    // return () => {
+    //   setTagModules([])
+    //   localStorage.removeItem("Tagged Modules");
+    // };
+  }, []);
+
+  const mainHandler = (children, title) => {
+    fetchNotification();
+    // setSubData(children);
+    // setSelectedModule(title)
+    localStorage.setItem("Sub Modules", JSON.stringify(children));
+  };
+
+  const tagModules = JSON.parse(localStorage.getItem("Tagged Modules"));
+  const subData = JSON.parse(localStorage.getItem("Sub Modules"));
+
+  useEffect(() => {
+    if (pathname === "/") {
+      return;
+    }
+    if (
+      tagModules?.some((x) => pathname.includes(x.path)) ||
+      subData?.some((x) => x.path.includes(pathname))
+    ) {
+      return;
+    }
+    navigate("/access-denied");
+  }, [pathname]);
+
+  console.log(tagModules, subData);
 
   return (
     <>
@@ -248,7 +262,11 @@ export const NewSidebar = ({
                         <Link
                           to={sub.path}
                           key={sub.path}
-                          onClick={() => setCurrentPath(sub.path)}
+                          onClick={() => {
+                            // setCurrentPath(sub.path);
+                            localStorage.setItem("Current Path", sub.path);
+                            localStorage.setItem("Current Module", sub.title);
+                          }}
                         >
                           <HStack
                             justifyContent="space-between"

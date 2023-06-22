@@ -21,8 +21,12 @@ export const Header = (props) => {
   const user = decodeUser();
   const navigate = useNavigate();
   const logout = () => {
-    unsetRequest(moveOrderIdOnApp, userFullname)
+    unsetRequest(moveOrderIdOnApp, userFullname);
     sessionStorage.removeItem("userData");
+    localStorage.removeItem("Tagged Modules");
+    localStorage.removeItem("Sub Modules");
+    localStorage.removeItem("Current Module");
+    localStorage.removeItem("Current Path");
     navigate("/");
   };
 
