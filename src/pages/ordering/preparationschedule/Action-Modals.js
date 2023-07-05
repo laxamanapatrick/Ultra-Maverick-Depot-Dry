@@ -177,6 +177,8 @@ export const CancelModalConfirmation = ({
   // currentPage,
   fetchOrders,
   orders,
+  checkedItems,
+  setCheckedItems,
   fetchNotification,
 }) => {
   const [cancelRemarks, setCancelRemarks] = useState("");
@@ -213,14 +215,26 @@ export const CancelModalConfirmation = ({
   };
 
   const cancelHandler = () => {
+    const submitArray = checkedItems?.map((item) => {
+      return {
+        id: item,
+        remarks: cancelRemarks,
+        isCancelBy: currentUser.fullName,
+      };
+    });
+    console.log(submitArray)
     setIsLoading(true);
     try {
       const res = apiClient
-        .put(`Ordering/CancelOrders`, {
-          id: cancelId,
-          remarks: cancelRemarks,
-          isCancelBy: currentUser.fullName,
-        })
+        .put(
+          `Ordering/CancelOrders`,
+          submitArray
+          // {
+          //   id: cancelId,
+          //   remarks: cancelRemarks,
+          //   isCancelBy: currentUser.fullName,
+          // }
+        )
         .then((res) => {
           // setCurrentPage(currentPage);
           ToastComponent(

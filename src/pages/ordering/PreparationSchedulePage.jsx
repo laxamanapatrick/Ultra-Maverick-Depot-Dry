@@ -105,22 +105,24 @@ import { Text, VStack } from "@chakra-ui/react";
 import { ListofOrders } from "./preparationschedule/List-of-Orders";
 import apiClient from "../../services/apiClient";
 
+const fetchOrdersApi = async (farmName) => {
+  const res = await apiClient.get(`Ordering/GetAllListofOrders`, {
+    params: {
+      farms: farmName,
+    },
+  });
+  return res.data;
+};
+
 const PreparationSchedulePage = ({ fetchNotification }) => {
   const [farmName, setFarmName] = useState("");
   const [orders, setOrders] = useState([]);
   const [checkedItems, setCheckedItems] = useState([]);
-
-  const fetchOrdersApi = async () => {
-    const res = await apiClient.get(`Ordering/GetAllListofOrders`, {
-      params: {
-        farms: farmName,
-      },
-    });
-    return res.data;
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchOrders = () => {
     fetchOrdersApi(farmName).then((res) => {
+      setIsLoading(false)
       setOrders(res);
     });
   };
@@ -138,12 +140,16 @@ const PreparationSchedulePage = ({ fetchNotification }) => {
   return (
     <>
       <VStack spacing={0} w="full" h="auto">
-        <Text w='full' color='white' bgColor='secondary' textAlign='center'>Preparation Schedule</Text>
+        <Text w="full" color="white" bgColor="secondary" textAlign="center">
+          Preparation Schedule
+        </Text>
         <ListofCustomers
           farmName={farmName}
           setFarmName={setFarmName}
           fetchNotification={fetchNotification}
           setCheckedItems={setCheckedItems}
+          orders={orders}
+          fetchOrders={fetchOrders}
         />
 
         {farmName && (
@@ -155,6 +161,7 @@ const PreparationSchedulePage = ({ fetchNotification }) => {
             fetchNotification={fetchNotification}
             checkedItems={checkedItems}
             setCheckedItems={setCheckedItems}
+            isLoading={isLoading}
           />
         )}
       </VStack>

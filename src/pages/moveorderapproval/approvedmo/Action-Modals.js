@@ -31,7 +31,7 @@ import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import { useReactToPrint } from "react-to-print";
 import Barcode from "react-barcode";
 import moment from "moment";
-import "./print-styles.css";
+// import "./print-styles.css";
 
 const currentUser = decodeUser();
 

@@ -491,8 +491,18 @@ import {
   ScheduleConfirmation,
 } from "./Action-Modals";
 import moment from "moment";
+import { LoadingRecords, NoDataFound } from "../../../assets/Lottie-Animations";
 
-export const ListofOrders = ({ farmName, setFarmName, orders, fetchOrders, fetchNotification, checkedItems, setCheckedItems }) => {
+export const ListofOrders = ({
+  farmName,
+  setFarmName,
+  orders,
+  fetchOrders,
+  fetchNotification,
+  checkedItems,
+  setCheckedItems,
+  isLoading,
+}) => {
   const [editData, setEditData] = useState({
     transactId: "",
     farm: "",
@@ -611,13 +621,11 @@ export const ListofOrders = ({ farmName, setFarmName, orders, fetchOrders, fetch
     }
   };
 
-  const cancelHandler = ({ id }) => {
-    console.log(id);
-    if (id) {
-      setCancelId(id);
+  const cancelHandler = () => {
+    // console.log(id);
+    if (checkedItems?.length > 0) {
+      // setCancelId(id);
       openCancel();
-    } else {
-      setCancelId("");
     }
   };
 
@@ -653,152 +661,177 @@ export const ListofOrders = ({ farmName, setFarmName, orders, fetchOrders, fetch
         >
           {`List of Orders (${farmName && farmName})`}
         </Text>
-        <PageScrollReusable minHeight="150px" maxHeight="265px">
-          <Table size="sm" variant="simple">
-            <Thead bgColor="secondary" top={0} position="sticky" zIndex="1">
-              <Tr>
-                <Th>
-                  <Checkbox
-                    onChange={parentCheckHandler}
-                    isChecked={stockData?.length === checkedItems?.length}
-                    disabled={!stockData?.length > 0}
-                    color="white"
-                  >
-                    Line
-                  </Checkbox>
-                </Th>
-                <Th color="white">ID</Th>
-                <Th color="white">Order Date</Th>
-                <Th color="white">Date Needed</Th>
-                {/* <Th color="white">Customer Code</Th>
+        {orders?.length === 0 ? (
+          <NoDataFound text="No remaining orders for scheduling on this customer" />
+        ) : (
+          <PageScrollReusable minHeight="150px" maxHeight="265px">
+            <Table size="sm" variant="simple">
+              <Thead bgColor="secondary" top={0} position="sticky" zIndex="1">
+                <Tr>
+                  <Th>
+                    <Checkbox
+                      onChange={parentCheckHandler}
+                      isChecked={stockData?.length === checkedItems?.length}
+                      disabled={!stockData?.length > 0}
+                      color="white"
+                    >
+                      Line
+                    </Checkbox>
+                  </Th>
+                  <Th color="white">ID</Th>
+                  <Th color="white">Order Date</Th>
+                  <Th color="white">Date Needed</Th>
+                  {/* <Th color="white">Customer Code</Th>
                 <Th color="white">Customer Name</Th> */}
-                <Th color="white">Category</Th>
-                <Th color="white">Item Code</Th>
-                <Th color="white">Item Description</Th>
-                <Th color="white">UOM</Th>
-                <Th color="white">Quantity Order</Th>
-                {/* <Th color='white'>Allocated Quantity</Th> */}
-                <Th color="white">Reserve</Th>
-                <Th color="white">Edit</Th>
-                <Th color="white">Cancel</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {orders
-                ?.filter((val) => {
-                  const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
-                  return val.category?.toLowerCase().match(newKeyword, "*");
-                })
-                ?.map((item, i) => (
-                  <Tr
-                    bgColor={
-                      item.stockOnHand < item.quantityOrder
-                        ? "#dfdfdf5c"
-                        : "none"
-                    }
-                    color={
-                      item.stockOnHand < item.quantityOrder ? "black" : "none"
-                    }
-                    _active={
-                      transactId
-                        ? { bgColor: "accent", color: "white" }
-                        : { bgColor: "none" }
-                    }
-                    _hover={
-                      transactId
-                        ? { bgColor: "accent", color: "white" }
-                        : { bgColor: "none" }
-                    }
-                    cursor="pointer"
-                    key={i}
-                  >
-                    {item.stockOnHand >= item.quantityOrder ? (
-                      <Td>
-                        <Checkbox
-                          onChange={childCheckHandler}
-                          isChecked={checkedItems.includes(item.id)}
-                          value={item.id}
-                          color="black"
-                        >
-                          {i + 1}
-                        </Checkbox>
-                      </Td>
-                    ) : (
-                      <Td>
-                        <HStack>
-                          <TiInfo
-                            fontSize="22px"
-                            color="red"
-                            title="Not enough stocks"
-                          />
-                          <Text>{i + 1}</Text>
-                        </HStack>
-                      </Td>
-                    )}
-                    <Td>{item.id}</Td>
-                    <Td>{item.orderDate}</Td>
-                    <Td>{item.dateNeeded}</Td>
-                    {/* <Td>{item.farmCode}</Td>
+                  <Th color="white">Category</Th>
+                  <Th color="white">Item Code</Th>
+                  <Th color="white">Item Description</Th>
+                  <Th color="white">UOM</Th>
+                  <Th color="white">Quantity Order</Th>
+                  {/* <Th color='white'>Allocated Quantity</Th> */}
+                  <Th color="white">Reserve</Th>
+                  <Th color="white">Action</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {orders
+                  ?.filter((val) => {
+                    const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                    return val.category?.toLowerCase().match(newKeyword, "*");
+                  })
+                  ?.map((item, i) => (
+                    <Tr
+                      bgColor={
+                        item.stockOnHand < item.quantityOrder
+                          ? "#dfdfdf5c"
+                          : "none"
+                      }
+                      color={
+                        item.stockOnHand < item.quantityOrder ? "black" : "none"
+                      }
+                      _active={
+                        transactId
+                          ? { bgColor: "accent", color: "white" }
+                          : { bgColor: "none" }
+                      }
+                      _hover={
+                        transactId
+                          ? { bgColor: "accent", color: "white" }
+                          : { bgColor: "none" }
+                      }
+                      cursor="pointer"
+                      key={i}
+                    >
+                      {item.stockOnHand >= item.quantityOrder ? (
+                        <Td>
+                          <Checkbox
+                            onChange={childCheckHandler}
+                            isChecked={checkedItems.includes(item.id)}
+                            value={item.id}
+                            color="black"
+                          >
+                            {i + 1}
+                          </Checkbox>
+                        </Td>
+                      ) : (
+                        <Td>
+                          <HStack>
+                            <TiInfo
+                              fontSize="22px"
+                              color="red"
+                              title="Not enough stocks"
+                            />
+                            <Text>{i + 1}</Text>
+                          </HStack>
+                        </Td>
+                      )}
+                      <Td>{item.id}</Td>
+                      <Td>{item.orderDate}</Td>
+                      <Td>{item.dateNeeded}</Td>
+                      {/* <Td>{item.farmCode}</Td>
                     <Td>{item.farm}</Td> */}
-                    <Td>{item.category.toUpperCase()}</Td>
-                    <Td>{item.itemCode}</Td>
-                    <Td>{item.itemDescription}</Td>
-                    <Td>{item.uom}</Td>
-                    <Td>
-                      {item.quantityOrder?.toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Td>
-                    {/* <Td>{item.allocatedQuantity?.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td> */}
-                    <Td>{item.stockOnHand}</Td>
-                    <Td>
-                      <Button
-                        onClick={() => editHandler(item)}
-                        disabled={item.stockOnHand === 0}
-                        size="xs"
-                        colorScheme="yellow"
-                        color="white"
-                        px={4}
-                      >
-                        Edit
-                      </Button>
-                    </Td>
-
-                    <Td>
-                      <Button
-                        onClick={() => cancelHandler(item)}
-                        size="xs"
-                        colorScheme="red"
-                      >
-                        Cancel
-                      </Button>
-                    </Td>
-                  </Tr>
-                ))}
-            </Tbody>
-          </Table>
-        </PageScrollReusable>
-        <Flex w="full" justifyContent="space-between" py={2} px={2}>
+                      <Td>{item.category.toUpperCase()}</Td>
+                      <Td>{item.itemCode}</Td>
+                      <Td>{item.itemDescription}</Td>
+                      <Td>{item.uom}</Td>
+                      <Td>
+                        {item.quantityOrder?.toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Td>
+                      {/* <Td>{item.allocatedQuantity?.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}</Td> */}
+                      <Td>{item.stockOnHand}</Td>
+                      {item?.stockOnHand === 0 ? (
+                        <Td>
+                          <Button
+                            onClick={() => {
+                              setCheckedItems([item.id]);
+                              openCancel();
+                            }}
+                            size="xs"
+                            colorScheme="red"
+                          >
+                            Cancel
+                          </Button>
+                        </Td>
+                      ) : (
+                        <Td>
+                          <Button
+                            onClick={() => editHandler(item)}
+                            disabled={item.stockOnHand === 0}
+                            size="xs"
+                            colorScheme="yellow"
+                            color="white"
+                            px={4}
+                          >
+                            Edit
+                          </Button>
+                        </Td>
+                      )}
+                    </Tr>
+                  ))}
+              </Tbody>
+            </Table>
+          </PageScrollReusable>
+        )}
+        <Flex
+          w="full"
+          justifyContent="space-between"
+          py={2}
+          px={2}
+          display={orders?.length === 0 ? "none" : "flex"}
+        >
           <Text fontSize="xs">Selected Item(s): {checkedItems?.length}</Text>
-          <Button
-            onClick={scheduleHandler}
-            title={
-              !checkedItems?.length > 0
-                ? disableIfStock
+          <Flex gap={2}>
+            <Button
+              onClick={scheduleHandler}
+              title={
+                !checkedItems?.length > 0
+                  ? disableIfStock
+                    ? "Stocks must be available"
+                    : "Please select an order to schedule"
+                  : !checkedItems?.length > 0 || disableIfStock
                   ? "Stocks must be available"
-                  : "Please select an order to schedule"
-                : !checkedItems?.length > 0 || disableIfStock
-                ? "Stocks must be available"
-                : "Schedule order(s)"
-            }
-            disabled={!checkedItems?.length > 0 || disableIfStock}
-            size="sm"
-            px={3}
-            colorScheme="blue"
-          >
-            Schedule
-          </Button>
+                  : "Schedule order(s)"
+              }
+              disabled={!checkedItems?.length > 0 || disableIfStock}
+              size="sm"
+              px={3}
+              colorScheme="blue"
+            >
+              Schedule
+            </Button>
+            <Button
+              onClick={cancelHandler}
+              disabled={checkedItems?.length === 0}
+              size="sm"
+              px={3}
+              colorScheme="red"
+            >
+              Cancel
+            </Button>
+          </Flex>
         </Flex>
       </VStack>
 
@@ -822,6 +855,8 @@ export const ListofOrders = ({ farmName, setFarmName, orders, fetchOrders, fetch
           // currentPage={currentPage}
           fetchOrders={fetchOrders}
           fetchNotification={fetchNotification}
+          checkedItems={checkedItems}
+          setCheckedItems={setCheckedItems}
         />
       )}
 

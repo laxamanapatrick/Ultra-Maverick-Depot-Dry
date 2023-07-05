@@ -32,6 +32,7 @@ import {
 import PageScrollReusable from "../../../components/PageScroll-Reusable";
 import apiClient from "../../../services/apiClient";
 import { FaSearch } from "react-icons/fa";
+import { LoadingRecords } from "../../../assets/Lottie-Animations";
 
 const fetchCustomerWithOrdersApi = async (pageNumber, pageSize) => {
   const res = await apiClient.get(
@@ -40,10 +41,17 @@ const fetchCustomerWithOrdersApi = async (pageNumber, pageSize) => {
   return res.data;
 };
 
-const ListofCustomers = ({ farmName, setFarmName, setCheckedItems }) => {
+const ListofCustomers = ({
+  farmName,
+  setFarmName,
+  setCheckedItems,
+  orders,
+  fetchOrders,
+}) => {
   const [customers, setCustomers] = useState([]);
   const [pageTotal, setPageTotal] = useState(undefined);
   const [keyword, setKeyword] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const outerLimit = 2;
   const innerLimit = 2;
@@ -65,6 +73,7 @@ const ListofCustomers = ({ farmName, setFarmName, setCheckedItems }) => {
 
   const fetchCustomerWithOrders = () => {
     fetchCustomerWithOrdersApi(currentPage, pageSize).then((res) => {
+      setIsLoading(false);
       setCustomers(res);
       setPageTotal(res.totalCount);
     });
@@ -87,6 +96,17 @@ const ListofCustomers = ({ farmName, setFarmName, setCheckedItems }) => {
     setPageSize(pageSize);
     setCurrentPage(1);
   };
+
+  // useEffect(() => {
+  //   if (orders?.length === 0) {
+  //     fetchOrders();
+  //     setTimeout(() => {
+  //       if (orders?.length === 0) {
+  //         fetchCustomerWithOrders();
+  //       }
+  //     }, 500);
+  //   }
+  // }, [orders]);
 
   return (
     <Flex w="full" px={7} flexDirection="column">
@@ -120,53 +140,62 @@ const ListofCustomers = ({ farmName, setFarmName, setCheckedItems }) => {
         >
           List of Customers
         </Text>
-        <PageScrollReusable maxHeight="275px">
-          <Table size="sm">
-            <Thead bgColor="secondary" top={0} position="sticky" zIndex="1">
-              <Tr>
-                <Th color="white">Line</Th>
-                <Th color="white">Customer Code</Th>
-                <Th color="white">Customer Name</Th>
-                <Th color="white">Customer Type</Th>
-                <Th color="white">Company</Th>
-                <Th color="white">Department</Th>
-                <Th color="white">Location</Th>
-                {/* <Th color="white">View Orders</Th> */}
-              </Tr>
-            </Thead>
-            <Tbody>
-              {customers?.orders
-                ?.filter((val) => {
-                  const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
-                  return val.customerName?.toLowerCase().match(newKeyword, "*");
-                })
-                ?.map((item, i) => (
-                  <Tr
-                    key={i}
-                    cursor="pointer"
-                    bgColor={farmName === item.customerName ? "table_accent" : ""}
-                    onClick={() => {
-                      setFarmName(item.customerName);
-                      setCheckedItems([]);
-                    }}
-                  >
-                    <Td>{i + 1}</Td>
-                    <Td>{item.customerCode}</Td>
-                    <Td>{item.customerName}</Td>
-                    <Td>{item.farmName}</Td>
-                    <Td>{item.companyName}</Td>
-                    <Td>{item.locationName}</Td>
-                    <Td>{item.departmentName}</Td>
-                    {/* <Td>
+        {isLoading ? (
+          <LoadingRecords />
+        ) : (
+          <PageScrollReusable maxHeight="275px">
+            <Table size="sm">
+              <Thead bgColor="secondary" top={0} position="sticky" zIndex="1">
+                <Tr>
+                  <Th color="white">Line</Th>
+                  <Th color="white">Customer Code</Th>
+                  <Th color="white">Customer Name</Th>
+                  <Th color="white">Customer Type</Th>
+                  <Th color="white">Company</Th>
+                  <Th color="white">Department</Th>
+                  <Th color="white">Location</Th>
+                  {/* <Th color="white">View Orders</Th> */}
+                </Tr>
+              </Thead>
+              <Tbody>
+                {customers?.orders
+                  ?.filter((val) => {
+                    const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                    return val.customerName
+                      ?.toLowerCase()
+                      .match(newKeyword, "*");
+                  })
+                  ?.map((item, i) => (
+                    <Tr
+                      key={i}
+                      cursor="pointer"
+                      bgColor={
+                        farmName === item.customerName ? "table_accent" : ""
+                      }
+                      onClick={() => {
+                        setFarmName(item.customerName);
+                        fetchOrders()
+                        setCheckedItems([]);
+                      }}
+                    >
+                      <Td>{i + 1}</Td>
+                      <Td>{item.customerCode}</Td>
+                      <Td>{item.customerName}</Td>
+                      <Td>{item.farmName}</Td>
+                      <Td>{item.companyName}</Td>
+                      <Td>{item.locationName}</Td>
+                      <Td>{item.departmentName}</Td>
+                      {/* <Td>
                     <Button size="xs" colorScheme="green">
                       View Orders
                     </Button>
                   </Td> */}
-                  </Tr>
-                ))}
-            </Tbody>
-          </Table>
-        </PageScrollReusable>
+                    </Tr>
+                  ))}
+              </Tbody>
+            </Table>
+          </PageScrollReusable>
+        )}
       </VStack>
 
       <Flex w="full" justifyContent="end">

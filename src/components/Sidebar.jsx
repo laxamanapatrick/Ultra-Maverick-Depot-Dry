@@ -203,8 +203,6 @@ export const NewSidebar = ({
     navigate("/access-denied");
   }, [pathname]);
 
-  console.log(tagModules, subData);
-
   return (
     <>
       <Flex

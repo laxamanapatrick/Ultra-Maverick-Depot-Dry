@@ -103,6 +103,7 @@ import Analysis from "./pages/setup/Analysis";
 import Parameters from "./pages/setup/Parameters";
 import ProductCondition from "./pages/setup/Product-Condition";
 import Dispotion from "./pages/setup/Dispotion";
+import AccountTtitles from "./pages/setup/Account-Ttitles";
 
 import MoveOrderApproval from "./pages/MoveOrderApproval";
 import ForApprovalMO from "./pages/moveorderapproval/For-ApprovalMO";
@@ -746,6 +747,10 @@ function App() {
             <Route
               path="disposition"
               element={user ? <Dispotion /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="account-titles"
+              element={user ? <AccountTtitles /> : <Navigate to="/login" />}
             />
           </Route>
 

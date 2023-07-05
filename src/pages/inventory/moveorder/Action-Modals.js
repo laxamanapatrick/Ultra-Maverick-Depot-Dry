@@ -512,17 +512,27 @@ export const DeliveryStatusConfirmation = ({
   };
 
   // FETCH ACcount API
+  // const fetchAccountApi = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0",
+  //       {
+  //         headers: {
+  //           Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
+  //         },
+  //       }
+  //     );
+  //     setAccount(res.data.result.account_titles);
+  //   } catch (error) {}
+  // };
+
+  // FETCH ACcount API on UM Database
   const fetchAccountApi = async () => {
     try {
-      const res = await axios.get(
-        "http://10.10.2.76:8000/api/dropdown/account-title?status=1&paginate=0",
-        {
-          headers: {
-            Authorization: "Bearer " + process.env.REACT_APP_FISTO_TOKEN,
-          },
-        }
+      const res = await apiClient.get(
+        `AccountTitle/GetAllAccountTitleAsyncPagination/true?PageNumber=1&PageSize=1999`
       );
-      setAccount(res.data.result.account_titles);
+      setAccount(res.data.accountTitles);
     } catch (error) {}
   };
 
@@ -677,6 +687,8 @@ export const DeliveryStatusConfirmation = ({
     } catch (error) {}
   };
 
+  console.log(account)
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={() => {}} isCentered size="2xl">
@@ -793,7 +805,7 @@ export const DeliveryStatusConfirmation = ({
                     {errors.formData?.locationId?.message}
                   </Text>
                 </Box>
-                <Box>
+                {/* <Box>
                   <FormLabel fontSize="sm">Account Title</FormLabel>
                   <Controller
                     control={control}
@@ -811,6 +823,33 @@ export const DeliveryStatusConfirmation = ({
                         {account?.map((item) => (
                           <option key={item.id} value={item.name}>
                             {item.name}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                  <Text color="red" fontSize="xs">
+                    {errors.formData?.accountTitles?.message}
+                  </Text>
+                </Box> */}
+                 <Box>
+                  <FormLabel fontSize="sm">Account Title</FormLabel>
+                  <Controller
+                    control={control}
+                    name="formData.accountTitles"
+                    defaultValue=""
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        value={field.value || ""}
+                        placeholder="Select Account"
+                        fontSize="sm"
+                        bgColor="#fff8dc"
+                        isSearchable
+                      >
+                        {account?.map((item) => (
+                          <option key={item.id} value={item.accountTitleName}>
+                            {item.accountTitleName}
                           </option>
                         ))}
                       </Select>
