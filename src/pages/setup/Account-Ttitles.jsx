@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Skeleton,
   Stack,
   Table,
   Tbody,
@@ -111,10 +112,12 @@ const AccountTtitles = () => {
   }, []);
 
   const handlePageChange = (nextPage) => {
+    setIsLoading(true);
     setCurrentPage(nextPage);
   };
 
   const handlePageSizeChange = (e) => {
+    setIsLoading(true);
     const pageSize = Number(e.target.value);
     setPageSize(pageSize);
   };
@@ -204,67 +207,83 @@ const AccountTtitles = () => {
 
             <HStack>
               <Text>STATUS: </Text>
-              <Select onChange={(e) => setStatus(e.target.value)}>
+              <Select
+                onChange={(e) => {
+                  setIsLoading(true);
+                  setStatus(e.target.value);
+                }}
+              >
                 <option value={true}>Active</option>
                 <option value={false}>Inactive</option>
               </Select>
             </HStack>
           </Flex>
-          <PageScrollReusable maxHeight="70vh">
-            <Table size="sm">
-              <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
-                <Tr>
-                  <Th color="white">Account Title ID</Th>
-                  <Th color="white">Account Title Code</Th>
-                  <Th color="white">Account Title Name</Th>
-                  <Th color="white">Change Status</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {accountUM
-                  ?.filter((val) => {
-                    const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
-                    return (
-                      val.accountTitleCode
-                        ?.toLowerCase()
-                        .match(newKeyword, "*") ||
-                      val.accountTitleName
-                        ?.toLowerCase()
-                        .match(newKeyword, "*") ||
-                      val.accountTitleId
-                        ?.toString()
-                        ?.toLowerCase()
-                        .match(newKeyword, "*")
-                    );
-                  })
-                  ?.map((item, i) => (
-                    <Tr key={i}>
-                      <Td>{item.accountTitleId}</Td>
-                      <Td>{item.accountTitleCode}</Td>
-                      <Td>{item.accountTitleName}</Td>
-                      <Td>
-                        <Button
-                          p={0}
-                          background="none"
-                          color="secondary"
-                          onClick={() =>
-                            changeStatusHandler(
-                              item.accountTitleId,
-                              item.isActive
-                            )
-                          }
-                        >
-                          <GiChoice />
-                        </Button>
-                      </Td>
-                    </Tr>
-                  ))}
-              </Tbody>
-            </Table>
-          </PageScrollReusable>
+          {isLoading ? (
+            <Stack width="full">
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+              <Skeleton height="20px" />
+            </Stack>
+          ) : (
+            <PageScrollReusable maxHeight="70vh">
+              <Table size="sm">
+                <Thead bgColor="secondary" position="sticky" top={0} zIndex={1}>
+                  <Tr>
+                    <Th color="white">Account Title ID</Th>
+                    <Th color="white">Account Title Code</Th>
+                    <Th color="white">Account Title Name</Th>
+                    <Th color="white">Change Status</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {accountUM
+                    ?.filter((val) => {
+                      const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
+                      return (
+                        val.accountTitleCode
+                          ?.toLowerCase()
+                          .match(newKeyword, "*") ||
+                        val.accountTitleName
+                          ?.toLowerCase()
+                          .match(newKeyword, "*") ||
+                        val.accountTitleId
+                          ?.toString()
+                          ?.toLowerCase()
+                          .match(newKeyword, "*")
+                      );
+                    })
+                    ?.map((item, i) => (
+                      <Tr key={i}>
+                        <Td>{item.accountTitleId}</Td>
+                        <Td>{item.accountTitleCode}</Td>
+                        <Td>{item.accountTitleName}</Td>
+                        <Td>
+                          <Button
+                            p={0}
+                            background="none"
+                            color="secondary"
+                            onClick={() =>
+                              changeStatusHandler(
+                                item.accountTitleId,
+                                item.isActive
+                              )
+                            }
+                          >
+                            <GiChoice />
+                          </Button>
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </PageScrollReusable>
+          )}
         </Flex>
         <Flex justifyContent="space-between" width="full">
-          <Button mx={2} size="sm" colorScheme="blue" onClick={handleSync}>
+          <Button mx={2} size="sm" colorScheme="blue" disabled={isLoading} onClick={handleSync}>
             Sync
           </Button>
           <Stack>
