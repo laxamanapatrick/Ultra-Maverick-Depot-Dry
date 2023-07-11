@@ -687,7 +687,7 @@ export const DeliveryStatusConfirmation = ({
     } catch (error) {}
   };
 
-  console.log(account)
+  console.log(account);
 
   return (
     <>
@@ -832,7 +832,7 @@ export const DeliveryStatusConfirmation = ({
                     {errors.formData?.accountTitles?.message}
                   </Text>
                 </Box> */}
-                 <Box>
+                <Box>
                   <FormLabel fontSize="sm">Account Title</FormLabel>
                   <Controller
                     control={control}
@@ -1024,11 +1024,13 @@ export const SearchCustomer = ({
   farmName,
   setCurrentPage,
   fetchMoveOrder,
+  firstKeyword,
+  setFirstKeyword,
 }) => {
   const [customers, setCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const toast = useToast();
-  const [keyword, setKeyword] = useState(farmName);
+  const [keyword, setKeyword] = useState(firstKeyword ? firstKeyword : "");
   const inputRef = useRef("");
 
   const fetchMoveOrderForCustomer = () => {
@@ -1046,8 +1048,9 @@ export const SearchCustomer = ({
     };
   }, []);
 
-  const handleClick = (farm, indexPlusOne) => {
+  const handleClick = (farm, indexPlusOne, departmentName) => {
     if (farmName !== farm) {
+      setFirstKeyword(departmentName);
       setFarmName(farm);
       setCurrentPage(indexPlusOne);
       onClose();
@@ -1092,7 +1095,7 @@ export const SearchCustomer = ({
                   <Input
                     ref={inputRef}
                     placeholder="You can also type the keyword of what you're looking for here."
-                    defaultValue={keyword}
+                    defaultValue={firstKeyword ? firstKeyword : ""}
                     // onChange={(e) => {
                     //   const inputValue = e.target.value;
                     //   setKeyword(inputValue !== "" ? inputValue : "");
@@ -1206,7 +1209,13 @@ export const SearchCustomer = ({
                             <Tr
                               key={item.index}
                               cursor="pointer"
-                              onClick={() => handleClick(item.farm, item.index)}
+                              onClick={() =>
+                                handleClick(
+                                  item.farm,
+                                  item.index,
+                                  item.departmentName
+                                )
+                              }
                             >
                               <Td>
                                 <Button bg="none">

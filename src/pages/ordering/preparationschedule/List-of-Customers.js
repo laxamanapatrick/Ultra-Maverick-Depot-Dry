@@ -161,9 +161,14 @@ const ListofCustomers = ({
                 {customers?.orders
                   ?.filter((val) => {
                     const newKeyword = new RegExp(`${keyword.toLowerCase()}`);
-                    return val.customerName
-                      ?.toLowerCase()
-                      .match(newKeyword, "*");
+                    return (
+                      val.customerName?.toLowerCase().match(newKeyword, "*") ||
+                      val.customerCode?.toLowerCase().match(newKeyword, "*") ||
+                      val.farmName?.toLowerCase().match(newKeyword, "*") ||
+                      val.companyName?.toLowerCase().match(newKeyword, "*") ||
+                      val.locationName?.toLowerCase().match(newKeyword, "*") ||
+                      val.departmentName?.toLowerCase().match(newKeyword, "*")
+                    );
                   })
                   ?.map((item, i) => (
                     <Tr
@@ -174,7 +179,7 @@ const ListofCustomers = ({
                       }
                       onClick={() => {
                         setFarmName(item.customerName);
-                        fetchOrders()
+                        fetchOrders();
                         setCheckedItems([]);
                       }}
                     >

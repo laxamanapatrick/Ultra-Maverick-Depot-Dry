@@ -172,11 +172,11 @@ export const EditModal = ({
 export const CancelModalConfirmation = ({
   isOpen,
   onClose,
-  cancelId,
+  // cancelId,
   // setCurrentPage,
   // currentPage,
   fetchOrders,
-  orders,
+  // orders,
   checkedItems,
   setCheckedItems,
   fetchNotification,
@@ -222,7 +222,7 @@ export const CancelModalConfirmation = ({
         isCancelBy: currentUser.fullName,
       };
     });
-    console.log(submitArray)
+    console.log(submitArray);
     setIsLoading(true);
     try {
       const res = apiClient

@@ -205,6 +205,8 @@ export const ListofApprovedDate = ({
     onOpen: openSearch,
   } = useDisclosure();
 
+  const [firstKeyword, setFirstKeyword] = useState("");
+
   return (
     <Flex w="full" flexDirection="column">
       <Flex w="full" justifyContent="space-between">
@@ -437,6 +439,8 @@ export const ListofApprovedDate = ({
           farmName={farmName}
           setCurrentPage={setCurrentPage}
           fetchMoveOrder={fetchMoveOrder}
+          firstKeyword={firstKeyword}
+          setFirstKeyword={setFirstKeyword}
         />
       )}
     </Flex>
