@@ -25,15 +25,21 @@ import {
   DisablePreparation,
   EnablePreparation,
 } from "./moveorder/Preparation-User-Control";
+import moment from "moment";
 
 const currentUser = decodeUser();
 
 //Pagination
 
-const fetchMoveOrderApi = async (pageNumber) => {
-  const res = await apiClient.get(
-    `Ordering/GetAllListForMoveOrderPagination?pageSize=1&pageNumber=${pageNumber}`
-  );
+const fetchMoveOrderApi = async (pageNumber, dateTo, dateFrom) => {
+  const res = await apiClient.get(`Ordering/GetAllListForMoveOrderPagination`, {
+    params: {
+      pageSize: 1,
+      pageNumber: pageNumber,
+      dateTo: dateTo,
+      dateFrom: dateFrom,
+    },
+  });
   return res.data;
 };
 
@@ -41,10 +47,12 @@ const fetchMoveOrderApi = async (pageNumber) => {
 
 const fetchApprovedMoveOrdersApi = async (farmName) => {
   const res = await apiClient.get(
-    `Ordering/GetAllListOfApprovedPreparedForMoveOrder`, {
+    `Ordering/GetAllListOfApprovedPreparedForMoveOrder`,
+    {
       params: {
-        farm:farmName
-      },}
+        farm: farmName,
+      },
+    }
   );
   return res.data;
 };
@@ -61,13 +69,12 @@ const fetchOrderListApi = async (orderId) => {
 //Actual Item Quantity || Barcode Details
 
 const fetchBarcodeDetailsApi = async (warehouseId, itemCode) => {
-  const res = await apiClient.get(
-    `Ordering/GetAvailableStockFromWarehouse`, {
-      params: {
-        id:warehouseId,
-        itemcode: itemCode,
-      },}
-  );
+  const res = await apiClient.get(`Ordering/GetAvailableStockFromWarehouse`, {
+    params: {
+      id: warehouseId,
+      itemcode: itemCode,
+    },
+  });
   return res.data;
 };
 
@@ -86,8 +93,11 @@ const MoveOrderPage = ({
   unsetRequest,
   setMoveOrderIdOnApp,
 }) => {
+  const initialFromDate = moment().subtract(7, "days").format("yyyy-MM-DD");
   const [farmName, setFarmName] = useState("");
-  const [customerId, setCustomerId] = useState("")
+  const [customerId, setCustomerId] = useState("");
+  const [dateFrom, setDateFrom] = useState(initialFromDate);
+  const [dateTo, setDateTo] = useState(moment(new Date()).format("yyyy-MM-DD"));
 
   const [deliveryStatus, setDeliveryStatus] = useState("");
   // const [batchNumber, setBatchNumber] = useState('')
@@ -135,9 +145,9 @@ const MoveOrderPage = ({
   //Pagination
 
   const fetchMoveOrder = () => {
-    fetchMoveOrderApi(currentPage).then((res) => {
+    fetchMoveOrderApi(currentPage, dateTo, dateFrom).then((res) => {
       setFarmName(res?.orders[0]?.farm);
-      setCustomerId(res?.orders[0]?.customerId)
+      setCustomerId(res?.orders[0]?.customerId);
       setPageTotal(res.totalCount);
       // setPaginationData(res);
     });
@@ -151,7 +161,7 @@ const MoveOrderPage = ({
     return () => {
       setFarmName("");
     };
-  }, [currentPage]);
+  }, [currentPage, dateTo, dateFrom]);
 
   //Approved Move Orders
 
@@ -302,7 +312,7 @@ const MoveOrderPage = ({
       return;
     }
 
-    fetchOrderList()
+    fetchOrderList();
     const variable = orderListData?.every(
       (item) => item.preparedQuantity === item.quantityOrder
     );
@@ -316,116 +326,122 @@ const MoveOrderPage = ({
         <DisablePreparation preparingUser={preparingUser} />
       )}
       {!preparingStatus && !isBeingPrepared && !preparingUser && (
-        <EnablePreparation preparingUser={preparingUser} moveData={moveData} />
+        <EnablePreparation moveData={moveData} />
       )}
-      <VStack w="full" p={4} spacing={6}>
-        <ListofApprovedDate
-          preparingUser={preparingUser}
-          me={currentUser?.fullName}
-          isBeingPrepared={isBeingPrepared}
-          preparingStatus={preparingStatus}
-          setPreparingStatus={setPreparingStatus}
-          setRequest={setRequest}
-          unsetRequest={unsetRequest}
-          startSetConnection={startSetConnection}
-          connectionTwo={connectionTwo}
-          MoveOrderId={moveData[0]?.id}
-          userFullname={currentUser?.fullName}
-          farmName={farmName} setFarmName={setFarmName}
-          moveData={moveData}
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
-          pagesCount={pagesCount}
-          setOrderId={setOrderId}
-          orderId={orderId}
-          setItemCode={setItemCode}
-          setWarehouseId={setWarehouseId}
-          setHighlighterId={setHighlighterId}
-          setDeliveryStatus={setDeliveryStatus}
-          // setBatchNumber={setBatchNumber}
-          buttonChanger={buttonChanger}
-          fetchApprovedMoveOrders={fetchApprovedMoveOrders}
-          fetchMoveOrder={fetchMoveOrder}
-          fetchOrderList={fetchOrderList}
-          lengthIndicator={lengthIndicator}
-          preparedLength={preparedData?.length}
-          pageDisable={pageDisable}
-          orderListData={orderListData}
-          preparedData={preparedData}
-        />
-        {orderId ? (
-          <ListofOrders
-            orderListData={orderListData}
-            setItemCode={setItemCode}
-            highlighterId={highlighterId} customerId={customerId}
-            setHighlighterId={setHighlighterId}
-            setQtyOrdered={setQtyOrdered}
-            setPreparedQty={setPreparedQty}
-            setWarehouseId={setWarehouseId}
-            setPageDisable={setPageDisable}
-            preparedData={preparedData}
+      <Flex direction="column" w="full">
+        <VStack w="full" p={4} spacing={6}>
+          <ListofApprovedDate
+            preparingUser={preparingUser}
+            me={currentUser?.fullName}
+            isBeingPrepared={isBeingPrepared}
             preparingStatus={preparingStatus}
-            setButtonChanger={setButtonChanger}
-            fetchOrderList={fetchOrderList}
-          />
-        ) : (
-          ""
-        )}
-        {buttonChanger && preparedData?.length !== 0 ? (
-          <SaveButton
-            deliveryStatus={deliveryStatus}
-            // batchNumber={batchNumber}
-            orderListData={orderListData}
-            fetchApprovedMoveOrders={fetchApprovedMoveOrders}
-            fetchOrderList={fetchOrderList}
-            orderId={orderId}
-            setOrderId={setOrderId}
-            setHighlighterId={setHighlighterId}
-            setItemCode={setItemCode}
-            setDeliveryStatus={setDeliveryStatus}
-            setButtonChanger={setButtonChanger}
+            setPreparingStatus={setPreparingStatus}
+            setRequest={setRequest}
+            unsetRequest={unsetRequest}
+            startSetConnection={startSetConnection}
+            connectionTwo={connectionTwo}
+            MoveOrderId={moveData[0]?.id}
+            userFullname={currentUser?.fullName}
+            farmName={farmName}
+            setFarmName={setFarmName}
+            moveData={moveData}
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
-            fetchNotification={fetchNotification}
-            unsetRequest={unsetRequest}
-            userId={currentUser?.id}
-            unsetOrderId={moveData[0]?.id}
-            setPageDisable={setPageDisable}
-            setPreparingStatus={setPreparingStatus}
-            setFarmName={setFarmName}
-            setOrderListData={setOrderListData}
-            moveData={moveData}
+            pagesCount={pagesCount}
+            setOrderId={setOrderId}
+            orderId={orderId}
+            setItemCode={setItemCode}
+            setWarehouseId={setWarehouseId}
+            setHighlighterId={setHighlighterId}
+            setDeliveryStatus={setDeliveryStatus}
+            // setBatchNumber={setBatchNumber}
+            buttonChanger={buttonChanger}
+            fetchApprovedMoveOrders={fetchApprovedMoveOrders}
             fetchMoveOrder={fetchMoveOrder}
+            fetchOrderList={fetchOrderList}
+            lengthIndicator={lengthIndicator}
+            preparedLength={preparedData?.length}
+            pageDisable={pageDisable}
+            orderListData={orderListData}
+            preparedData={preparedData}
+            dateTo={dateTo}
+            setDateTo={setDateTo}
+            dateFrom={dateFrom}
+            setDateFrom={setDateFrom}
           />
-        ) : (
-          itemCode &&
-          highlighterId && (
-            <ActualItemQuantity
-              setWarehouseId={setWarehouseId}
-              warehouseId={warehouseId}
-              barcodeData={barcodeData}
-              orderId={orderId}
+          {orderId && (
+            <ListofOrders
+              orderListData={orderListData}
+              setItemCode={setItemCode}
               highlighterId={highlighterId}
-              itemCode={itemCode}
+              customerId={customerId}
+              setHighlighterId={setHighlighterId}
+              setQtyOrdered={setQtyOrdered}
+              setPreparedQty={setPreparedQty}
+              setWarehouseId={setWarehouseId}
+              setPageDisable={setPageDisable}
+              preparedData={preparedData}
+              preparingStatus={preparingStatus}
+              setButtonChanger={setButtonChanger}
               fetchOrderList={fetchOrderList}
-              fetchPreparedItems={fetchPreparedItems}
-              qtyOrdered={qtyOrdered}
-              preparedQty={preparedQty}
+            />
+          )}
+          {buttonChanger && preparedData?.length !== 0 ? (
+            <SaveButton
+              deliveryStatus={deliveryStatus}
+              // batchNumber={batchNumber}
+              orderListData={orderListData}
+              fetchApprovedMoveOrders={fetchApprovedMoveOrders}
+              fetchOrderList={fetchOrderList}
+              orderId={orderId}
+              setOrderId={setOrderId}
               setHighlighterId={setHighlighterId}
               setItemCode={setItemCode}
-              nearlyExpireBarcode={nearlyExpireBarcode}
+              setDeliveryStatus={setDeliveryStatus}
+              setButtonChanger={setButtonChanger}
+              setCurrentPage={setCurrentPage}
+              currentPage={currentPage}
+              fetchNotification={fetchNotification}
+              unsetRequest={unsetRequest}
+              userId={currentUser?.id}
+              unsetOrderId={moveData[0]?.id}
               setPageDisable={setPageDisable}
+              setPreparingStatus={setPreparingStatus}
+              setFarmName={setFarmName}
+              setOrderListData={setOrderListData}
+              moveData={moveData}
+              fetchMoveOrder={fetchMoveOrder}
             />
-          )
-        )}
-        {preparedData.length > 0 && (
-          <PreparedItems
-            preparedData={preparedData}
-            fetchPreparedItems={fetchPreparedItems}
-            fetchOrderList={fetchOrderList}
-          />
-        )}
-      </VStack>
+          ) : (
+            itemCode &&
+            highlighterId && (
+              <ActualItemQuantity
+                setWarehouseId={setWarehouseId}
+                warehouseId={warehouseId}
+                barcodeData={barcodeData}
+                orderId={orderId}
+                highlighterId={highlighterId}
+                itemCode={itemCode}
+                fetchOrderList={fetchOrderList}
+                fetchPreparedItems={fetchPreparedItems}
+                qtyOrdered={qtyOrdered}
+                preparedQty={preparedQty}
+                setHighlighterId={setHighlighterId}
+                setItemCode={setItemCode}
+                nearlyExpireBarcode={nearlyExpireBarcode}
+                setPageDisable={setPageDisable}
+              />
+            )
+          )}
+          {preparedData.length > 0 && (
+            <PreparedItems
+              preparedData={preparedData}
+              fetchPreparedItems={fetchPreparedItems}
+              fetchOrderList={fetchOrderList}
+            />
+          )}
+        </VStack>
+      </Flex>
     </>
   );
 };

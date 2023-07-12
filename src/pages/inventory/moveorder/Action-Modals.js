@@ -1010,10 +1010,15 @@ export const VoidConfirmation = ({
   );
 };
 
-const fetchMoveOrderForCustomerApi = async () => {
-  const res = await apiClient.get(
-    `Ordering/GetAllListForMoveOrderPagination?pageSize=${2000}&pageNumber=${1}`
-  );
+const fetchMoveOrderForCustomerApi = async (dateTo, dateFrom) => {
+  const res = await apiClient.get(`Ordering/GetAllListForMoveOrderPagination`, {
+    params: {
+      pageSize: 2000,
+      pageNumber: 1,
+      dateTo: dateTo,
+      dateFrom: dateFrom,
+    },
+  });
   return res.data;
 };
 
@@ -1026,6 +1031,8 @@ export const SearchCustomer = ({
   fetchMoveOrder,
   firstKeyword,
   setFirstKeyword,
+  dateTo,
+  dateFrom,
 }) => {
   const [customers, setCustomers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -1034,7 +1041,7 @@ export const SearchCustomer = ({
   const inputRef = useRef("");
 
   const fetchMoveOrderForCustomer = () => {
-    fetchMoveOrderForCustomerApi().then((res) => {
+    fetchMoveOrderForCustomerApi(dateTo, dateFrom).then((res) => {
       setIsLoading(false);
       setCustomers(res);
     });

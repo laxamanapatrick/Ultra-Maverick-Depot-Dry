@@ -4,6 +4,7 @@ import {
   Button,
   Flex,
   HStack,
+  Input,
   Select,
   Table,
   Tbody,
@@ -69,6 +70,10 @@ export const ListofApprovedDate = ({
   pageDisable,
   orderListData,
   preparedData,
+  dateTo,
+  setDateTo,
+  dateFrom,
+  setDateFrom,
 }) => {
   const toast = useToast();
 
@@ -207,26 +212,32 @@ export const ListofApprovedDate = ({
 
   const [firstKeyword, setFirstKeyword] = useState("");
 
+  const dateVar = new Date();
+  const startDate = moment(dateVar.setDate(dateVar.getDate() - 35)).format(
+    "yyyy-MM-DD"
+  );
+
   return (
     <Flex w="full" flexDirection="column">
-      <Flex w="full" justifyContent="space-between">
-        <Button
-          disabled={preparingStatus}
-          gap={1}
-          cursor="pointer"
-          onClick={() => {
-            farmName ? openSearch() : () => {};
-          }}
-        >
-          <Badge bgColor="secondary" color="white" px={3}>
-            Customer:{" "}
-          </Badge>
-          <Text fontSize="sm">{farmName && farmName}</Text>
-        </Button>
-
-        <Flex w="17%">
+      <Flex w="full" justifyContent="space-between" h="auto">
+        <Flex w="auto">
+          <Button
+            disabled={preparingStatus}
+            gap={1}
+            cursor="pointer"
+            onClick={() => {
+              farmName ? openSearch() : () => {};
+            }}
+          >
+            <Badge bgColor="secondary" color="white" px={3}>
+              Customer:{" "}
+            </Badge>
+            <Text fontSize="sm">{farmName && farmName}</Text>
+          </Button>
           {!preparingStatus ? (
             <Button
+              w="auto"
+              height="full"
               onClick={startPreparationHandler}
               size="sm"
               colorScheme="green"
@@ -248,6 +259,27 @@ export const ListofApprovedDate = ({
               Stop Preparing
             </Button>
           )}
+        </Flex>
+
+        <Flex justifyContent="center">
+          <HStack spacing={2} w="auto">
+            <Badge>From:</Badge>
+            <Input
+              type="date"
+              bgColor="#fff8dc"
+              min={startDate}
+              value={dateFrom}
+              onChange={(date) => setDateFrom(date.target.value)}
+            />
+            <Badge>To:</Badge>
+            <Input
+              type="date"
+              bgColor="#fff8dc"
+              min={dateFrom}
+              value={dateTo}
+              onChange={(date) => setDateTo(date.target.value)}
+            />
+          </HStack>
         </Flex>
 
         <Flex>
@@ -397,7 +429,7 @@ export const ListofApprovedDate = ({
                   <Td>{order.farmName}</Td>
                   {/* <Td>{order.category}</Td> */}
                   <Td>{order.quantityOrder}</Td>
-                  <Td>{moment(order.preparedDateTime).format("MM/DD/yyyy")}</Td>
+                  <Td>{moment(order.preparedDate).format("MM/DD/yyyy")}</Td>
                   <Td>
                     <Button
                       size="xs"
@@ -441,6 +473,8 @@ export const ListofApprovedDate = ({
           fetchMoveOrder={fetchMoveOrder}
           firstKeyword={firstKeyword}
           setFirstKeyword={setFirstKeyword}
+          dateTo={dateTo}
+          dateFrom={dateFrom}
         />
       )}
     </Flex>
