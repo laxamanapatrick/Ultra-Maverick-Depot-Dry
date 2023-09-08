@@ -385,6 +385,7 @@ export const RawMatsInfoModal = ({
         // expirationDate: expirationDate
         expirationDate: rawMatsInfo.expirationDate,
         quantity: rawMatsInfo.quantity,
+        unitCost: rawMatsInfo.unitCost,
       });
     } else {
       setRawMatsInfo({
@@ -395,6 +396,7 @@ export const RawMatsInfoModal = ({
         // expirationDate: ''
         expirationDate: rawMatsInfo.expirationDate,
         quantity: rawMatsInfo.quantity,
+        unitCost: rawMatsInfo.unitCost
       });
     }
   };
@@ -404,6 +406,7 @@ export const RawMatsInfoModal = ({
       const newData = JSON.parse(data);
       const warehouseId = newData.warehouseId;
       const expirationDate = newData.expirationDate;
+      const unitCost = newData.unitCost;
       setAvailableStock(newData.remainingStocks);
       setWarehouseId(warehouseId);
       setRawMatsInfo({
@@ -413,6 +416,7 @@ export const RawMatsInfoModal = ({
         uom: rawMatsInfo.uom,
         expirationDate: expirationDate,
         quantity: rawMatsInfo.quantity,
+        unitCost: unitCost
       });
     } else {
       setAvailableStock("");
@@ -424,6 +428,7 @@ export const RawMatsInfoModal = ({
         uom: rawMatsInfo.uom,
         expirationDate: "",
         quantity: rawMatsInfo.quantity,
+        unitCost: "",
       });
     }
   };
@@ -667,6 +672,34 @@ export const RawMatsInfoModal = ({
                         : "Select an expiration date"}
                     </Text>
                   )}
+                </HStack>
+
+                {/* Unit Cost */}
+                <HStack w="full">
+                  <Text
+                    minW="50%"
+                    w="auto"
+                    bgColor="secondary"
+                    color="white"
+                    pl={2}
+                    pr={10}
+                    py={2.5}
+                    fontSize="xs"
+                  >
+                    Unit Cost:{" "}
+                  </Text>
+                  <Text
+                    textAlign="center"
+                    w="full"
+                    bgColor="gray.200"
+                    border="1px"
+                    borderColor="gray.200"
+                    py={1.5}
+                  >
+                    {rawMatsInfo.unitCost
+                      ? rawMatsInfo.unitCost
+                      : "Select a warehouse ID/Expiration Date"}
+                  </Text>
                 </HStack>
               </VStack>
             </Flex>

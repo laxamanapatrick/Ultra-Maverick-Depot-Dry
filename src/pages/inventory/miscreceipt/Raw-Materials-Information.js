@@ -496,6 +496,43 @@ export const RawMatsInfoModal = ({
                     bgColor="#fff8dc"
                   />
                 </HStack>
+
+                {/* Unit Cost */}
+                <HStack w="full">
+                  <Text
+                    minW="50%"
+                    w="auto"
+                    bgColor="secondary"
+                    color="white"
+                    pl={2}
+                    pr={7}
+                    py={2.5}
+                    fontSize="xs"
+                  >
+                    Unit Cost:{" "}
+                  </Text>
+                  <Input
+                    onChange={(e) =>
+                      setRawMatsInfo({
+                        itemCode: rawMatsInfo.itemCode,
+                        itemDescription: rawMatsInfo.itemDescription,
+                        supplier: rawMatsInfo.supplier,
+                        uom: rawMatsInfo.uom,
+                        expirationDate: rawMatsInfo.expirationDate,
+                        quantity: rawMatsInfo.quantity,
+                        unitCost: Number(e.target.value)
+                      })
+                    }
+                    type="number"
+                    onWheel={(e) => e.target.blur()}
+                    onKeyDown={(e) =>
+                      ["E", "e", "+", "-"].includes(e.key) && e.preventDefault()
+                    }
+                    onPaste={(e) => e.preventDefault()}
+                    w="full"
+                    bgColor="#fff8dc"
+                  />
+                </HStack>
               </VStack>
 
               <VStack alignItems="start" w="40%" mx={5}>

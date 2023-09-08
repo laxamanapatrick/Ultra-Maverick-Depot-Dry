@@ -68,6 +68,7 @@ export const AddConfirmation = ({
         customerCode: customerData.customerCode,
         expirationDate: rawMatsInfo.expirationDate,
         quantity: rawMatsInfo.quantity,
+        unitCost: rawMatsInfo.unitCost,
         remarks: remarks,
         details: details,
         preparedBy: currentUser.fullName,
@@ -83,6 +84,7 @@ export const AddConfirmation = ({
             uom: "",
             expirationDate: "",
             quantity: "",
+            unitCost: "",
           });
           setWarehouseId("");
           setIsLoading(false);

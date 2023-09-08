@@ -54,6 +54,7 @@ export const AddConfirmation = ({
       uom: rawMatsInfo.uom,
       expirationDate: rawMatsInfo.expirationDate,
       quantity: rawMatsInfo.quantity,
+      unitCost: rawMatsInfo.unitCost,
       description: details,
       remarks: remarks,
     };
@@ -65,6 +66,7 @@ export const AddConfirmation = ({
       uom: "",
       expirationDate: "",
       quantity: "",
+      unitCost: "",
     });
     // supplierRef.current.value = ''
     setSelectorId("");
@@ -307,6 +309,7 @@ export const SaveConfirmation = ({
                   supplier: item.supplier,
                   expiration: item.expirationDate ? item.expirationDate : null,
                   actualGood: item.quantity,
+                  unitCost: item.unitCost,
                   details: item.description,
                   remarks: item.remarks,
                   receivedBy: currentUser.fullName,

@@ -57,6 +57,7 @@ const MiscellaneousIssuePage = ({
     customer: "",
     expirationDate: isExpirable ? "" : null,
     quantity: "",
+    unitCost: "",
   });
   const [details, setDetails] = useState("");
   const [remarks, setRemarks] = useState("");
